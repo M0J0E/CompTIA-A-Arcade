@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CompTIA A+ Arcade</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111827;
+      color: white;
+      text-align: center;
+    }
+
+    .game-container {
+      max-width: 700px;
+      margin: auto;
+      padding: 30px 20px;
+    }
+
+    h1 {
+      font-size: 42px;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      color: #9ca3af;
+      margin-bottom: 35px;
+    }
+
+    .game-button {
+      width: 100%;
+      padding: 20px;
+      margin: 10px 0;
+      font-size: 22px;
+      font-weight: bold;
+      border: none;
+      border-radius: 15px;
+      background: #2563eb;
+      color: white;
+      cursor: pointer;
+    }
+
+    .game-button:active {
+      transform: scale(0.97);
+    }
+
+    #gameScreen {
+      display: none;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 25px;
+      font-size: 18px;
+    }
+
+    .question-box {
+      background: #1f2937;
+      padding: 25px;
+      border-radius: 20px;
+    }
+
+    .answer {
+      width: 100%;
+      padding: 16px;
+      margin: 8px 0;
+      border: 2px solid #374151;
+      border-radius: 12px;
+      background: #111827;
+      color: white;
+      font-size: 18px;
+    }
+
+    .answer:active {
+      background: #2563eb;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="game-container">
+
+  <div id="mainMenu">
+
+    <h1>CompTIA A+ Arcade</h1>
+
+    <p class="subtitle">
+      Learn. Battle. Level Up.
+    </p>
+
+    <button class="game-button" onclick="startGame('battle')">
+      ⚔️ Battle Mode
+    </button>
+
+    <button class="game-button" onclick="startGame('race')">
+      🏎️ Race Mode
+    </button>
+
+    <button class="game-button" onclick="startGame('tower')">
+      🏰 Tower Climb
+    </button>
+
+    <button class="game-button" onclick="startGame('survival')">
+      ❤️ Survival Mode
+    </button>
+
+    <button class="game-button" onclick="startGame('exam')">
+      📝 Practice Exam
+    </button>
+
+  </div>
+
+
+  <div id="gameScreen">
+
+    <div class="stats">
+      <span id="modeName">Battle Mode</span>
+      <span>XP: <span id="xp">0</span></span>
+      <span>❤️ <span id="lives">3</span></span>
+    </div>
+
+    <div class="question-box">
+
+      <h2 id="question">
+        Which port does HTTPS use?
+      </h2>
+
+      <button class="answer" onclick="answerQuestion(21)">
+        A. 21
+      </button>
+
+      <button class="answer" onclick="answerQuestion(22)">
+        B. 22
+      </button>
+
+      <button class="answer" onclick="answerQuestion(80)">
+        C. 80
+      </button>
+
+      <button class="answer" onclick="answerQuestion(443)">
+        D. 443
+      </button>
+
+      <p id="result"></p>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+let xp = 0;
+let lives = 3;
+
+function startGame(mode) {
+
+  document.getElementById("mainMenu").style.display = "none";
+
+  document.getElementById("gameScreen").style.display = "block";
+
+  const names = {
+    battle: "⚔️ Battle Mode",
+    race: "🏎️ Race Mode",
+    tower: "🏰 Tower Climb",
+    survival: "❤️ Survival Mode",
+    exam: "📝 Practice Exam"
+  };
+
+  document.getElementById("modeName").innerText = names[mode];
+}
+
+
+function answerQuestion(answer) {
+
+  const result = document.getElementById("result");
+
+  if (answer === 443) {
+
+    xp += 10;
+
+    document.getElementById("xp").innerText = xp;
+
+    result.innerHTML = "✅ Correct! +10 XP";
+
+  }
+
+  else {
+
+    lives--;
+
+    document.getElementById("lives").innerText = lives;
+
+    result.innerHTML = "❌ Incorrect! The correct answer is port 443.";
+
+  }
+
+}
+
+</script>
+
+</body>
+</html>
