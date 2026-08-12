@@ -1,17 +1,49 @@
 let playerHP = 100;
 let enemyHP = 100;
+let enemyMaxHP = 100;
 let enemyLevel = 1;
+let enemiesDefeated = 0;
+let isBoss = false;
 
 function setupBattle() {
   playerHP = 100;
-  enemyHP = 100;
   enemyLevel = 1;
+  enemiesDefeated = 0;
+  spawnEnemy();
+
+  updateBattleUI();
+}
+
+function spawnEnemy() {
+  isBoss = enemyLevel % 5 === 0;
+
+  if (isBoss) {
+    enemyMaxHP = 200 + ((enemyLevel - 1) * 25);
+  } else {
+    enemyMaxHP = 100 + ((enemyLevel - 1) * 20);
+  }
+
+  enemyHP = enemyMaxHP;
+
+  const enemyName = document.getElementById("enemyName");
+
+  if (isBoss) {
+    enemyName.innerText =
+      "👑 Malware Boss Lv. " + enemyLevel;
+  } else {
+    enemyName.innerText =
+      "Malware Bot Lv. " + enemyLevel;
+  }
 
   updateBattleUI();
 }
 
 function correctBattleAnswer() {
-  const damage = 20;
+  let damage = 20;
+
+  if (isBoss) {
+    damage = 25;
+  }
 
   enemyHP -= damage;
 
@@ -20,18 +52,23 @@ function correctBattleAnswer() {
   }
 
   animatePlayerAttack();
+  showDamage("-" + damage, "enemy");
 
   updateBattleUI();
 
   if (enemyHP <= 0) {
     setTimeout(() => {
-      nextEnemy();
+      defeatEnemy();
     }, 700);
   }
 }
 
 function wrongBattleAnswer() {
-  const damage = 25;
+  let damage = 25;
+
+  if (isBoss) {
+    damage = 35;
+  }
 
   playerHP -= damage;
 
@@ -40,6 +77,7 @@ function wrongBattleAnswer() {
   }
 
   animateEnemyAttack();
+  showDamage("-" + damage, "player");
 
   updateBattleUI();
 
@@ -50,15 +88,37 @@ function wrongBattleAnswer() {
   }
 }
 
-function nextEnemy() {
+function defeatEnemy() {
+  enemiesDefeated++;
+
+  let bonusXP = 25;
+
+  if (isBoss) {
+    bonusXP = 100;
+  }
+
+  xp += bonusXP;
+
+  document.getElementById("xp").innerText = xp;
+
+  const result = document.getElementById("result");
+
+  if (isBoss) {
+    result.innerHTML =
+      "🏆 BOSS DEFEATED!<br>" +
+      "+" + bonusXP + " bonus XP";
+  } else {
+    result.innerHTML =
+      "⚔️ Enemy defeated!<br>" +
+      "+" + bonusXP + " bonus XP";
+  }
+
   enemyLevel++;
 
-  enemyHP = 100 + ((enemyLevel - 1) * 20);
-
-  document.getElementById("enemyName").innerText =
-    "Malware Bot Lv. " + enemyLevel;
-
-  updateBattleUI();
+  setTimeout(() => {
+    spawnEnemy();
+    loadQuestion();
+  }, 1500);
 }
 
 function updateBattleUI() {
@@ -68,18 +128,18 @@ function updateBattleUI() {
   const enemyHealthBar =
     document.getElementById("enemyHealthBar");
 
+  const playerPercent =
+    (playerHP / 100) * 100;
+
+  const enemyPercent =
+    (enemyHP / enemyMaxHP) * 100;
+
   if (playerHealthBar) {
     playerHealthBar.style.width =
-      Math.max(playerHP, 0) + "%";
+      Math.max(playerPercent, 0) + "%";
   }
 
   if (enemyHealthBar) {
-    const enemyMaxHP =
-      100 + ((enemyLevel - 1) * 20);
-
-    const enemyPercent =
-      (enemyHP / enemyMaxHP) * 100;
-
     enemyHealthBar.style.width =
       Math.max(enemyPercent, 0) + "%";
   }
@@ -92,12 +152,13 @@ function updateBattleUI() {
 
   if (playerHPText) {
     playerHPText.innerText =
-      playerHP + " HP";
+      playerHP + " / 100 HP";
   }
 
   if (enemyHPText) {
     enemyHPText.innerText =
-      enemyHP + " HP";
+      enemyHP + " / " +
+      enemyMaxHP + " HP";
   }
 }
 
@@ -127,14 +188,39 @@ function animateEnemyAttack() {
   }, 400);
 }
 
+function showDamage(amount, target) {
+  const targetElement =
+    document.getElementById(
+      target === "enemy"
+        ? "enemyCharacter"
+        : "playerCharacter"
+    );
+
+  if (!targetElement) return;
+
+  const damageText =
+    document.createElement("div");
+
+  damageText.className = "damage-number";
+  damageText.innerText = amount;
+
+  targetElement.appendChild(damageText);
+
+  setTimeout(() => {
+    damageText.remove();
+  }, 700);
+}
+
 function battleGameOver() {
   document.getElementById("question").innerText =
-    "You were defeated!";
+    "💀 You Were Defeated";
 
   document.getElementById("result").innerHTML =
-    "You reached enemy level " +
-    enemyLevel +
-    ".<br><br>Refresh the page to try again.";
+    "Enemies defeated: " +
+    enemiesDefeated +
+    "<br>" +
+    "Final XP: " +
+    xp;
 
   document.querySelectorAll(".answer")
     .forEach(button => {
