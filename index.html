@@ -155,15 +155,18 @@
 </div>
 
 
-<script>
+<script src="questions.js"></script>
 
+<script>
 let xp = 0;
 let lives = 3;
+let currentQuestion = null;
+let currentMode = "battle";
 
 function startGame(mode) {
+  currentMode = mode;
 
   document.getElementById("mainMenu").style.display = "none";
-
   document.getElementById("gameScreen").style.display = "block";
 
   const names = {
@@ -175,35 +178,93 @@ function startGame(mode) {
   };
 
   document.getElementById("modeName").innerText = names[mode];
+
+  loadQuestion();
 }
 
+function loadQuestion() {
+  currentQuestion =
+    questions[Math.floor(Math.random() * questions.length)];
 
-function answerQuestion(answer) {
+  document.getElementById("question").innerText =
+    currentQuestion.question;
 
+  const answerButtons =
+    document.querySelectorAll(".answer");
+
+  answerButtons.forEach((button, index) => {
+    button.innerText =
+      String.fromCharCode(65 + index) +
+      ". " +
+      currentQuestion.answers[index];
+
+    button.disabled = false;
+
+    button.onclick = function () {
+      answerQuestion(index);
+    };
+  });
+
+  document.getElementById("result").innerHTML =
+    "Category: " + currentQuestion.category;
+}
+
+function answerQuestion(selectedIndex) {
   const result = document.getElementById("result");
 
-  if (answer === 443) {
+  const answerButtons =
+    document.querySelectorAll(".answer");
 
+  answerButtons.forEach(button => {
+    button.disabled = true;
+  });
+
+  if (selectedIndex === currentQuestion.correct) {
     xp += 10;
 
     document.getElementById("xp").innerText = xp;
 
-    result.innerHTML = "✅ Correct! +10 XP";
-
-  }
-
-  else {
-
+    result.innerHTML =
+      "✅ Correct! +10 XP<br><br>" +
+      currentQuestion.explanation;
+  } else {
     lives--;
 
     document.getElementById("lives").innerText = lives;
 
-    result.innerHTML = "❌ Incorrect! The correct answer is port 443.";
+    const correctAnswer =
+      currentQuestion.answers[currentQuestion.correct];
 
+    result.innerHTML =
+      "❌ Incorrect<br><br>" +
+      "Correct answer: " +
+      correctAnswer +
+      "<br><br>" +
+      currentQuestion.explanation;
   }
 
+  setTimeout(() => {
+    if (lives <= 0) {
+      gameOver();
+    } else {
+      loadQuestion();
+    }
+  }, 2500);
 }
 
+function gameOver() {
+  document.getElementById("question").innerText =
+    "Game Over";
+
+  document.getElementById("result").innerHTML =
+    "Final XP: " + xp +
+    "<br><br>Refresh the page to play again.";
+
+  document.querySelectorAll(".answer")
+    .forEach(button => {
+      button.style.display = "none";
+    });
+}
 </script>
 
 </body>
