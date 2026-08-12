@@ -464,32 +464,6 @@ function gameOver() {
       button.style.display = "none";
     });
 }
- <button id="backToMenuButton" class="game-button" style="display:none;">
-  ⬅️ Back to Menu
-</button> 
-  document.getElementById("backToMenuButton")
-  .addEventListener("click", backToMenu);
-
-function backToMenu() {
-  document.getElementById("gameScreen").style.display = "none";
-  document.getElementById("mainMenu").style.display = "block";
-
-  document.getElementById("backToMenuButton").style.display = "none";
-
-  document.querySelectorAll(".answer")
-    .forEach(button => {
-      button.style.display = "block";
-      button.disabled = false;
-    });
-
-  document.getElementById("result").innerHTML = "";
-
-  xp = 0;
-  lives = 3;
-
-  document.getElementById("xp").innerText = xp;
-  document.getElementById("lives").innerText = lives;
-}
 </script>
 
 </body>
