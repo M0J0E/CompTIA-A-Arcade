@@ -78,6 +78,90 @@
     .answer:active {
       background: #2563eb;
     }
+    .battle-arena {
+  margin-bottom: 25px;
+  padding: 20px;
+  border-radius: 20px;
+  background: #0f172a;
+}
+
+.battle-field {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  min-height: 220px;
+  gap: 20px;
+}
+
+.fighter {
+  width: 45%;
+  transition: transform 0.2s;
+}
+
+.character {
+  font-size: 80px;
+  margin-bottom: 10px;
+}
+
+.health-container {
+  width: 100%;
+  height: 18px;
+  background: #374151;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.health-bar {
+  width: 100%;
+  height: 100%;
+  background: #22c55e;
+  transition: width 0.4s;
+}
+
+.enemy-health {
+  background: #ef4444;
+}
+
+.hp-text {
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.player-attack {
+  animation: playerAttack 0.4s;
+}
+
+.enemy-attack {
+  animation: enemyAttack 0.4s;
+}
+
+@keyframes playerAttack {
+  0% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(45px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes enemyAttack {
+  0% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(-45px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
   </style>
 </head>
 
@@ -123,6 +207,58 @@
       <span>XP: <span id="xp">0</span></span>
       <span>❤️ <span id="lives">3</span></span>
     </div>
+<div id="battleArena" class="battle-arena">
+
+  <div class="battle-field">
+
+    <div class="fighter">
+
+      <div id="playerCharacter" class="character">
+        🧑‍💻
+      </div>
+
+      <strong>You</strong>
+
+      <div class="health-container">
+        <div
+          id="playerHealthBar"
+          class="health-bar">
+        </div>
+      </div>
+
+      <div id="playerHPText" class="hp-text">
+        100 HP
+      </div>
+
+    </div>
+
+
+    <div class="fighter">
+
+      <div id="enemyCharacter" class="character">
+        🤖
+      </div>
+
+      <strong id="enemyName">
+        Malware Bot Lv. 1
+      </strong>
+
+      <div class="health-container">
+        <div
+          id="enemyHealthBar"
+          class="health-bar enemy-health">
+        </div>
+      </div>
+
+      <div id="enemyHPText" class="hp-text">
+        100 HP
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
 
     <div class="question-box">
 
@@ -156,6 +292,7 @@
 
 
 <script src="questions.js"></script>
+<script src="battle.js"></script>
 
 <script>
 let xp = 0;
@@ -177,7 +314,9 @@ function startGame(mode) {
     exam: "📝 Practice Exam"
   };
 
-  document.getElementById("modeName").innerText = names[mode];
+  document.getElementById("modeName").innerText = names[mode];if (mode === "battle") {
+  setupBattle();
+}
 
   loadQuestion();
 }
@@ -220,7 +359,9 @@ function answerQuestion(selectedIndex) {
   });
 
   if (selectedIndex === currentQuestion.correct) {
-    xp += 10;
+    xp += 10; if (currentMode === "battle") {
+  correctBattleAnswer();
+}
 
     document.getElementById("xp").innerText = xp;
 
@@ -228,7 +369,9 @@ function answerQuestion(selectedIndex) {
       "✅ Correct! +10 XP<br><br>" +
       currentQuestion.explanation;
   } else {
-    lives--;
+    lives--;if (currentMode === "battle") {
+  wrongBattleAnswer();
+}
 
     document.getElementById("lives").innerText = lives;
 
