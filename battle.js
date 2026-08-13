@@ -31,9 +31,65 @@ let campaignComplete = false;
 /* CAMPAIGN SETTINGS                                     */
 /* ===================================================== */
 
-const TOTAL_CAMPAIGN_QUESTIONS = 462;
-
 const BOSS_INTERVAL = 10;
+
+
+/* ===================================================== */
+/* TOTAL PLAYABLE QUESTIONS                              */
+/* ===================================================== */
+
+function getTotalCampaignQuestions() {
+
+  if (
+    typeof campaignQuestions !== "undefined" &&
+    Array.isArray(campaignQuestions) &&
+    campaignQuestions.length > 0
+  ) {
+
+    return campaignQuestions.length;
+
+  }
+
+
+  if (
+    typeof questions !== "undefined" &&
+    Array.isArray(questions)
+  ) {
+
+    return questions.filter(question => {
+
+      return (
+
+        question.pbq !== true &&
+
+        Array.isArray(
+          question.answers
+        ) &&
+
+        question.answers.length > 0 &&
+
+        question.correct !== null &&
+
+        question.correct !== undefined &&
+
+        !(
+          question.multiple === true &&
+          Array.isArray(
+            question.correct
+          ) &&
+          question.correct.length < 2
+        )
+
+      );
+
+    }).length;
+
+  }
+
+
+  return 0;
+
+}
 
 
 /* ===================================================== */
@@ -41,12 +97,15 @@ const BOSS_INTERVAL = 10;
 /* ===================================================== */
 
 /*
-  Add your actual images to assets/ using these names.
+  Put enemy art in the assets folder:
 
-  You do NOT need all 46 images immediately.
+  enemy1.PNG
+  enemy2.PNG
+  enemy3.PNG
+  ...
+  enemy46.PNG
 
-  If an image is missing, the code will fall back to
-  assets/enemy.PNG.
+  Missing images automatically fall back to enemy.PNG.
 */
 
 const normalEnemies = [
@@ -333,12 +392,6 @@ const normalEnemies = [
 /* ===================================================== */
 /* BOSSES                                                */
 /* ===================================================== */
-
-/*
-  Same idea here.
-
-  Missing boss art falls back to assets/enemy.PNG.
-*/
 
 const bosses = [
 
@@ -627,7 +680,8 @@ const bosses = [
 
 const finalEnemy = {
 
-  name: "Exam Sentinel",
+  name:
+    "Exam Sentinel",
 
   image:
     "assets/final-enemy.PNG",
@@ -705,7 +759,7 @@ function setupBattle() {
 
 
 /* ===================================================== */
-/* LOAD CORRECT ENEMY FOR NEXT QUESTION                  */
+/* LOAD ENEMY FOR CURRENT QUESTION                       */
 /* ===================================================== */
 
 function loadEnemyForCurrentQuestion() {
@@ -714,18 +768,33 @@ function loadEnemyForCurrentQuestion() {
     false;
 
 
+  const totalQuestions =
+    getTotalCampaignQuestions();
+
+
+  if (
+    totalQuestions <= 0
+  ) {
+
+    return;
+
+  }
+
+
   const questionNumber =
     questionsAnswered + 1;
 
 
   /*
     =====================================
-    QUESTION 461
+    SECOND-TO-LAST PLAYABLE QUESTION
     =====================================
   */
 
   if (
-    questionNumber === 461
+    totalQuestions >= 2 &&
+    questionNumber ===
+    totalQuestions - 1
   ) {
 
     isBoss =
@@ -740,20 +809,28 @@ function loadEnemyForCurrentQuestion() {
 
     applyEnemy(
       finalEnemy,
-      "⚔️ FINAL GUARDIAN"
+      finalEnemy.name
     );
 
 
-    document.getElementById(
-      "bossBanner"
-    ).style.display =
-      "block";
+    const banner =
+      document.getElementById(
+        "bossBanner"
+      );
 
 
-    document.getElementById(
-      "bossBanner"
-    ).innerText =
-      "⚔️ FINAL GUARDIAN ⚔️";
+    if (
+      banner
+    ) {
+
+      banner.style.display =
+        "block";
+
+
+      banner.innerText =
+        "⚔️ FINAL GUARDIAN ⚔️";
+
+    }
 
 
     return;
@@ -763,12 +840,13 @@ function loadEnemyForCurrentQuestion() {
 
   /*
     =====================================
-    QUESTION 462
+    FINAL PLAYABLE QUESTION
     =====================================
   */
 
   if (
-    questionNumber === 462
+    questionNumber ===
+    totalQuestions
   ) {
 
     isBoss =
@@ -783,20 +861,29 @@ function loadEnemyForCurrentQuestion() {
 
     applyEnemy(
       finalBoss,
-      "👑 FINAL BOSS"
+      "👑 " +
+      finalBoss.name
     );
 
 
-    document.getElementById(
-      "bossBanner"
-    ).style.display =
-      "block";
+    const banner =
+      document.getElementById(
+        "bossBanner"
+      );
 
 
-    document.getElementById(
-      "bossBanner"
-    ).innerText =
-      "👑 FINAL BOSS 👑";
+    if (
+      banner
+    ) {
+
+      banner.style.display =
+        "block";
+
+
+      banner.innerText =
+        "👑 FINAL BOSS 👑";
+
+    }
 
 
     return;
@@ -822,7 +909,11 @@ function loadEnemyForCurrentQuestion() {
   const stageIndex =
 
     Math.floor(
-      (questionNumber - 1) /
+      (
+        questionNumber -
+        1
+      )
+      /
       BOSS_INTERVAL
     );
 
@@ -832,28 +923,33 @@ function loadEnemyForCurrentQuestion() {
 
 
   /*
-    Every tenth question
-    is the boss.
+    Every 10th playable question
+    is a boss.
   */
 
 
   isBoss =
 
     questionNumber %
-    BOSS_INTERVAL === 0;
+    BOSS_INTERVAL ===
+    0;
 
 
   if (
     isBoss
   ) {
 
-    const boss =
+    const bossIndex =
 
+      Math.min(
+        stageIndex,
+        bosses.length - 1
+      );
+
+
+    const boss =
       bosses[
-        Math.min(
-          stageIndex,
-          bosses.length - 1
-        )
+        bossIndex
       ];
 
 
@@ -864,29 +960,41 @@ function loadEnemyForCurrentQuestion() {
     );
 
 
-    document.getElementById(
-      "bossBanner"
-    ).style.display =
-      "block";
+    const banner =
+      document.getElementById(
+        "bossBanner"
+      );
 
 
-    document.getElementById(
-      "bossBanner"
-    ).innerText =
-      "👑 BOSS BATTLE 👑";
+    if (
+      banner
+    ) {
+
+      banner.style.display =
+        "block";
+
+
+      banner.innerText =
+        "👑 BOSS BATTLE 👑";
+
+    }
 
   }
 
 
   else {
 
-    const enemy =
+    const enemyIndex =
 
+      Math.min(
+        stageIndex,
+        normalEnemies.length - 1
+      );
+
+
+    const enemy =
       normalEnemies[
-        Math.min(
-          stageIndex,
-          normalEnemies.length - 1
-        )
+        enemyIndex
       ];
 
 
@@ -894,14 +1002,26 @@ function loadEnemyForCurrentQuestion() {
       enemy,
       enemy.name +
       " Lv. " +
-      (stageIndex + 1)
+      (
+        stageIndex + 1
+      )
     );
 
 
-    document.getElementById(
-      "bossBanner"
-    ).style.display =
-      "none";
+    const banner =
+      document.getElementById(
+        "bossBanner"
+      );
+
+
+    if (
+      banner
+    ) {
+
+      banner.style.display =
+        "none";
+
+    }
 
   }
 
@@ -909,7 +1029,7 @@ function loadEnemyForCurrentQuestion() {
 
 
 /* ===================================================== */
-/* APPLY ENEMY DATA                                      */
+/* APPLY ENEMY                                           */
 /* ===================================================== */
 
 function applyEnemy(
@@ -925,10 +1045,20 @@ function applyEnemy(
     enemyMaxHP;
 
 
-  document.getElementById(
-    "enemyName"
-  ).innerText =
-    displayName;
+  const enemyName =
+    document.getElementById(
+      "enemyName"
+    );
+
+
+  if (
+    enemyName
+  ) {
+
+    enemyName.innerText =
+      displayName;
+
+  }
 
 
   const image =
@@ -1009,14 +1139,6 @@ function correctBattleAnswer() {
 
 
   updateBattleUI();
-
-
-  /*
-    Each question advances
-    even if the enemy still has HP.
-
-    Enemy HP here is mainly visual.
-  */
 
 
   finishBattleQuestion(
@@ -1175,7 +1297,7 @@ function calculateEnemyDamage() {
 
 
 /* ===================================================== */
-/* FINISH QUESTION                                       */
+/* FINISH BATTLE QUESTION                                */
 /* ===================================================== */
 
 function finishBattleQuestion(
@@ -1189,12 +1311,9 @@ function finishBattleQuestion(
   questionsAnswered++;
 
 
-  updateCampaignCounter();
-
-
   /*
-    Heal slightly after
-    correct answers.
+    Correct answer gives
+    a small recovery.
   */
 
 
@@ -1222,14 +1341,21 @@ function finishBattleQuestion(
   updateBattleUI();
 
 
+  updateCampaignCounter();
+
+
+  const totalQuestions =
+    getTotalCampaignQuestions();
+
+
   /*
-    Campaign finished.
+    End of campaign.
   */
 
 
   if (
     questionsAnswered >=
-    TOTAL_CAMPAIGN_QUESTIONS
+    totalQuestions
   ) {
 
     setTimeout(
@@ -1244,7 +1370,7 @@ function finishBattleQuestion(
 
 
   /*
-    Normal transition.
+    Next battle/question.
   */
 
 
@@ -1264,21 +1390,10 @@ function finishBattleQuestion(
 
 
 /* ===================================================== */
-/* LOAD NEXT QUESTION IN ORDER                           */
+/* LOAD NEXT CAMPAIGN QUESTION                           */
 /* ===================================================== */
 
 function loadNextCampaignQuestion() {
-
-  /*
-    Battle Mode is meant
-    to go in order.
-
-    This function calls the campaign-aware
-    question loader if you add it to index.html.
-
-    If not, it falls back to loadQuestion().
-  */
-
 
   if (
     typeof loadCampaignQuestion ===
@@ -1295,7 +1410,14 @@ function loadNextCampaignQuestion() {
   }
 
 
-  loadQuestion();
+  if (
+    typeof loadQuestion ===
+    "function"
+  ) {
+
+    loadQuestion();
+
+  }
 
 }
 
@@ -1321,17 +1443,35 @@ function updateCampaignCounter() {
   }
 
 
-  const nextQuestion =
+  const totalQuestions =
+    getTotalCampaignQuestions();
+
+
+  if (
+    totalQuestions <= 0
+  ) {
+
+    counter.innerText =
+      "0/0";
+
+
+    return;
+
+  }
+
+
+  const currentQuestion =
     Math.min(
       questionsAnswered + 1,
-      TOTAL_CAMPAIGN_QUESTIONS
+      totalQuestions
     );
 
 
   counter.innerText =
-    nextQuestion +
+
+    currentQuestion +
     "/" +
-    TOTAL_CAMPAIGN_QUESTIONS;
+    totalQuestions;
 
 }
 
@@ -1347,7 +1487,8 @@ function updateBattleUI() {
     (
       playerHP /
       playerMaxHP
-    ) *
+    )
+    *
     100;
 
 
@@ -1356,7 +1497,8 @@ function updateBattleUI() {
     (
       enemyHP /
       enemyMaxHP
-    ) *
+    )
+    *
     100;
 
 
@@ -1381,7 +1523,8 @@ function updateBattleUI() {
       Math.max(
         playerPercent,
         0
-      ) +
+      )
+      +
       "%";
 
   }
@@ -1396,7 +1539,8 @@ function updateBattleUI() {
       Math.max(
         enemyPercent,
         0
-      ) +
+      )
+      +
       "%";
 
   }
@@ -1420,12 +1564,12 @@ function updateBattleUI() {
 
     playerText.innerText =
 
-      playerHP +
-
-      " / " +
-
-      playerMaxHP +
-
+      playerHP
+      +
+      " / "
+      +
+      playerMaxHP
+      +
       " HP";
 
   }
@@ -1437,12 +1581,12 @@ function updateBattleUI() {
 
     enemyText.innerText =
 
-      enemyHP +
-
-      " / " +
-
-      enemyMaxHP +
-
+      enemyHP
+      +
+      " / "
+      +
+      enemyMaxHP
+      +
       " HP";
 
   }
@@ -1531,7 +1675,7 @@ function animateEnemyAttack() {
 
 
 /* ===================================================== */
-/* DAMAGE TEXT                                           */
+/* DAMAGE NUMBER                                         */
 /* ===================================================== */
 
 function showDamage(
@@ -1609,10 +1753,24 @@ function battleGameOver() {
     true;
 
 
-  document.getElementById(
-    "bossBanner"
-  ).style.display =
-    "none";
+  const totalQuestions =
+    getTotalCampaignQuestions();
+
+
+  const banner =
+    document.getElementById(
+      "bossBanner"
+    );
+
+
+  if (
+    banner
+  ) {
+
+    banner.style.display =
+      "none";
+
+  }
 
 
   document.getElementById(
@@ -1631,19 +1789,32 @@ function battleGameOver() {
     "result"
   ).innerHTML =
 
-    "You reached Question " +
+    "You reached campaign question "
 
-    (
-      questionsAnswered + 1
-    ) +
+    +
 
-    " of " +
+    Math.min(
+      questionsAnswered + 1,
+      totalQuestions
+    )
 
-    TOTAL_CAMPAIGN_QUESTIONS +
+    +
 
-    ".<br><br>" +
+    " of "
 
-    "Final XP: " +
+    +
+
+    totalQuestions
+
+    +
+
+    ".<br><br>"
+
+    +
+
+    "Final XP: "
+
+    +
 
     xp;
 
@@ -1672,20 +1843,36 @@ function campaignVictory() {
     true;
 
 
+  battleFinished =
+    true;
+
+
   questionLocked =
     true;
 
 
-  document.getElementById(
-    "bossBanner"
-  ).style.display =
-    "block";
+  const totalQuestions =
+    getTotalCampaignQuestions();
 
 
-  document.getElementById(
-    "bossBanner"
-  ).innerText =
-    "🏆 CAMPAIGN COMPLETE 🏆";
+  const banner =
+    document.getElementById(
+      "bossBanner"
+    );
+
+
+  if (
+    banner
+  ) {
+
+    banner.style.display =
+      "block";
+
+
+    banner.innerText =
+      "🏆 CAMPAIGN COMPLETE 🏆";
+
+  }
 
 
   document.getElementById(
@@ -1704,15 +1891,25 @@ function campaignVictory() {
     "result"
   ).innerHTML =
 
-    "You completed all " +
+    "You completed all "
 
-    TOTAL_CAMPAIGN_QUESTIONS +
+    +
 
-    " campaign questions." +
+    totalQuestions
 
-    "<br><br>" +
+    +
 
-    "Final XP: " +
+    " playable campaign questions."
+
+    +
+
+    "<br><br>"
+
+    +
+
+    "Final XP: "
+
+    +
 
     xp;
 
