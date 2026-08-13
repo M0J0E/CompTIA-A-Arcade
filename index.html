@@ -2,76 +2,125 @@
 <html lang="en">
 
 <head>
-
   <meta charset="UTF-8">
 
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
   >
 
   <title>CompTIA A+ Arcade</title>
 
-
   <style>
-
-    /* ======================================= */
-    /* PAGE */
-    /* ======================================= */
 
     * {
       box-sizing: border-box;
     }
 
+    html,
     body {
       margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
       font-family: Arial, sans-serif;
-      background: #111827;
+      background: #0f172a;
       color: white;
+    }
+
+    body {
+      overflow-x: hidden;
+    }
+
+    button {
+      font-family: inherit;
+    }
+
+
+    /* ================================================= */
+    /* MAIN MENU */
+    /* ================================================= */
+
+    #mainMenu {
+      min-height: 100vh;
+      width: 100%;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      padding: 30px 20px;
+
+      background:
+        linear-gradient(
+          rgba(15, 23, 42, 0.45),
+          rgba(15, 23, 42, 0.85)
+        ),
+        url("assets/battle-bg.PNG");
+
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .menu-panel {
+      width: 100%;
+      max-width: 600px;
+
+      padding: 28px;
+
+      border-radius: 28px;
+
+      background:
+        rgba(15, 23, 42, 0.82);
+
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+
+      border:
+        1px solid rgba(255,255,255,0.14);
+
+      box-shadow:
+        0 20px 50px rgba(0,0,0,0.35);
+    }
+
+    .menu-title {
+      font-size: 42px;
+      margin: 0 0 5px;
       text-align: center;
     }
 
-    .game-container {
-      width: 100%;
-      max-width: 750px;
-      margin: auto;
-      padding: 25px 15px;
+    .menu-subtitle {
+      text-align: center;
+      color: #cbd5e1;
+      margin-bottom: 25px;
     }
-
-    h1 {
-      font-size: 42px;
-      margin-bottom: 5px;
-    }
-
-    h2 {
-      line-height: 1.4;
-    }
-
-    .subtitle {
-      color: #9ca3af;
-      margin-bottom: 35px;
-    }
-
-
-    /* ======================================= */
-    /* MAIN BUTTONS */
-    /* ======================================= */
 
     .game-button {
       width: 100%;
-      padding: 18px;
-      margin: 10px 0;
 
-      font-size: 20px;
-      font-weight: bold;
+      padding: 17px;
+
+      margin: 8px 0;
 
       border: none;
-      border-radius: 15px;
+      border-radius: 18px;
+
+      font-size: 19px;
+      font-weight: bold;
 
       background: #2563eb;
       color: white;
 
       cursor: pointer;
+
+      box-shadow:
+        0 8px 20px rgba(0,0,0,0.22);
+
+      transition:
+        transform 0.12s,
+        opacity 0.12s;
     }
 
     .game-button:active {
@@ -80,96 +129,166 @@
 
     .game-button:disabled {
       opacity: 0.5;
-      cursor: default;
     }
 
 
-    /* ======================================= */
-    /* GAME SCREEN */
-    /* ======================================= */
+    /* ================================================= */
+    /* FULL SCREEN GAME */
+    /* ================================================= */
 
     #gameScreen {
       display: none;
-    }
-
-    .stats {
-      display: flex;
-
-      justify-content: space-between;
-      align-items: center;
-
-      flex-wrap: wrap;
-
-      gap: 10px;
-
-      margin-bottom: 20px;
-
-      font-size: 17px;
-
-      background: #1f2937;
-
-      padding: 15px;
-
-      border-radius: 15px;
-    }
-
-
-    /* ======================================= */
-    /* BATTLE ARENA */
-    /* ======================================= */
-
-    .battle-arena {
 
       position: relative;
 
-      margin-bottom: 25px;
-
-      padding: 20px;
-
-      border-radius: 20px;
+      min-height: 100vh;
+      width: 100%;
 
       overflow: hidden;
 
       background-image:
+        linear-gradient(
+          rgba(0,0,0,0.05),
+          rgba(0,0,0,0.35)
+        ),
         url("assets/battle-bg.PNG");
 
       background-size: cover;
-
       background-position: center;
-
       background-repeat: no-repeat;
     }
 
+    .game-overlay {
+      min-height: 100vh;
+
+      display: flex;
+      flex-direction: column;
+
+      padding:
+        env(safe-area-inset-top, 12px)
+        14px
+        env(safe-area-inset-bottom, 14px);
+    }
+
+
+    /* ================================================= */
+    /* TOP HUD */
+    /* ================================================= */
+
+    .top-hud {
+      display: grid;
+
+      grid-template-columns:
+        1fr auto auto;
+
+      align-items: center;
+
+      gap: 8px;
+
+      padding: 10px 12px;
+
+      border-radius: 18px;
+
+      background:
+        rgba(15, 23, 42, 0.76);
+
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+
+      box-shadow:
+        0 8px 20px rgba(0,0,0,0.22);
+
+      z-index: 20;
+    }
+
+    #modeName {
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    .hud-stat {
+      padding: 6px 10px;
+
+      border-radius: 12px;
+
+      background:
+        rgba(255,255,255,0.08);
+
+      white-space: nowrap;
+
+      font-weight: bold;
+    }
+
+
+    /* ================================================= */
+    /* BATTLEFIELD */
+    /* ================================================= */
+
+    #battleArena {
+      position: relative;
+
+      flex: 1;
+
+      min-height: 340px;
+
+      display: flex;
+
+      flex-direction: column;
+
+      justify-content: center;
+
+      padding: 12px 4px 0;
+    }
 
     #bossBanner {
-
       display: none;
 
-      margin-bottom: 10px;
+      position: absolute;
 
-      font-size: 28px;
+      top: 12px;
+      left: 50%;
 
+      transform: translateX(-50%);
+
+      z-index: 12;
+
+      padding: 9px 18px;
+
+      border-radius: 16px;
+
+      background:
+        rgba(126, 34, 206, 0.88);
+
+      font-size: 22px;
       font-weight: bold;
 
-      color: #facc15;
-
-      text-shadow:
-        2px 2px 4px black;
+      box-shadow:
+        0 6px 18px rgba(0,0,0,0.3);
     }
-
 
     .enemy-counter {
+      position: absolute;
 
-      margin-bottom: 15px;
+      top: 12px;
+      right: 4px;
 
+      z-index: 10;
+
+      padding: 8px 11px;
+
+      border-radius: 13px;
+
+      background:
+        rgba(15, 23, 42, 0.72);
+
+      font-size: 13px;
       font-weight: bold;
 
-      text-shadow:
-        2px 2px 4px black;
+      backdrop-filter: blur(6px);
     }
 
-
     .battle-field {
+      width: 100%;
 
       display: flex;
 
@@ -177,187 +296,372 @@
 
       align-items: flex-end;
 
-      min-height: 320px;
+      gap: 18px;
 
-      gap: 20px;
+      padding:
+        65px 10px
+        10px;
     }
-
 
     .fighter {
+      width: 46%;
+      max-width: 240px;
 
-      width: 45%;
-
-      transition:
-        transform 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
-
-
-    .fighter-name {
-
-      display: block;
-
-      margin-top: 5px;
-
-      margin-bottom: 8px;
-
-      text-shadow:
-        2px 2px 4px black;
-    }
-
 
     .character {
-
       position: relative;
 
-      margin-bottom: 10px;
+      width: 100%;
+
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+
+      min-height: 170px;
     }
 
-
     .character img {
+      display: block;
 
-      width: 150px;
-
+      width: 165px;
       max-width: 100%;
 
       height: auto;
 
-      display: block;
+      object-fit: contain;
 
-      margin: auto;
+      filter:
+        drop-shadow(
+          0 10px 12px rgba(0,0,0,0.35)
+        );
+    }
+
+    .fighter-name {
+      margin-top: 3px;
+      margin-bottom: 7px;
+
+      padding: 5px 10px;
+
+      border-radius: 10px;
+
+      background:
+        rgba(15, 23, 42, 0.65);
+
+      font-size: 14px;
+
+      text-shadow:
+        0 2px 4px black;
     }
 
 
-    /* ======================================= */
-    /* HEALTH */
-    /* ======================================= */
+    /* ================================================= */
+    /* HEALTH BARS */
+    /* ================================================= */
 
     .health-container {
-
       width: 100%;
+      max-width: 210px;
 
-      height: 20px;
-
-      background: #374151;
-
-      border-radius: 20px;
+      height: 17px;
 
       overflow: hidden;
 
+      border-radius: 999px;
+
+      background:
+        rgba(15, 23, 42, 0.85);
+
       border:
-        2px solid white;
+        2px solid rgba(255,255,255,0.85);
+
+      box-shadow:
+        0 4px 12px rgba(0,0,0,0.22);
     }
 
-
     .health-bar {
-
       width: 100%;
-
       height: 100%;
 
       background: #22c55e;
 
       transition:
-        width 0.4s;
+        width 0.35s ease;
     }
-
 
     .enemy-health {
       background: #ef4444;
     }
 
-
     .hp-text {
-
       margin-top: 5px;
+
+      padding: 3px 7px;
+
+      border-radius: 8px;
+
+      background:
+        rgba(15, 23, 42, 0.62);
+
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+
+    /* ================================================= */
+    /* QUESTION PANEL */
+    /* ================================================= */
+
+    .question-panel {
+      width: 100%;
+      max-width: 760px;
+
+      margin:
+        0 auto
+        8px;
+
+      padding: 15px;
+
+      border-radius: 24px;
+
+      background:
+        rgba(15, 23, 42, 0.86);
+
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+
+      border:
+        1px solid rgba(255,255,255,0.12);
+
+      box-shadow:
+        0 15px 40px rgba(0,0,0,0.30);
+
+      z-index: 30;
+    }
+
+    #category {
+      margin-bottom: 7px;
+
+      color: #93c5fd;
+
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    #question {
+      margin:
+        0 0 10px;
+
+      font-size: 19px;
+
+      line-height: 1.35;
+    }
+
+    #questionInstructions {
+      margin-bottom: 10px;
+
+      color: #fde047;
+
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+
+    /* ================================================= */
+    /* ANSWERS */
+    /* ================================================= */
+
+    #answersContainer {
+      display: grid;
+
+      gap: 7px;
+    }
+
+    .answer {
+      width: 100%;
+
+      padding: 12px 14px;
+
+      border:
+        1px solid rgba(255,255,255,0.15);
+
+      border-radius: 15px;
+
+      background:
+        rgba(2, 6, 23, 0.74);
+
+      color: white;
+
+      font-size: 15px;
+
+      text-align: left;
+
+      line-height: 1.25;
+
+      cursor: pointer;
+
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+
+      transition:
+        transform 0.12s,
+        background 0.15s,
+        border-color 0.15s;
+    }
+
+    .answer:active {
+      transform: scale(0.98);
+    }
+
+    .answer.selected {
+      background:
+        rgba(37, 99, 235, 0.92);
+
+      border-color: #93c5fd;
+    }
+
+    .answer.correct-answer {
+      background:
+        rgba(22, 101, 52, 0.95);
+
+      border-color: #4ade80;
+    }
+
+    .answer.wrong-answer {
+      background:
+        rgba(153, 27, 27, 0.95);
+
+      border-color: #f87171;
+    }
+
+    .answer:disabled {
+      opacity: 0.95;
+    }
+
+    #submitAnswerButton {
+      display: none;
+
+      margin-top: 10px;
+
+      padding: 13px;
+
+      background: #16a34a;
+    }
+
+    #result {
+      min-height: 0;
+
+      margin:
+        10px 0 0;
 
       font-size: 14px;
 
-      font-weight: bold;
-
-      text-shadow:
-        2px 2px 3px black;
+      line-height: 1.35;
     }
 
 
-    /* ======================================= */
-    /* BATTLE ANIMATIONS */
-    /* ======================================= */
+    /* ================================================= */
+    /* BACK BUTTON */
+    /* ================================================= */
+
+    #backToMenuButton {
+      max-width: 760px;
+
+      margin:
+        0 auto
+        8px;
+
+      padding: 11px;
+
+      font-size: 15px;
+
+      background:
+        rgba(15, 23, 42, 0.80);
+
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+
+      border:
+        1px solid rgba(255,255,255,0.12);
+    }
+
+
+    /* ================================================= */
+    /* ATTACK ANIMATIONS */
+    /* ================================================= */
 
     .player-attack {
       animation:
-        playerAttack 0.4s;
+        playerAttack 0.38s;
     }
-
 
     .enemy-attack {
       animation:
-        enemyAttack 0.4s;
+        enemyAttack 0.38s;
     }
-
 
     @keyframes playerAttack {
 
       0% {
-        transform:
-          translateX(0);
+        transform: translateX(0);
       }
 
       50% {
         transform:
-          translateX(55px);
+          translateX(50px)
+          scale(1.05);
       }
 
       100% {
-        transform:
-          translateX(0);
+        transform: translateX(0);
       }
 
     }
-
 
     @keyframes enemyAttack {
 
       0% {
-        transform:
-          translateX(0);
+        transform: translateX(0);
       }
 
       50% {
         transform:
-          translateX(-55px);
+          translateX(-50px)
+          scale(1.05);
       }
 
       100% {
-        transform:
-          translateX(0);
+        transform: translateX(0);
       }
 
     }
 
 
-    /* ======================================= */
+    /* ================================================= */
     /* DAMAGE NUMBERS */
-    /* ======================================= */
+    /* ================================================= */
 
     .damage-number {
-
       position: absolute;
 
-      top: 10px;
-
+      top: 15px;
       left: 50%;
 
       transform:
         translateX(-50%);
 
-      font-size: 32px;
+      z-index: 50;
 
+      font-size: 30px;
       font-weight: bold;
 
       color: #ef4444;
 
       text-shadow:
-        2px 2px 3px black;
+        0 3px 5px black;
 
       animation:
         damageFloat 0.8s
@@ -366,227 +670,140 @@
       pointer-events: none;
     }
 
-
     @keyframes damageFloat {
 
-      0% {
-
+      from {
         opacity: 1;
 
         transform:
           translate(-50%, 0);
-
       }
 
-      100% {
-
+      to {
         opacity: 0;
 
         transform:
           translate(-50%, -70px);
-
       }
 
     }
 
 
-    /* ======================================= */
-    /* QUESTIONS */
-    /* ======================================= */
-
-    .question-box {
-
-      background: #1f2937;
-
-      padding: 22px;
-
-      border-radius: 20px;
-
-      margin-bottom: 15px;
-    }
-
-
-    .category {
-
-      color: #60a5fa;
-
-      font-size: 15px;
-
-      font-weight: bold;
-
-      margin-bottom: 12px;
-    }
-
-
-    #questionInstructions {
-
-      color: #facc15;
-
-      font-weight: bold;
-
-      margin:
-        10px 0 15px;
-    }
-
-
-    #answersContainer {
-      width: 100%;
-    }
-
-
-    .answer {
-
-      width: 100%;
-
-      padding: 16px;
-
-      margin: 8px 0;
-
-      border:
-        2px solid #374151;
-
-      border-radius: 12px;
-
-      background: #111827;
-
-      color: white;
-
-      font-size: 17px;
-
-      cursor: pointer;
-
-      text-align: left;
-
-      transition:
-        background 0.2s,
-        border-color 0.2s,
-        transform 0.15s;
-    }
-
-
-    .answer:active {
-      transform:
-        scale(0.98);
-    }
-
-
-    .answer.selected {
-
-      background: #1d4ed8;
-
-      border-color: #60a5fa;
-    }
-
-
-    .answer.correct-answer {
-
-      background: #166534;
-
-      border-color: #22c55e;
-    }
-
-
-    .answer.wrong-answer {
-
-      background: #991b1b;
-
-      border-color: #ef4444;
-    }
-
-
-    .answer:disabled {
-
-      cursor: default;
-
-      opacity: 0.95;
-    }
-
-
-    #submitAnswerButton {
-
-      display: none;
-
-      background: #16a34a;
-
-      margin-top: 15px;
-    }
-
-
-    #result {
-
-      min-height: 30px;
-
-      line-height: 1.5;
-
-      margin-top: 18px;
-    }
-
-
-    /* ======================================= */
-    /* MOBILE */
-    /* ======================================= */
+    /* ================================================= */
+    /* TABLET / DESKTOP */
+    /* ================================================= */
 
     @media
-    (max-width: 600px) {
+    (min-width: 700px) {
 
-      h1 {
-        font-size: 34px;
-      }
-
-      .battle-field {
-        min-height: 260px;
+      .game-overlay {
+        max-width: 900px;
+        margin: auto;
       }
 
       .character img {
-        width: 115px;
+        width: 210px;
       }
 
-      .fighter {
-        width: 47%;
+      .character {
+        min-height: 225px;
       }
 
-      .stats {
-        font-size: 14px;
+      #question {
+        font-size: 21px;
       }
 
-      .question-box {
-        padding: 18px;
+      #answersContainer {
+        grid-template-columns:
+          1fr 1fr;
       }
 
       .answer {
+        min-height: 58px;
+      }
+
+    }
+
+
+    /* ================================================= */
+    /* SMALL PHONES */
+    /* ================================================= */
+
+    @media
+    (max-width: 450px) {
+
+      .game-overlay {
+        padding-left: 9px;
+        padding-right: 9px;
+      }
+
+      .top-hud {
+        padding: 8px 9px;
+      }
+
+      #modeName {
+        font-size: 12px;
+      }
+
+      .hud-stat {
+        font-size: 12px;
+        padding: 5px 7px;
+      }
+
+      #battleArena {
+        min-height: 280px;
+      }
+
+      .battle-field {
+        padding-left: 4px;
+        padding-right: 4px;
+      }
+
+      .character {
+        min-height: 135px;
+      }
+
+      .character img {
+        width: 125px;
+      }
+
+      .question-panel {
+        padding: 12px;
+      }
+
+      #question {
         font-size: 16px;
+      }
+
+      .answer {
+        padding: 10px 11px;
+        font-size: 14px;
       }
 
     }
 
   </style>
-
 </head>
-
 
 
 <body>
 
 
-<div class="game-container">
+<!-- ================================================= -->
+<!-- MAIN MENU -->
+<!-- ================================================= -->
 
+<div id="mainMenu">
 
-  <!-- ======================================= -->
-  <!-- MAIN MENU -->
-  <!-- ======================================= -->
+  <div class="menu-panel">
 
-
-  <div id="mainMenu">
-
-    <h1>
+    <h1 class="menu-title">
       CompTIA A+ Arcade
     </h1>
 
-
-    <p class="subtitle">
+    <p class="menu-subtitle">
       Learn. Battle. Level Up.
     </p>
-
 
     <button
       class="game-button"
@@ -595,14 +812,12 @@
       ⚔️ Battle Mode
     </button>
 
-
     <button
       class="game-button"
       onclick="startGame('race')"
     >
       🏎️ Race Mode
     </button>
-
 
     <button
       class="game-button"
@@ -611,14 +826,12 @@
       🏰 Tower Climb
     </button>
 
-
     <button
       class="game-button"
       onclick="startGame('survival')"
     >
       ❤️ Survival Mode
     </button>
-
 
     <button
       class="game-button"
@@ -629,54 +842,50 @@
 
   </div>
 
+</div>
 
 
-  <!-- ======================================= -->
-  <!-- GAME -->
-  <!-- ======================================= -->
+<!-- ================================================= -->
+<!-- GAME SCREEN -->
+<!-- ================================================= -->
+
+<div id="gameScreen">
+
+  <div class="game-overlay">
 
 
-  <div id="gameScreen">
+    <!-- TOP HUD -->
 
-
-    <!-- STATS -->
-
-
-    <div class="stats">
+    <div class="top-hud">
 
       <span id="modeName">
         ⚔️ Battle Mode
       </span>
 
-
-      <span>
-        XP:
-        <strong id="xp">
+      <span class="hud-stat">
+        ⭐
+        <span id="xp">
           0
-        </strong>
+        </span>
+        XP
       </span>
 
-
-      <span>
+      <span class="hud-stat">
         ❤️
-        <strong id="lives">
+        <span id="lives">
           3
-        </strong>
+        </span>
       </span>
 
     </div>
 
 
 
-    <!-- ======================================= -->
-    <!-- BATTLE ARENA -->
-    <!-- ======================================= -->
+    <!-- ================================================= -->
+    <!-- BATTLE FIELD -->
+    <!-- ================================================= -->
 
-
-    <div
-      id="battleArena"
-      class="battle-arena"
-    >
+    <div id="battleArena">
 
 
       <div id="bossBanner">
@@ -685,15 +894,11 @@
 
 
       <div class="enemy-counter">
-
-        Enemies Defeated:
-
+        Defeated:
         <span id="enemyCount">
           0
         </span>
-
       </div>
-
 
 
       <div class="battle-field">
@@ -701,9 +906,7 @@
 
         <!-- PLAYER -->
 
-
         <div class="fighter">
-
 
           <div
             id="playerCharacter"
@@ -712,18 +915,14 @@
 
             <img
               src="assets/player.PNG"
-              alt="Player"
+              alt="Player character"
             >
 
           </div>
 
-
-          <strong
-            class="fighter-name"
-          >
+          <div class="fighter-name">
             You
-          </strong>
-
+          </div>
 
           <div class="health-container">
 
@@ -734,7 +933,6 @@
             </div>
 
           </div>
-
 
           <div
             id="playerHPText"
@@ -749,9 +947,7 @@
 
         <!-- ENEMY -->
 
-
         <div class="fighter">
-
 
           <div
             id="enemyCharacter"
@@ -760,19 +956,17 @@
 
             <img
               src="assets/enemy.PNG"
-              alt="Enemy"
+              alt="Enemy character"
             >
 
           </div>
 
-
-          <strong
+          <div
             id="enemyName"
             class="fighter-name"
           >
             Malware Bot Lv. 1
-          </strong>
-
+          </div>
 
           <div class="health-container">
 
@@ -786,7 +980,6 @@
             </div>
 
           </div>
-
 
           <div
             id="enemyHPText"
@@ -804,38 +997,25 @@
 
 
 
-    <!-- ======================================= -->
-    <!-- QUESTION AREA -->
-    <!-- ======================================= -->
+    <!-- ================================================= -->
+    <!-- QUESTION UI -->
+    <!-- ================================================= -->
 
+    <div class="question-panel">
 
-    <div class="question-box">
-
-
-      <div
-        id="category"
-        class="category"
-      >
-        Category
+      <div id="category">
+        CompTIA A+
       </div>
-
 
       <h2 id="question">
         Loading question...
       </h2>
 
-
-      <div
-        id="questionInstructions"
-      >
+      <div id="questionInstructions">
       </div>
 
-
-      <div
-        id="answersContainer"
-      >
+      <div id="answersContainer">
       </div>
-
 
       <button
         id="submitAnswerButton"
@@ -845,15 +1025,9 @@
         ✅ Submit Answer
       </button>
 
-
       <p id="result"></p>
 
-
     </div>
-
-
-
-    <!-- BACK -->
 
 
     <button
@@ -867,39 +1041,22 @@
 
   </div>
 
-
 </div>
 
 
-
-<!-- ======================================= -->
-<!-- QUESTION DATABASE -->
-<!-- ======================================= -->
-
+<!-- ================================================= -->
+<!-- GAME FILES -->
+<!-- ================================================= -->
 
 <script src="questions.js"></script>
-
-
-<!-- ======================================= -->
-<!-- BATTLE CODE -->
-<!-- ======================================= -->
-
-
 <script src="battle.js"></script>
 
 
-
-<!-- ======================================= -->
-<!-- MAIN GAME ENGINE -->
-<!-- ======================================= -->
-
+<!-- ================================================= -->
+<!-- MAIN GAME LOGIC -->
+<!-- ================================================= -->
 
 <script>
-
-
-/* ======================================= */
-/* GLOBAL GAME VARIABLES */
-/* ======================================= */
 
 
 let xp = 0;
@@ -918,43 +1075,38 @@ let previousQuestionId = null;
 
 
 
-/* ======================================= */
+/* ================================================= */
 /* START GAME */
-/* ======================================= */
-
+/* ================================================= */
 
 function startGame(mode) {
-
 
   currentMode =
     mode;
 
+  xp =
+    0;
 
-  xp = 0;
-
-  lives = 3;
+  lives =
+    3;
 
   previousQuestionId =
     null;
-
 
   document.getElementById(
     "xp"
   ).innerText =
     xp;
 
-
   document.getElementById(
     "lives"
   ).innerText =
     lives;
 
-
   document.getElementById(
     "mainMenu"
   ).style.display =
     "none";
-
 
   document.getElementById(
     "gameScreen"
@@ -988,12 +1140,6 @@ function startGame(mode) {
     names[mode];
 
 
-  /*
-    Battle mode currently has
-    the battle graphics.
-  */
-
-
   if (
     mode ===
     "battle"
@@ -1002,13 +1148,11 @@ function startGame(mode) {
     document.getElementById(
       "battleArena"
     ).style.display =
-      "block";
-
+      "flex";
 
     setupBattle();
 
   }
-
 
   else {
 
@@ -1026,13 +1170,11 @@ function startGame(mode) {
 
 
 
-/* ======================================= */
-/* PLAYABLE QUESTIONS */
-/* ======================================= */
-
+/* ================================================= */
+/* GET QUESTIONS */
+/* ================================================= */
 
 function getPlayableQuestions() {
-
 
   if (
     typeof questions ===
@@ -1047,12 +1189,6 @@ function getPlayableQuestions() {
   return questions.filter(
     question => {
 
-
-      /*
-        Skip PBQs
-      */
-
-
       if (
         question.pbq ===
         true
@@ -1061,11 +1197,6 @@ function getPlayableQuestions() {
         return false;
 
       }
-
-
-      /*
-        Must have answers
-      */
 
 
       if (
@@ -1089,23 +1220,10 @@ function getPlayableQuestions() {
       }
 
 
-      /*
-        Must contain
-        correct answer data
-      */
-
-
       if (
         question.correct ===
         null
-      ) {
-
-        return false;
-
-      }
-
-
-      if (
+        ||
         question.correct ===
         undefined
       ) {
@@ -1124,17 +1242,14 @@ function getPlayableQuestions() {
 
 
 
-/* ======================================= */
+/* ================================================= */
 /* LOAD QUESTION */
-/* ======================================= */
-
+/* ================================================= */
 
 function loadQuestion() {
 
-
   questionLocked =
     false;
-
 
   selectedAnswers =
     [];
@@ -1154,29 +1269,16 @@ function loadQuestion() {
     ).innerText =
       "No playable questions found.";
 
-
-    document.getElementById(
-      "result"
-    ).innerText =
-      "Check questions.js.";
-
     return;
 
   }
 
 
-  /*
-    Prevent immediate duplicates
-  */
-
-
   let availableQuestions =
     playableQuestions.filter(
       question =>
-
         question.id !==
         previousQuestionId
-
     );
 
 
@@ -1204,11 +1306,6 @@ function loadQuestion() {
     currentQuestion.id;
 
 
-  /*
-    Show question
-  */
-
-
   document.getElementById(
     "question"
   ).innerText =
@@ -1223,7 +1320,7 @@ function loadQuestion() {
       currentQuestion.category ||
       "CompTIA A+ 220-1201"
     ) +
-    " • Question #" +
+    " • #" +
     currentQuestion.id;
 
 
@@ -1245,17 +1342,11 @@ function loadQuestion() {
     );
 
 
-  /*
-    Multiple-answer question
-  */
-
-
   if (
     Array.isArray(
       currentQuestion.correct
     )
   ) {
-
 
     const required =
       currentQuestion.correct.length;
@@ -1276,14 +1367,7 @@ function loadQuestion() {
 
   }
 
-
-  /*
-    Normal question
-  */
-
-
   else {
-
 
     instructions.innerText =
       "Select the best answer";
@@ -1301,13 +1385,11 @@ function loadQuestion() {
 
 
 
-/* ======================================= */
-/* CREATE ANSWERS */
-/* ======================================= */
-
+/* ================================================= */
+/* CREATE BUTTONS */
+/* ================================================= */
 
 function createAnswerButtons() {
-
 
   const container =
     document.getElementById(
@@ -1321,7 +1403,6 @@ function createAnswerButtons() {
 
   currentQuestion.answers.forEach(
     (answer, index) => {
-
 
       const button =
         document.createElement(
@@ -1341,21 +1422,14 @@ function createAnswerButtons() {
         index;
 
 
-      const letter =
+      button.innerText =
         String.fromCharCode(
           65 + index
-        );
-
-
-      button.innerText =
-        letter +
-        ". " +
+        )
+        +
+        ". "
+        +
         answer;
-
-
-      /*
-        Multiple answer
-      */
 
 
       if (
@@ -1363,7 +1437,6 @@ function createAnswerButtons() {
           currentQuestion.correct
         )
       ) {
-
 
         button.onclick =
           function () {
@@ -1377,14 +1450,7 @@ function createAnswerButtons() {
 
       }
 
-
-      /*
-        Single answer
-      */
-
-
       else {
-
 
         button.onclick =
           function () {
@@ -1409,16 +1475,14 @@ function createAnswerButtons() {
 
 
 
-/* ======================================= */
-/* MULTIPLE SELECTION */
-/* ======================================= */
-
+/* ================================================= */
+/* MULTIPLE ANSWERS */
+/* ================================================= */
 
 function toggleAnswer(
   index,
   button
 ) {
-
 
   if (
     questionLocked
@@ -1439,15 +1503,9 @@ function toggleAnswer(
     );
 
 
-  /*
-    Deselect
-  */
-
-
   if (
     existing !== -1
   ) {
-
 
     selectedAnswers.splice(
       existing,
@@ -1461,14 +1519,7 @@ function toggleAnswer(
 
   }
 
-
-  /*
-    Select
-  */
-
-
   else {
-
 
     if (
       selectedAnswers.length >=
@@ -1502,15 +1553,13 @@ function toggleAnswer(
 
 
 
-/* ======================================= */
-/* SINGLE ANSWER */
-/* ======================================= */
-
+/* ================================================= */
+/* SUBMIT SINGLE */
+/* ================================================= */
 
 function submitSingleAnswer(
   selectedIndex
 ) {
-
 
   if (
     questionLocked
@@ -1529,13 +1578,11 @@ function submitSingleAnswer(
 
 
 
-/* ======================================= */
-/* MULTIPLE SUBMIT */
-/* ======================================= */
-
+/* ================================================= */
+/* SUBMIT MULTIPLE */
+/* ================================================= */
 
 function submitMultipleAnswer() {
-
 
   if (
     questionLocked
@@ -1557,13 +1604,9 @@ function submitMultipleAnswer() {
   }
 
 
-  const required =
-    currentQuestion.correct.length;
-
-
   if (
     selectedAnswers.length !==
-    required
+    currentQuestion.correct.length
   ) {
 
     return;
@@ -1579,23 +1622,15 @@ function submitMultipleAnswer() {
 
 
 
-/* ======================================= */
-/* EVALUATE ANSWER */
-/* ======================================= */
-
+/* ================================================= */
+/* GRADE ANSWER */
+/* ================================================= */
 
 function evaluateAnswer(
   userAnswers
 ) {
 
-
   questionLocked =
-    true;
-
-
-  document.getElementById(
-    "submitAnswerButton"
-  ).disabled =
     true;
 
 
@@ -1605,23 +1640,22 @@ function evaluateAnswer(
     )
       ?
       [...currentQuestion.correct]
-
       :
       [currentQuestion.correct];
 
 
   const selected =
-    [...userAnswers].sort(
-      (a, b) =>
-        a - b
-    );
+    [...userAnswers]
+      .sort(
+        (a,b) => a-b
+      );
 
 
   const correct =
-    [...correctAnswers].sort(
-      (a, b) =>
-        a - b
-    );
+    [...correctAnswers]
+      .sort(
+        (a,b) => a-b
+      );
 
 
   const isCorrect =
@@ -1632,11 +1666,9 @@ function evaluateAnswer(
     &&
 
     selected.every(
-      (value, index) =>
-
+      (value,index) =>
         value ===
         correct[index]
-
     );
 
 
@@ -1654,7 +1686,6 @@ function evaluateAnswer(
 
   }
 
-
   else {
 
     handleWrongAnswer();
@@ -1665,26 +1696,23 @@ function evaluateAnswer(
 
 
 
-/* ======================================= */
-/* HIGHLIGHT ANSWERS */
-/* ======================================= */
-
+/* ================================================= */
+/* HIGHLIGHT */
+/* ================================================= */
 
 function highlightAnswers(
   selected,
   correct
 ) {
 
-
   const buttons =
     document.querySelectorAll(
-      "#answersContainer .answer"
+      ".answer"
     );
 
 
   buttons.forEach(
-    (button, index) => {
-
+    (button,index) => {
 
       button.disabled =
         true;
@@ -1696,20 +1724,17 @@ function highlightAnswers(
         )
       ) {
 
-
         button.classList.add(
           "correct-answer"
         );
 
       }
 
-
       else if (
         selected.includes(
           index
         )
       ) {
-
 
         button.classList.add(
           "wrong-answer"
@@ -1724,15 +1749,14 @@ function highlightAnswers(
 
 
 
-/* ======================================= */
+/* ================================================= */
 /* CORRECT */
-/* ======================================= */
-
+/* ================================================= */
 
 function handleCorrectAnswer() {
 
-
-  xp += 10;
+  xp +=
+    10;
 
 
   document.getElementById(
@@ -1741,53 +1765,10 @@ function handleCorrectAnswer() {
     xp;
 
 
-  let message =
-
-    "✅ <strong>Correct!</strong>" +
-
-    "<br>" +
-
-    "+10 XP";
-
-
-  if (
-    currentQuestion.explanation
-  ) {
-
-
-    message +=
-
-      "<br><br>" +
-
-      currentQuestion.explanation;
-
-  }
-
-
-  if (
-    currentQuestion.disputed ===
-    true
-  ) {
-
-
-    message +=
-
-      "<br><br>" +
-
-      "⚠️ This question is marked as disputed in the source material.";
-
-  }
-
-
   document.getElementById(
     "result"
   ).innerHTML =
-    message;
-
-
-  /*
-    Battle
-  */
+    "✅ <strong>Correct!</strong> +10 XP";
 
 
   if (
@@ -1795,19 +1776,12 @@ function handleCorrectAnswer() {
     "battle"
   ) {
 
-
     correctBattleAnswer();
 
 
-    /*
-      battle.js will load
-      another question after
-      enemy death.
-    */
-
-
     if (
-      enemyHP <= 0
+      enemyHP <=
+      0
     ) {
 
       return;
@@ -1819,29 +1793,29 @@ function handleCorrectAnswer() {
 
   setTimeout(
     loadQuestion,
-    2200
+    1800
   );
 
 }
 
 
 
-/* ======================================= */
+/* ================================================= */
 /* WRONG */
-/* ======================================= */
-
+/* ================================================= */
 
 function handleWrongAnswer() {
-
 
   lives--;
 
 
   if (
-    lives < 0
+    lives <
+    0
   ) {
 
-    lives = 0;
+    lives =
+      0;
 
   }
 
@@ -1858,96 +1832,39 @@ function handleWrongAnswer() {
     )
       ?
       currentQuestion.correct
-
       :
       [currentQuestion.correct];
 
 
   const correctText =
-
     correctIndexes
-
       .map(
-        index => {
+        index =>
 
+          String.fromCharCode(
+            65 + index
+          )
+          +
+          ". "
+          +
+          currentQuestion.answers[
+            index
+          ]
 
-          const letter =
-            String.fromCharCode(
-              65 + index
-            );
-
-
-          return (
-
-            letter +
-
-            ". " +
-
-            currentQuestion.answers[
-              index
-            ]
-
-          );
-
-        }
       )
-
       .join(
         "<br>"
       );
 
 
-  let message =
-
-    "❌ <strong>Incorrect</strong>" +
-
-    "<br><br>" +
-
-    "<strong>Correct answer:</strong>" +
-
-    "<br>" +
-
-    correctText;
-
-
-  if (
-    currentQuestion.explanation
-  ) {
-
-
-    message +=
-
-      "<br><br>" +
-
-      currentQuestion.explanation;
-
-  }
-
-
-  if (
-    currentQuestion.disputed ===
-    true
-  ) {
-
-
-    message +=
-
-      "<br><br>" +
-
-      "⚠️ This question is marked as disputed in the source material.";
-
-  }
-
-
   document.getElementById(
     "result"
   ).innerHTML =
-    message;
-
-
-  /*
-    Battle
-  */
+    "❌ <strong>Incorrect</strong>"
+    +
+    "<br>"
+    +
+    correctText;
 
 
   if (
@@ -1955,12 +1872,12 @@ function handleWrongAnswer() {
     "battle"
   ) {
 
-
     wrongBattleAnswer();
 
 
     if (
-      playerHP <= 0
+      playerHP <=
+      0
     ) {
 
       return;
@@ -1969,16 +1886,10 @@ function handleWrongAnswer() {
 
   }
 
-
-  /*
-    Other modes
-  */
-
-
   else if (
-    lives <= 0
+    lives <=
+    0
   ) {
-
 
     genericGameOver();
 
@@ -1989,42 +1900,36 @@ function handleWrongAnswer() {
 
   setTimeout(
     loadQuestion,
-    2600
+    2200
   );
 
 }
 
 
 
-/* ======================================= */
-/* NUMBER WORD */
-/* ======================================= */
-
+/* ================================================= */
+/* HELPERS */
+/* ================================================= */
 
 function numberToWord(
   number
 ) {
 
-
   const words = {
 
     1: "ONE",
-
     2: "TWO",
-
     3: "THREE",
-
     4: "FOUR",
-
     5: "FIVE",
-
     6: "SIX"
 
   };
 
 
   return (
-    words[number] ||
+    words[number]
+    ||
     number
   );
 
@@ -2032,30 +1937,16 @@ function numberToWord(
 
 
 
-/* ======================================= */
-/* GENERIC GAME OVER */
-/* ======================================= */
-
+/* ================================================= */
+/* GAME OVER */
+/* ================================================= */
 
 function genericGameOver() {
-
-
-  questionLocked =
-    true;
-
 
   document.getElementById(
     "question"
   ).innerText =
     "💀 Game Over";
-
-
-  document.getElementById(
-    "result"
-  ).innerHTML =
-
-    "Final XP: " +
-    xp;
 
 
   document.getElementById(
@@ -2073,13 +1964,11 @@ function genericGameOver() {
 
 
 
-/* ======================================= */
+/* ================================================= */
 /* BACK TO MENU */
-/* ======================================= */
-
+/* ================================================= */
 
 function backToMenu() {
-
 
   document.getElementById(
     "gameScreen"
@@ -2090,19 +1979,13 @@ function backToMenu() {
   document.getElementById(
     "mainMenu"
   ).style.display =
-    "block";
+    "flex";
 
 
   document.getElementById(
     "answersContainer"
   ).innerHTML =
     "";
-
-
-  document.getElementById(
-    "submitAnswerButton"
-  ).style.display =
-    "none";
 
 
   document.getElementById(
@@ -2115,6 +1998,12 @@ function backToMenu() {
     "questionInstructions"
   ).innerHTML =
     "";
+
+
+  document.getElementById(
+    "submitAnswerButton"
+  ).style.display =
+    "none";
 
 
   document.getElementById(
@@ -2142,9 +2031,16 @@ function backToMenu() {
 
 
 
-/* ======================================= */
-/* BUTTON EVENTS */
-/* ======================================= */
+/* ================================================= */
+/* EVENTS */
+/* ================================================= */
+
+document.getElementById(
+  "submitAnswerButton"
+).addEventListener(
+  "click",
+  submitMultipleAnswer
+);
 
 
 document.getElementById(
@@ -2152,14 +2048,6 @@ document.getElementById(
 ).addEventListener(
   "click",
   backToMenu
-);
-
-
-document.getElementById(
-  "submitAnswerButton"
-).addEventListener(
-  "click",
-  submitMultipleAnswer
 );
 
 
