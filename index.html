@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
   <meta charset="UTF-8">
 
   <meta
@@ -11,7 +12,16 @@
 
   <title>CompTIA A+ Arcade</title>
 
+
   <style>
+
+    /* ======================================= */
+    /* PAGE */
+    /* ======================================= */
+
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -22,9 +32,10 @@
     }
 
     .game-container {
-      max-width: 700px;
+      width: 100%;
+      max-width: 750px;
       margin: auto;
-      padding: 30px 20px;
+      padding: 25px 15px;
     }
 
     h1 {
@@ -32,21 +43,34 @@
       margin-bottom: 5px;
     }
 
+    h2 {
+      line-height: 1.4;
+    }
+
     .subtitle {
       color: #9ca3af;
       margin-bottom: 35px;
     }
 
+
+    /* ======================================= */
+    /* MAIN BUTTONS */
+    /* ======================================= */
+
     .game-button {
       width: 100%;
-      padding: 20px;
+      padding: 18px;
       margin: 10px 0;
-      font-size: 22px;
+
+      font-size: 20px;
       font-weight: bold;
+
       border: none;
       border-radius: 15px;
+
       background: #2563eb;
       color: white;
+
       cursor: pointer;
     }
 
@@ -54,225 +78,485 @@
       transform: scale(0.97);
     }
 
+    .game-button:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+
+    /* ======================================= */
+    /* GAME SCREEN */
+    /* ======================================= */
+
     #gameScreen {
       display: none;
     }
 
     .stats {
       display: flex;
+
       justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 20px;
-      font-size: 18px;
+      align-items: center;
+
       flex-wrap: wrap;
+
+      gap: 10px;
+
+      margin-bottom: 20px;
+
+      font-size: 17px;
+
+      background: #1f2937;
+
+      padding: 15px;
+
+      border-radius: 15px;
     }
 
-    /* -------------------- */
+
+    /* ======================================= */
     /* BATTLE ARENA */
-    /* -------------------- */
+    /* ======================================= */
 
     .battle-arena {
+
+      position: relative;
+
       margin-bottom: 25px;
+
       padding: 20px;
+
       border-radius: 20px;
 
-      background-image: url("assets/battle-bg.PNG");
+      overflow: hidden;
+
+      background-image:
+        url("assets/battle-bg.PNG");
+
       background-size: cover;
+
       background-position: center;
+
       background-repeat: no-repeat;
     }
 
+
     #bossBanner {
+
       display: none;
+
       margin-bottom: 10px;
-      font-size: 26px;
+
+      font-size: 28px;
+
       font-weight: bold;
+
       color: #facc15;
-      text-shadow: 2px 2px 4px black;
+
+      text-shadow:
+        2px 2px 4px black;
     }
+
 
     .enemy-counter {
+
       margin-bottom: 15px;
-      font-size: 18px;
+
       font-weight: bold;
-      text-shadow: 2px 2px 4px black;
+
+      text-shadow:
+        2px 2px 4px black;
     }
 
+
     .battle-field {
+
       display: flex;
+
       justify-content: space-between;
+
       align-items: flex-end;
+
       min-height: 320px;
+
       gap: 20px;
     }
 
+
     .fighter {
+
       width: 45%;
-      transition: transform 0.2s;
+
+      transition:
+        transform 0.2s;
     }
 
+
+    .fighter-name {
+
+      display: block;
+
+      margin-top: 5px;
+
+      margin-bottom: 8px;
+
+      text-shadow:
+        2px 2px 4px black;
+    }
+
+
     .character {
+
       position: relative;
+
       margin-bottom: 10px;
     }
 
+
     .character img {
-      width: 140px;
+
+      width: 150px;
+
       max-width: 100%;
+
       height: auto;
+
       display: block;
-      margin: 0 auto 10px;
+
+      margin: auto;
     }
+
+
+    /* ======================================= */
+    /* HEALTH */
+    /* ======================================= */
 
     .health-container {
+
       width: 100%;
-      height: 18px;
+
+      height: 20px;
+
       background: #374151;
+
       border-radius: 20px;
+
       overflow: hidden;
-      border: 2px solid white;
+
+      border:
+        2px solid white;
     }
 
+
     .health-bar {
+
       width: 100%;
+
       height: 100%;
+
       background: #22c55e;
-      transition: width 0.4s;
+
+      transition:
+        width 0.4s;
     }
+
 
     .enemy-health {
       background: #ef4444;
     }
 
+
     .hp-text {
-      font-size: 14px;
+
       margin-top: 5px;
+
+      font-size: 14px;
+
       font-weight: bold;
-      text-shadow: 2px 2px 3px black;
+
+      text-shadow:
+        2px 2px 3px black;
     }
 
-    /* -------------------- */
-    /* ATTACK ANIMATIONS */
-    /* -------------------- */
+
+    /* ======================================= */
+    /* BATTLE ANIMATIONS */
+    /* ======================================= */
 
     .player-attack {
-      animation: playerAttack 0.4s;
+      animation:
+        playerAttack 0.4s;
     }
 
+
     .enemy-attack {
-      animation: enemyAttack 0.4s;
+      animation:
+        enemyAttack 0.4s;
     }
+
 
     @keyframes playerAttack {
 
       0% {
-        transform: translateX(0);
+        transform:
+          translateX(0);
       }
 
       50% {
-        transform: translateX(45px);
+        transform:
+          translateX(55px);
       }
 
       100% {
-        transform: translateX(0);
+        transform:
+          translateX(0);
       }
 
     }
+
 
     @keyframes enemyAttack {
 
       0% {
-        transform: translateX(0);
+        transform:
+          translateX(0);
       }
 
       50% {
-        transform: translateX(-45px);
+        transform:
+          translateX(-55px);
       }
 
       100% {
-        transform: translateX(0);
+        transform:
+          translateX(0);
       }
 
     }
 
-    /* -------------------- */
+
+    /* ======================================= */
     /* DAMAGE NUMBERS */
-    /* -------------------- */
+    /* ======================================= */
 
     .damage-number {
+
       position: absolute;
+
       top: 10px;
+
       left: 50%;
 
-      transform: translateX(-50%);
+      transform:
+        translateX(-50%);
 
-      font-size: 30px;
+      font-size: 32px;
+
       font-weight: bold;
-      color: red;
 
-      text-shadow: 2px 2px 3px black;
+      color: #ef4444;
 
-      animation: damageFloat 0.7s ease-out forwards;
+      text-shadow:
+        2px 2px 3px black;
+
+      animation:
+        damageFloat 0.8s
+        ease-out forwards;
 
       pointer-events: none;
     }
 
+
     @keyframes damageFloat {
 
       0% {
+
         opacity: 1;
-        transform: translate(-50%, 0);
+
+        transform:
+          translate(-50%, 0);
+
       }
 
       100% {
+
         opacity: 0;
-        transform: translate(-50%, -60px);
+
+        transform:
+          translate(-50%, -70px);
+
       }
 
     }
 
-    /* -------------------- */
-    /* QUESTION AREA */
-    /* -------------------- */
+
+    /* ======================================= */
+    /* QUESTIONS */
+    /* ======================================= */
 
     .question-box {
+
       background: #1f2937;
-      padding: 25px;
+
+      padding: 22px;
+
       border-radius: 20px;
+
+      margin-bottom: 15px;
     }
+
 
     .category {
+
       color: #60a5fa;
+
+      font-size: 15px;
+
       font-weight: bold;
-      margin-bottom: 10px;
+
+      margin-bottom: 12px;
     }
 
-    .answer {
+
+    #questionInstructions {
+
+      color: #facc15;
+
+      font-weight: bold;
+
+      margin:
+        10px 0 15px;
+    }
+
+
+    #answersContainer {
       width: 100%;
+    }
+
+
+    .answer {
+
+      width: 100%;
+
       padding: 16px;
+
       margin: 8px 0;
 
-      border: 2px solid #374151;
+      border:
+        2px solid #374151;
+
       border-radius: 12px;
 
       background: #111827;
+
       color: white;
 
-      font-size: 18px;
+      font-size: 17px;
+
       cursor: pointer;
+
+      text-align: left;
+
+      transition:
+        background 0.2s,
+        border-color 0.2s,
+        transform 0.15s;
     }
+
 
     .answer:active {
-      background: #2563eb;
+      transform:
+        scale(0.98);
     }
+
+
+    .answer.selected {
+
+      background: #1d4ed8;
+
+      border-color: #60a5fa;
+    }
+
+
+    .answer.correct-answer {
+
+      background: #166534;
+
+      border-color: #22c55e;
+    }
+
+
+    .answer.wrong-answer {
+
+      background: #991b1b;
+
+      border-color: #ef4444;
+    }
+
 
     .answer:disabled {
-      opacity: 0.7;
+
+      cursor: default;
+
+      opacity: 0.95;
     }
 
+
+    #submitAnswerButton {
+
+      display: none;
+
+      background: #16a34a;
+
+      margin-top: 15px;
+    }
+
+
     #result {
-      min-height: 25px;
+
+      min-height: 30px;
+
       line-height: 1.5;
+
+      margin-top: 18px;
+    }
+
+
+    /* ======================================= */
+    /* MOBILE */
+    /* ======================================= */
+
+    @media
+    (max-width: 600px) {
+
+      h1 {
+        font-size: 34px;
+      }
+
+      .battle-field {
+        min-height: 260px;
+      }
+
+      .character img {
+        width: 115px;
+      }
+
+      .fighter {
+        width: 47%;
+      }
+
+      .stats {
+        font-size: 14px;
+      }
+
+      .question-box {
+        padding: 18px;
+      }
+
+      .answer {
+        font-size: 16px;
+      }
+
     }
 
   </style>
@@ -280,13 +564,17 @@
 </head>
 
 
+
 <body>
+
 
 <div class="game-container">
 
-  <!-- ============================== -->
+
+  <!-- ======================================= -->
   <!-- MAIN MENU -->
-  <!-- ============================== -->
+  <!-- ======================================= -->
+
 
   <div id="mainMenu">
 
@@ -294,9 +582,11 @@
       CompTIA A+ Arcade
     </h1>
 
+
     <p class="subtitle">
       Learn. Battle. Level Up.
     </p>
+
 
     <button
       class="game-button"
@@ -305,12 +595,14 @@
       ⚔️ Battle Mode
     </button>
 
+
     <button
       class="game-button"
       onclick="startGame('race')"
     >
       🏎️ Race Mode
     </button>
+
 
     <button
       class="game-button"
@@ -319,12 +611,14 @@
       🏰 Tower Climb
     </button>
 
+
     <button
       class="game-button"
       onclick="startGame('survival')"
     >
       ❤️ Survival Mode
     </button>
+
 
     <button
       class="game-button"
@@ -336,13 +630,17 @@
   </div>
 
 
-  <!-- ============================== -->
-  <!-- GAME SCREEN -->
-  <!-- ============================== -->
+
+  <!-- ======================================= -->
+  <!-- GAME -->
+  <!-- ======================================= -->
+
 
   <div id="gameScreen">
 
-    <!-- TOP STATS -->
+
+    <!-- STATS -->
+
 
     <div class="stats">
 
@@ -350,36 +648,41 @@
         ⚔️ Battle Mode
       </span>
 
+
       <span>
         XP:
-        <strong id="xp">0</strong>
+        <strong id="xp">
+          0
+        </strong>
       </span>
+
 
       <span>
         ❤️
-        <strong id="lives">3</strong>
+        <strong id="lives">
+          3
+        </strong>
       </span>
 
     </div>
 
 
-    <!-- ============================== -->
+
+    <!-- ======================================= -->
     <!-- BATTLE ARENA -->
-    <!-- ============================== -->
+    <!-- ======================================= -->
+
 
     <div
       id="battleArena"
       class="battle-arena"
     >
 
-      <!-- BOSS BANNER -->
 
       <div id="bossBanner">
         👑 BOSS BATTLE 👑
       </div>
 
-
-      <!-- ENEMY COUNTER -->
 
       <div class="enemy-counter">
 
@@ -392,13 +695,15 @@
       </div>
 
 
-      <!-- FIGHTERS -->
 
       <div class="battle-field">
 
+
         <!-- PLAYER -->
 
+
         <div class="fighter">
+
 
           <div
             id="playerCharacter"
@@ -407,14 +712,18 @@
 
             <img
               src="assets/player.PNG"
-              alt="Player character"
+              alt="Player"
             >
 
           </div>
 
-          <strong>
+
+          <strong
+            class="fighter-name"
+          >
             You
           </strong>
+
 
           <div class="health-container">
 
@@ -426,6 +735,7 @@
 
           </div>
 
+
           <div
             id="playerHPText"
             class="hp-text"
@@ -436,9 +746,12 @@
         </div>
 
 
+
         <!-- ENEMY -->
 
+
         <div class="fighter">
+
 
           <div
             id="enemyCharacter"
@@ -447,24 +760,33 @@
 
             <img
               src="assets/enemy.PNG"
-              alt="Enemy character"
+              alt="Enemy"
             >
 
           </div>
 
-          <strong id="enemyName">
+
+          <strong
+            id="enemyName"
+            class="fighter-name"
+          >
             Malware Bot Lv. 1
           </strong>
+
 
           <div class="health-container">
 
             <div
               id="enemyHealthBar"
-              class="health-bar enemy-health"
+              class="
+                health-bar
+                enemy-health
+              "
             >
             </div>
 
           </div>
+
 
           <div
             id="enemyHPText"
@@ -475,16 +797,20 @@
 
         </div>
 
+
       </div>
 
     </div>
 
 
-    <!-- ============================== -->
-    <!-- QUESTION BOX -->
-    <!-- ============================== -->
+
+    <!-- ======================================= -->
+    <!-- QUESTION AREA -->
+    <!-- ======================================= -->
+
 
     <div class="question-box">
+
 
       <div
         id="category"
@@ -493,99 +819,148 @@
         Category
       </div>
 
+
       <h2 id="question">
         Loading question...
       </h2>
 
-      <button
-        class="answer"
-        type="button"
+
+      <div
+        id="questionInstructions"
       >
-        A
-      </button>
+      </div>
+
+
+      <div
+        id="answersContainer"
+      >
+      </div>
+
 
       <button
-        class="answer"
+        id="submitAnswerButton"
+        class="game-button"
         type="button"
       >
-        B
+        ✅ Submit Answer
       </button>
 
-      <button
-        class="answer"
-        type="button"
-      >
-        C
-      </button>
-
-      <button
-        class="answer"
-        type="button"
-      >
-        D
-      </button>
 
       <p id="result"></p>
+
 
     </div>
 
 
-    <!-- BACK TO MENU -->
+
+    <!-- BACK -->
+
 
     <button
-  id="backToMenuButton"
-  class="game-button"
-  type="button"
->
-  ⬅️ Back to Menu
-</button>
+      id="backToMenuButton"
+      class="game-button"
+      type="button"
+    >
+      ⬅️ Back to Menu
+    </button>
+
 
   </div>
+
 
 </div>
 
 
-<!-- ============================== -->
-<!-- JAVASCRIPT FILES -->
-<!-- ============================== -->
+
+<!-- ======================================= -->
+<!-- QUESTION DATABASE -->
+<!-- ======================================= -->
+
 
 <script src="questions.js"></script>
+
+
+<!-- ======================================= -->
+<!-- BATTLE CODE -->
+<!-- ======================================= -->
+
 
 <script src="battle.js"></script>
 
 
+
+<!-- ======================================= -->
+<!-- MAIN GAME ENGINE -->
+<!-- ======================================= -->
+
+
 <script>
 
+
+/* ======================================= */
+/* GLOBAL GAME VARIABLES */
+/* ======================================= */
+
+
 let xp = 0;
+
 let lives = 3;
 
 let currentQuestion = null;
+
 let currentMode = null;
 
 let questionLocked = false;
 
+let selectedAnswers = [];
 
-/* ============================== */
+let previousQuestionId = null;
+
+
+
+/* ======================================= */
 /* START GAME */
-/* ============================== */
+/* ======================================= */
+
 
 function startGame(mode) {
 
-  currentMode = mode;
+
+  currentMode =
+    mode;
+
 
   xp = 0;
+
   lives = 3;
 
-  document.getElementById("xp").innerText = xp;
+  previousQuestionId =
+    null;
 
-  document.getElementById("lives").innerText =
+
+  document.getElementById(
+    "xp"
+  ).innerText =
+    xp;
+
+
+  document.getElementById(
+    "lives"
+  ).innerText =
     lives;
 
-  document.getElementById("mainMenu").style.display =
+
+  document.getElementById(
+    "mainMenu"
+  ).style.display =
     "none";
 
-  document.getElementById("gameScreen").style.display =
+
+  document.getElementById(
+    "gameScreen"
+  ).style.display =
     "block";
+
 
   const names = {
 
@@ -614,27 +989,28 @@ function startGame(mode) {
 
 
   /*
-    Battle Mode is currently the first
-    fully built game mode.
+    Battle mode currently has
+    the battle graphics.
   */
 
-  if (mode === "battle") {
+
+  if (
+    mode ===
+    "battle"
+  ) {
 
     document.getElementById(
       "battleArena"
     ).style.display =
       "block";
 
+
     setupBattle();
 
   }
 
-  else {
 
-    /*
-      Hide the battle arena for the
-      unfinished modes.
-    */
+  else {
 
     document.getElementById(
       "battleArena"
@@ -644,29 +1020,193 @@ function startGame(mode) {
   }
 
 
-  showAnswerButtons();
-
   loadQuestion();
 
 }
 
 
-/* ============================== */
+
+/* ======================================= */
+/* PLAYABLE QUESTIONS */
+/* ======================================= */
+
+
+function getPlayableQuestions() {
+
+
+  if (
+    typeof questions ===
+    "undefined"
+  ) {
+
+    return [];
+
+  }
+
+
+  return questions.filter(
+    question => {
+
+
+      /*
+        Skip PBQs
+      */
+
+
+      if (
+        question.pbq ===
+        true
+      ) {
+
+        return false;
+
+      }
+
+
+      /*
+        Must have answers
+      */
+
+
+      if (
+        !Array.isArray(
+          question.answers
+        )
+      ) {
+
+        return false;
+
+      }
+
+
+      if (
+        question.answers.length ===
+        0
+      ) {
+
+        return false;
+
+      }
+
+
+      /*
+        Must contain
+        correct answer data
+      */
+
+
+      if (
+        question.correct ===
+        null
+      ) {
+
+        return false;
+
+      }
+
+
+      if (
+        question.correct ===
+        undefined
+      ) {
+
+        return false;
+
+      }
+
+
+      return true;
+
+    }
+  );
+
+}
+
+
+
+/* ======================================= */
 /* LOAD QUESTION */
-/* ============================== */
+/* ======================================= */
+
 
 function loadQuestion() {
 
-  questionLocked = false;
+
+  questionLocked =
+    false;
+
+
+  selectedAnswers =
+    [];
+
+
+  const playableQuestions =
+    getPlayableQuestions();
+
+
+  if (
+    playableQuestions.length ===
+    0
+  ) {
+
+    document.getElementById(
+      "question"
+    ).innerText =
+      "No playable questions found.";
+
+
+    document.getElementById(
+      "result"
+    ).innerText =
+      "Check questions.js.";
+
+    return;
+
+  }
+
+
+  /*
+    Prevent immediate duplicates
+  */
+
+
+  let availableQuestions =
+    playableQuestions.filter(
+      question =>
+
+        question.id !==
+        previousQuestionId
+
+    );
+
+
+  if (
+    availableQuestions.length ===
+    0
+  ) {
+
+    availableQuestions =
+      playableQuestions;
+
+  }
 
 
   currentQuestion =
-    questions[
+    availableQuestions[
       Math.floor(
         Math.random() *
-        questions.length
+        availableQuestions.length
       )
     ];
+
+
+  previousQuestionId =
+    currentQuestion.id;
+
+
+  /*
+    Show question
+  */
 
 
   document.getElementById(
@@ -679,7 +1219,12 @@ function loadQuestion() {
     "category"
   ).innerText =
     "📚 " +
-    currentQuestion.category;
+    (
+      currentQuestion.category ||
+      "CompTIA A+ 220-1201"
+    ) +
+    " • Question #" +
+    currentQuestion.id;
 
 
   document.getElementById(
@@ -688,37 +1233,174 @@ function loadQuestion() {
     "";
 
 
-  const answerButtons =
-    document.querySelectorAll(
-      ".answer"
+  const instructions =
+    document.getElementById(
+      "questionInstructions"
     );
 
 
-  answerButtons.forEach(
-    (button, index) => {
+  const submitButton =
+    document.getElementById(
+      "submitAnswerButton"
+    );
 
-      button.innerText =
+
+  /*
+    Multiple-answer question
+  */
+
+
+  if (
+    Array.isArray(
+      currentQuestion.correct
+    )
+  ) {
+
+
+    const required =
+      currentQuestion.correct.length;
+
+
+    instructions.innerText =
+      "Select " +
+      numberToWord(required) +
+      " answers";
+
+
+    submitButton.style.display =
+      "block";
+
+
+    submitButton.disabled =
+      true;
+
+  }
+
+
+  /*
+    Normal question
+  */
+
+
+  else {
+
+
+    instructions.innerText =
+      "Select the best answer";
+
+
+    submitButton.style.display =
+      "none";
+
+  }
+
+
+  createAnswerButtons();
+
+}
+
+
+
+/* ======================================= */
+/* CREATE ANSWERS */
+/* ======================================= */
+
+
+function createAnswerButtons() {
+
+
+  const container =
+    document.getElementById(
+      "answersContainer"
+    );
+
+
+  container.innerHTML =
+    "";
+
+
+  currentQuestion.answers.forEach(
+    (answer, index) => {
+
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+
+      button.type =
+        "button";
+
+
+      button.className =
+        "answer";
+
+
+      button.dataset.index =
+        index;
+
+
+      const letter =
         String.fromCharCode(
           65 + index
-        ) +
+        );
+
+
+      button.innerText =
+        letter +
         ". " +
-        currentQuestion.answers[
-          index
-        ];
+        answer;
 
 
-      button.disabled =
-        false;
+      /*
+        Multiple answer
+      */
 
 
-      button.onclick =
-        function () {
+      if (
+        Array.isArray(
+          currentQuestion.correct
+        )
+      ) {
 
-          answerQuestion(
-            index
-          );
 
-        };
+        button.onclick =
+          function () {
+
+            toggleAnswer(
+              index,
+              button
+            );
+
+          };
+
+      }
+
+
+      /*
+        Single answer
+      */
+
+
+      else {
+
+
+        button.onclick =
+          function () {
+
+            submitSingleAnswer(
+              index
+            );
+
+          };
+
+      }
+
+
+      container.appendChild(
+        button
+      );
 
     }
   );
@@ -726,184 +1408,678 @@ function loadQuestion() {
 }
 
 
-/* ============================== */
-/* ANSWER QUESTION */
-/* ============================== */
 
-function answerQuestion(
+/* ======================================= */
+/* MULTIPLE SELECTION */
+/* ======================================= */
+
+
+function toggleAnswer(
+  index,
+  button
+) {
+
+
+  if (
+    questionLocked
+  ) {
+
+    return;
+
+  }
+
+
+  const required =
+    currentQuestion.correct.length;
+
+
+  const existing =
+    selectedAnswers.indexOf(
+      index
+    );
+
+
+  /*
+    Deselect
+  */
+
+
+  if (
+    existing !== -1
+  ) {
+
+
+    selectedAnswers.splice(
+      existing,
+      1
+    );
+
+
+    button.classList.remove(
+      "selected"
+    );
+
+  }
+
+
+  /*
+    Select
+  */
+
+
+  else {
+
+
+    if (
+      selectedAnswers.length >=
+      required
+    ) {
+
+      return;
+
+    }
+
+
+    selectedAnswers.push(
+      index
+    );
+
+
+    button.classList.add(
+      "selected"
+    );
+
+  }
+
+
+  document.getElementById(
+    "submitAnswerButton"
+  ).disabled =
+    selectedAnswers.length !==
+    required;
+
+}
+
+
+
+/* ======================================= */
+/* SINGLE ANSWER */
+/* ======================================= */
+
+
+function submitSingleAnswer(
   selectedIndex
 ) {
 
-  if (questionLocked) {
+
+  if (
+    questionLocked
+  ) {
+
     return;
+
   }
 
-  questionLocked = true;
+
+  evaluateAnswer(
+    [selectedIndex]
+  );
+
+}
 
 
-  const result =
-    document.getElementById(
-      "result"
+
+/* ======================================= */
+/* MULTIPLE SUBMIT */
+/* ======================================= */
+
+
+function submitMultipleAnswer() {
+
+
+  if (
+    questionLocked
+  ) {
+
+    return;
+
+  }
+
+
+  if (
+    !Array.isArray(
+      currentQuestion.correct
+    )
+  ) {
+
+    return;
+
+  }
+
+
+  const required =
+    currentQuestion.correct.length;
+
+
+  if (
+    selectedAnswers.length !==
+    required
+  ) {
+
+    return;
+
+  }
+
+
+  evaluateAnswer(
+    [...selectedAnswers]
+  );
+
+}
+
+
+
+/* ======================================= */
+/* EVALUATE ANSWER */
+/* ======================================= */
+
+
+function evaluateAnswer(
+  userAnswers
+) {
+
+
+  questionLocked =
+    true;
+
+
+  document.getElementById(
+    "submitAnswerButton"
+  ).disabled =
+    true;
+
+
+  const correctAnswers =
+    Array.isArray(
+      currentQuestion.correct
+    )
+      ?
+      [...currentQuestion.correct]
+
+      :
+      [currentQuestion.correct];
+
+
+  const selected =
+    [...userAnswers].sort(
+      (a, b) =>
+        a - b
     );
 
 
-  const answerButtons =
+  const correct =
+    [...correctAnswers].sort(
+      (a, b) =>
+        a - b
+    );
+
+
+  const isCorrect =
+
+    selected.length ===
+    correct.length
+
+    &&
+
+    selected.every(
+      (value, index) =>
+
+        value ===
+        correct[index]
+
+    );
+
+
+  highlightAnswers(
+    selected,
+    correct
+  );
+
+
+  if (
+    isCorrect
+  ) {
+
+    handleCorrectAnswer();
+
+  }
+
+
+  else {
+
+    handleWrongAnswer();
+
+  }
+
+}
+
+
+
+/* ======================================= */
+/* HIGHLIGHT ANSWERS */
+/* ======================================= */
+
+
+function highlightAnswers(
+  selected,
+  correct
+) {
+
+
+  const buttons =
     document.querySelectorAll(
-      ".answer"
+      "#answersContainer .answer"
     );
 
 
-  answerButtons.forEach(
-    button => {
+  buttons.forEach(
+    (button, index) => {
+
 
       button.disabled =
         true;
 
-    }
-  );
-
-
-  /* ============================== */
-  /* CORRECT ANSWER */
-  /* ============================== */
-
-  if (
-    selectedIndex ===
-    currentQuestion.correct
-  ) {
-
-    xp += 10;
-
-
-    document.getElementById(
-      "xp"
-    ).innerText =
-      xp;
-
-
-    result.innerHTML =
-      "✅ <strong>Correct!</strong> +10 XP" +
-      "<br><br>" +
-      currentQuestion.explanation;
-
-
-    if (
-      currentMode ===
-      "battle"
-    ) {
-
-      correctBattleAnswer();
-
-
-      /*
-        If the enemy is still alive,
-        load another question.
-      */
 
       if (
-        enemyHP > 0
+        correct.includes(
+          index
+        )
       ) {
 
-        setTimeout(
-          loadQuestion,
-          1800
+
+        button.classList.add(
+          "correct-answer"
         );
 
       }
 
-      /*
-        If enemyHP reaches zero,
-        battle.js handles spawning
-        the next enemy and question.
-      */
 
-      return;
-
-    }
-
-  }
-
-
-  /* ============================== */
-  /* WRONG ANSWER */
-  /* ============================== */
-
-  else {
-
-    lives--;
-
-    if (lives < 0) {
-      lives = 0;
-    }
-
-
-    document.getElementById(
-      "lives"
-    ).innerText =
-      lives;
-
-
-    const correctAnswer =
-      currentQuestion.answers[
-        currentQuestion.correct
-      ];
-
-
-    result.innerHTML =
-      "❌ <strong>Incorrect</strong>" +
-      "<br><br>" +
-      "Correct answer: " +
-      correctAnswer +
-      "<br><br>" +
-      currentQuestion.explanation;
-
-
-    if (
-      currentMode ===
-      "battle"
-    ) {
-
-      wrongBattleAnswer();
-
-
-      /*
-        Battle HP controls death
-        during Battle Mode.
-      */
-
-      if (
-        playerHP > 0
+      else if (
+        selected.includes(
+          index
+        )
       ) {
 
-        setTimeout(
-          loadQuestion,
-          1800
+
+        button.classList.add(
+          "wrong-answer"
         );
 
       }
 
-      return;
-
     }
-
-  }
-
-
-  /* Non-battle modes */
-
-  setTimeout(
-    loadQuestion,
-    1800
   );
 
 }
 
 
-/* ============================== */
+
+/* ======================================= */
+/* CORRECT */
+/* ======================================= */
+
+
+function handleCorrectAnswer() {
+
+
+  xp += 10;
+
+
+  document.getElementById(
+    "xp"
+  ).innerText =
+    xp;
+
+
+  let message =
+
+    "✅ <strong>Correct!</strong>" +
+
+    "<br>" +
+
+    "+10 XP";
+
+
+  if (
+    currentQuestion.explanation
+  ) {
+
+
+    message +=
+
+      "<br><br>" +
+
+      currentQuestion.explanation;
+
+  }
+
+
+  if (
+    currentQuestion.disputed ===
+    true
+  ) {
+
+
+    message +=
+
+      "<br><br>" +
+
+      "⚠️ This question is marked as disputed in the source material.";
+
+  }
+
+
+  document.getElementById(
+    "result"
+  ).innerHTML =
+    message;
+
+
+  /*
+    Battle
+  */
+
+
+  if (
+    currentMode ===
+    "battle"
+  ) {
+
+
+    correctBattleAnswer();
+
+
+    /*
+      battle.js will load
+      another question after
+      enemy death.
+    */
+
+
+    if (
+      enemyHP <= 0
+    ) {
+
+      return;
+
+    }
+
+  }
+
+
+  setTimeout(
+    loadQuestion,
+    2200
+  );
+
+}
+
+
+
+/* ======================================= */
+/* WRONG */
+/* ======================================= */
+
+
+function handleWrongAnswer() {
+
+
+  lives--;
+
+
+  if (
+    lives < 0
+  ) {
+
+    lives = 0;
+
+  }
+
+
+  document.getElementById(
+    "lives"
+  ).innerText =
+    lives;
+
+
+  const correctIndexes =
+    Array.isArray(
+      currentQuestion.correct
+    )
+      ?
+      currentQuestion.correct
+
+      :
+      [currentQuestion.correct];
+
+
+  const correctText =
+
+    correctIndexes
+
+      .map(
+        index => {
+
+
+          const letter =
+            String.fromCharCode(
+              65 + index
+            );
+
+
+          return (
+
+            letter +
+
+            ". " +
+
+            currentQuestion.answers[
+              index
+            ]
+
+          );
+
+        }
+      )
+
+      .join(
+        "<br>"
+      );
+
+
+  let message =
+
+    "❌ <strong>Incorrect</strong>" +
+
+    "<br><br>" +
+
+    "<strong>Correct answer:</strong>" +
+
+    "<br>" +
+
+    correctText;
+
+
+  if (
+    currentQuestion.explanation
+  ) {
+
+
+    message +=
+
+      "<br><br>" +
+
+      currentQuestion.explanation;
+
+  }
+
+
+  if (
+    currentQuestion.disputed ===
+    true
+  ) {
+
+
+    message +=
+
+      "<br><br>" +
+
+      "⚠️ This question is marked as disputed in the source material.";
+
+  }
+
+
+  document.getElementById(
+    "result"
+  ).innerHTML =
+    message;
+
+
+  /*
+    Battle
+  */
+
+
+  if (
+    currentMode ===
+    "battle"
+  ) {
+
+
+    wrongBattleAnswer();
+
+
+    if (
+      playerHP <= 0
+    ) {
+
+      return;
+
+    }
+
+  }
+
+
+  /*
+    Other modes
+  */
+
+
+  else if (
+    lives <= 0
+  ) {
+
+
+    genericGameOver();
+
+    return;
+
+  }
+
+
+  setTimeout(
+    loadQuestion,
+    2600
+  );
+
+}
+
+
+
+/* ======================================= */
+/* NUMBER WORD */
+/* ======================================= */
+
+
+function numberToWord(
+  number
+) {
+
+
+  const words = {
+
+    1: "ONE",
+
+    2: "TWO",
+
+    3: "THREE",
+
+    4: "FOUR",
+
+    5: "FIVE",
+
+    6: "SIX"
+
+  };
+
+
+  return (
+    words[number] ||
+    number
+  );
+
+}
+
+
+
+/* ======================================= */
+/* GENERIC GAME OVER */
+/* ======================================= */
+
+
+function genericGameOver() {
+
+
+  questionLocked =
+    true;
+
+
+  document.getElementById(
+    "question"
+  ).innerText =
+    "💀 Game Over";
+
+
+  document.getElementById(
+    "result"
+  ).innerHTML =
+
+    "Final XP: " +
+    xp;
+
+
+  document.getElementById(
+    "answersContainer"
+  ).innerHTML =
+    "";
+
+
+  document.getElementById(
+    "submitAnswerButton"
+  ).style.display =
+    "none";
+
+}
+
+
+
+/* ======================================= */
 /* BACK TO MENU */
-/* ============================== */
+/* ======================================= */
+
 
 function backToMenu() {
+
 
   document.getElementById(
     "gameScreen"
@@ -918,7 +2094,13 @@ function backToMenu() {
 
 
   document.getElementById(
-    "bossBanner"
+    "answersContainer"
+  ).innerHTML =
+    "";
+
+
+  document.getElementById(
+    "submitAnswerButton"
   ).style.display =
     "none";
 
@@ -929,53 +2111,41 @@ function backToMenu() {
     "";
 
 
-  showAnswerButtons();
-
-
-  xp = 0;
-  lives = 3;
+  document.getElementById(
+    "questionInstructions"
+  ).innerHTML =
+    "";
 
 
   document.getElementById(
-    "xp"
-  ).innerText =
-    xp;
+    "bossBanner"
+  ).style.display =
+    "none";
 
 
-  document.getElementById(
-    "lives"
-  ).innerText =
-    lives;
+  currentMode =
+    null;
+
+
+  currentQuestion =
+    null;
+
+
+  selectedAnswers =
+    [];
+
+
+  questionLocked =
+    false;
 
 }
 
 
-/* ============================== */
-/* SHOW ANSWERS */
-/* ============================== */
 
-function showAnswerButtons() {
+/* ======================================= */
+/* BUTTON EVENTS */
+/* ======================================= */
 
-  document.querySelectorAll(
-    ".answer"
-  ).forEach(
-    button => {
-
-      button.style.display =
-        "block";
-
-      button.disabled =
-        false;
-
-    }
-  );
-
-}
-
-
-/* ============================== */
-/* MENU BUTTON */
-/* ============================== */
 
 document.getElementById(
   "backToMenuButton"
@@ -984,7 +2154,17 @@ document.getElementById(
   backToMenu
 );
 
+
+document.getElementById(
+  "submitAnswerButton"
+).addEventListener(
+  "click",
+  submitMultipleAnswer
+);
+
+
 </script>
+
 
 </body>
 
