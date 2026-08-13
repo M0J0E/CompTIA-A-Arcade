@@ -1,11 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
   <title>CompTIA A+ Arcade</title>
 
   <style>
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -54,9 +61,179 @@
     .stats {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 25px;
+      gap: 10px;
+      margin-bottom: 20px;
       font-size: 18px;
+      flex-wrap: wrap;
     }
+
+    /* -------------------- */
+    /* BATTLE ARENA */
+    /* -------------------- */
+
+    .battle-arena {
+      margin-bottom: 25px;
+      padding: 20px;
+      border-radius: 20px;
+
+      background-image: url("assets/battle-bg.PNG");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    #bossBanner {
+      display: none;
+      margin-bottom: 10px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #facc15;
+      text-shadow: 2px 2px 4px black;
+    }
+
+    .enemy-counter {
+      margin-bottom: 15px;
+      font-size: 18px;
+      font-weight: bold;
+      text-shadow: 2px 2px 4px black;
+    }
+
+    .battle-field {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      min-height: 320px;
+      gap: 20px;
+    }
+
+    .fighter {
+      width: 45%;
+      transition: transform 0.2s;
+    }
+
+    .character {
+      position: relative;
+      margin-bottom: 10px;
+    }
+
+    .character img {
+      width: 140px;
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto 10px;
+    }
+
+    .health-container {
+      width: 100%;
+      height: 18px;
+      background: #374151;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 2px solid white;
+    }
+
+    .health-bar {
+      width: 100%;
+      height: 100%;
+      background: #22c55e;
+      transition: width 0.4s;
+    }
+
+    .enemy-health {
+      background: #ef4444;
+    }
+
+    .hp-text {
+      font-size: 14px;
+      margin-top: 5px;
+      font-weight: bold;
+      text-shadow: 2px 2px 3px black;
+    }
+
+    /* -------------------- */
+    /* ATTACK ANIMATIONS */
+    /* -------------------- */
+
+    .player-attack {
+      animation: playerAttack 0.4s;
+    }
+
+    .enemy-attack {
+      animation: enemyAttack 0.4s;
+    }
+
+    @keyframes playerAttack {
+
+      0% {
+        transform: translateX(0);
+      }
+
+      50% {
+        transform: translateX(45px);
+      }
+
+      100% {
+        transform: translateX(0);
+      }
+
+    }
+
+    @keyframes enemyAttack {
+
+      0% {
+        transform: translateX(0);
+      }
+
+      50% {
+        transform: translateX(-45px);
+      }
+
+      100% {
+        transform: translateX(0);
+      }
+
+    }
+
+    /* -------------------- */
+    /* DAMAGE NUMBERS */
+    /* -------------------- */
+
+    .damage-number {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+
+      transform: translateX(-50%);
+
+      font-size: 30px;
+      font-weight: bold;
+      color: red;
+
+      text-shadow: 2px 2px 3px black;
+
+      animation: damageFloat 0.7s ease-out forwards;
+
+      pointer-events: none;
+    }
+
+    @keyframes damageFloat {
+
+      0% {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -60px);
+      }
+
+    }
+
+    /* -------------------- */
+    /* QUESTION AREA */
+    /* -------------------- */
 
     .question-box {
       background: #1f2937;
@@ -64,411 +241,763 @@
       border-radius: 20px;
     }
 
+    .category {
+      color: #60a5fa;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
     .answer {
       width: 100%;
       padding: 16px;
       margin: 8px 0;
+
       border: 2px solid #374151;
       border-radius: 12px;
+
       background: #111827;
       color: white;
+
       font-size: 18px;
+      cursor: pointer;
     }
 
     .answer:active {
       background: #2563eb;
     }
-    
-    .battle-arena {
-  margin-bottom: 25px;
-  padding: 20px;
-  border-radius: 20px;
 
-  background-image: url("assets/battle-bg.PNG");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-<div id="bossBanner" style="display:none; margin-bottom:15px; font-size:26px; font-weight:bold;">
-  👑 BOSS BATTLE 👑
-</div>
+    .answer:disabled {
+      opacity: 0.7;
+    }
 
-<div style="margin-bottom:15px;">
-  Enemies Defeated:
-  <strong id="enemyCount">0</strong>
-</div>
-    
-.battle-field {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  min-height: 220px;
-  gap: 20px;
-}
-.battle-field {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  min-height: 320px;
-  gap: 20px;
-}
-    
-.fighter {
-  width: 45%;
-  transition: transform 0.2s;
-}
+    #result {
+      min-height: 25px;
+      line-height: 1.5;
+    }
 
-.character {
-  font-size: 80px;
-  margin-bottom: 10px;
-}
-    
-.character img {
-  width: 140px;
-  max-width: 100%;
-  height: auto;
-  display: block;
-  margin: 0 auto 10px;
-}
-    
-.health-container {
-  width: 100%;
-  height: 18px;
-  background: #374151;
-  border-radius: 20px;
-  overflow: hidden;
-}
-
-.health-bar {
-  width: 100%;
-  height: 100%;
-  background: #22c55e;
-  transition: width 0.4s;
-}
-
-.enemy-health {
-  background: #ef4444;
-}
-
-.hp-text {
-  font-size: 14px;
-  margin-top: 5px;
-}
-
-.player-attack {
-  animation: playerAttack 0.4s;
-}
-
-.enemy-attack {
-  animation: enemyAttack 0.4s;
-}
-    
-.character {
-  position: relative;
-}
-
-.damage-number {
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 28px;
-  font-weight: bold;
-  color: red;
-  animation: damageFloat 0.7s ease-out forwards;
-  pointer-events: none;
-}
-
-@keyframes damageFloat {
-  0% {
-    opacity: 1;
-    transform: translate(-50%, 0);
-  }
-
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -60px);
-  }
-}
-    
-@keyframes playerAttack {
-  0% {
-    transform: translateX(0);
-  }
-
-  50% {
-    transform: translateX(45px);
-  }
-
-  100% {
-    transform: translateX(0);
-  }
-}
-
-@keyframes enemyAttack {
-  0% {
-    transform: translateX(0);
-  }
-
-  50% {
-    transform: translateX(-45px);
-  }
-
-  100% {
-    transform: translateX(0);
-  }
-}
   </style>
+
 </head>
+
 
 <body>
 
 <div class="game-container">
 
+  <!-- ============================== -->
+  <!-- MAIN MENU -->
+  <!-- ============================== -->
+
   <div id="mainMenu">
 
-    <h1>CompTIA A+ Arcade</h1>
+    <h1>
+      CompTIA A+ Arcade
+    </h1>
 
     <p class="subtitle">
       Learn. Battle. Level Up.
     </p>
 
-    <button class="game-button" onclick="startGame('battle')">
+    <button
+      class="game-button"
+      onclick="startGame('battle')"
+    >
       ⚔️ Battle Mode
     </button>
 
-    <button class="game-button" onclick="startGame('race')">
+    <button
+      class="game-button"
+      onclick="startGame('race')"
+    >
       🏎️ Race Mode
     </button>
 
-    <button class="game-button" onclick="startGame('tower')">
+    <button
+      class="game-button"
+      onclick="startGame('tower')"
+    >
       🏰 Tower Climb
     </button>
 
-    <button class="game-button" onclick="startGame('survival')">
+    <button
+      class="game-button"
+      onclick="startGame('survival')"
+    >
       ❤️ Survival Mode
     </button>
 
-    <button class="game-button" onclick="startGame('exam')">
+    <button
+      class="game-button"
+      onclick="startGame('exam')"
+    >
       📝 Practice Exam
     </button>
 
   </div>
 
 
+  <!-- ============================== -->
+  <!-- GAME SCREEN -->
+  <!-- ============================== -->
+
   <div id="gameScreen">
 
+    <!-- TOP STATS -->
+
     <div class="stats">
-      <span id="modeName">Battle Mode</span>
-      <span>XP: <span id="xp">0</span></span>
-      <span>❤️ <span id="lives">3</span></span>
+
+      <span id="modeName">
+        ⚔️ Battle Mode
+      </span>
+
+      <span>
+        XP:
+        <strong id="xp">0</strong>
+      </span>
+
+      <span>
+        ❤️
+        <strong id="lives">3</strong>
+      </span>
+
     </div>
-<div id="battleArena" class="battle-arena">
 
-  <div class="battle-field">
 
-    <div class="fighter">
+    <!-- ============================== -->
+    <!-- BATTLE ARENA -->
+    <!-- ============================== -->
 
-      <div id="playerCharacter" class="character">
-  <img src="assets/player.PNG" alt="Player character">
-</div>
+    <div
+      id="battleArena"
+      class="battle-arena"
+    >
 
-      <strong>You</strong>
+      <!-- BOSS BANNER -->
 
-      <div class="health-container">
-        <div
-          id="playerHealthBar"
-          class="health-bar">
+      <div id="bossBanner">
+        👑 BOSS BATTLE 👑
+      </div>
+
+
+      <!-- ENEMY COUNTER -->
+
+      <div class="enemy-counter">
+
+        Enemies Defeated:
+
+        <span id="enemyCount">
+          0
+        </span>
+
+      </div>
+
+
+      <!-- FIGHTERS -->
+
+      <div class="battle-field">
+
+        <!-- PLAYER -->
+
+        <div class="fighter">
+
+          <div
+            id="playerCharacter"
+            class="character"
+          >
+
+            <img
+              src="assets/player.PNG"
+              alt="Player character"
+            >
+
+          </div>
+
+          <strong>
+            You
+          </strong>
+
+          <div class="health-container">
+
+            <div
+              id="playerHealthBar"
+              class="health-bar"
+            >
+            </div>
+
+          </div>
+
+          <div
+            id="playerHPText"
+            class="hp-text"
+          >
+            100 / 100 HP
+          </div>
+
         </div>
-      </div>
-
-      <div id="playerHPText" class="hp-text">
-        100 HP
-      </div>
-
-    </div>
 
 
-    <div class="fighter">
+        <!-- ENEMY -->
 
-      <div id="enemyCharacter" class="character">
-  <img src="assets/enemy.PNG" alt="Enemy character">
-</div>
+        <div class="fighter">
 
-      <strong id="enemyName">
-        Malware Bot Lv. 1
-      </strong>
+          <div
+            id="enemyCharacter"
+            class="character"
+          >
 
-      <div class="health-container">
-        <div
-          id="enemyHealthBar"
-          class="health-bar enemy-health">
+            <img
+              src="assets/enemy.PNG"
+              alt="Enemy character"
+            >
+
+          </div>
+
+          <strong id="enemyName">
+            Malware Bot Lv. 1
+          </strong>
+
+          <div class="health-container">
+
+            <div
+              id="enemyHealthBar"
+              class="health-bar enemy-health"
+            >
+            </div>
+
+          </div>
+
+          <div
+            id="enemyHPText"
+            class="hp-text"
+          >
+            100 / 100 HP
+          </div>
+
         </div>
-      </div>
 
-      <div id="enemyHPText" class="hp-text">
-        100 HP
       </div>
 
     </div>
 
-  </div>
 
-</div>
+    <!-- ============================== -->
+    <!-- QUESTION BOX -->
+    <!-- ============================== -->
 
     <div class="question-box">
 
+      <div
+        id="category"
+        class="category"
+      >
+        Category
+      </div>
+
       <h2 id="question">
-        Which port does HTTPS use?
+        Loading question...
       </h2>
 
-      <button class="answer" onclick="answerQuestion(21)">
-        A. 21
+      <button
+        class="answer"
+        type="button"
+      >
+        A
       </button>
 
-      <button class="answer" onclick="answerQuestion(22)">
-        B. 22
+      <button
+        class="answer"
+        type="button"
+      >
+        B
       </button>
 
-      <button class="answer" onclick="answerQuestion(80)">
-        C. 80
+      <button
+        class="answer"
+        type="button"
+      >
+        C
       </button>
 
-      <button class="answer" onclick="answerQuestion(443)">
-        D. 443
+      <button
+        class="answer"
+        type="button"
+      >
+        D
       </button>
 
       <p id="result"></p>
-      
-<button id="backToMenuButton" class="game-button" style="display:none;">
-  ⬅️ Back to Menu
-</button>
-      
+
     </div>
+
+
+    <!-- BACK TO MENU -->
+
+    <button
+      id="backToMenuButton"
+      class="game-button"
+      style="display:none;"
+      type="button"
+    >
+      ⬅️ Back to Menu
+    </button>
 
   </div>
 
 </div>
 
 
+<!-- ============================== -->
+<!-- JAVASCRIPT FILES -->
+<!-- ============================== -->
+
 <script src="questions.js"></script>
+
 <script src="battle.js"></script>
 
+
 <script>
+
 let xp = 0;
 let lives = 3;
+
 let currentQuestion = null;
-let currentMode = "battle";
+let currentMode = null;
+
+let questionLocked = false;
+
+
+/* ============================== */
+/* START GAME */
+/* ============================== */
 
 function startGame(mode) {
+
   currentMode = mode;
 
-  document.getElementById("mainMenu").style.display = "none";
-  document.getElementById("gameScreen").style.display = "block";
+  xp = 0;
+  lives = 3;
+
+  document.getElementById("xp").innerText = xp;
+
+  document.getElementById("lives").innerText =
+    lives;
+
+  document.getElementById("mainMenu").style.display =
+    "none";
+
+  document.getElementById("gameScreen").style.display =
+    "block";
+
+  document.getElementById(
+    "backToMenuButton"
+  ).style.display = "none";
+
 
   const names = {
-    battle: "⚔️ Battle Mode",
-    race: "🏎️ Race Mode",
-    tower: "🏰 Tower Climb",
-    survival: "❤️ Survival Mode",
-    exam: "📝 Practice Exam"
+
+    battle:
+      "⚔️ Battle Mode",
+
+    race:
+      "🏎️ Race Mode",
+
+    tower:
+      "🏰 Tower Climb",
+
+    survival:
+      "❤️ Survival Mode",
+
+    exam:
+      "📝 Practice Exam"
+
   };
 
-  document.getElementById("modeName").innerText = names[mode];if (mode === "battle") {
-  setupBattle();
-}
+
+  document.getElementById(
+    "modeName"
+  ).innerText =
+    names[mode];
+
+
+  /*
+    Battle Mode is currently the first
+    fully built game mode.
+  */
+
+  if (mode === "battle") {
+
+    document.getElementById(
+      "battleArena"
+    ).style.display =
+      "block";
+
+    setupBattle();
+
+  }
+
+  else {
+
+    /*
+      Hide the battle arena for the
+      unfinished modes.
+    */
+
+    document.getElementById(
+      "battleArena"
+    ).style.display =
+      "none";
+
+  }
+
+
+  showAnswerButtons();
 
   loadQuestion();
+
 }
+
+
+/* ============================== */
+/* LOAD QUESTION */
+/* ============================== */
 
 function loadQuestion() {
-  currentQuestion =
-    questions[Math.floor(Math.random() * questions.length)];
 
-  document.getElementById("question").innerText =
+  questionLocked = false;
+
+
+  currentQuestion =
+    questions[
+      Math.floor(
+        Math.random() *
+        questions.length
+      )
+    ];
+
+
+  document.getElementById(
+    "question"
+  ).innerText =
     currentQuestion.question;
 
-  const answerButtons =
-    document.querySelectorAll(".answer");
 
-  answerButtons.forEach((button, index) => {
-    button.innerText =
-      String.fromCharCode(65 + index) +
-      ". " +
-      currentQuestion.answers[index];
+  document.getElementById(
+    "category"
+  ).innerText =
+    "📚 " +
+    currentQuestion.category;
 
-    button.disabled = false;
 
-    button.onclick = function () {
-      answerQuestion(index);
-    };
-  });
+  document.getElementById(
+    "result"
+  ).innerHTML =
+    "";
 
-  document.getElementById("result").innerHTML =
-    "Category: " + currentQuestion.category;
-}
-
-function answerQuestion(selectedIndex) {
-  const result = document.getElementById("result");
 
   const answerButtons =
-    document.querySelectorAll(".answer");
+    document.querySelectorAll(
+      ".answer"
+    );
 
-  answerButtons.forEach(button => {
-    button.disabled = true;
-  });
 
-  if (selectedIndex === currentQuestion.correct) {
-    xp += 10; if (currentMode === "battle") {
-  correctBattleAnswer();
+  answerButtons.forEach(
+    (button, index) => {
+
+      button.innerText =
+        String.fromCharCode(
+          65 + index
+        ) +
+        ". " +
+        currentQuestion.answers[
+          index
+        ];
+
+
+      button.disabled =
+        false;
+
+
+      button.onclick =
+        function () {
+
+          answerQuestion(
+            index
+          );
+
+        };
+
+    }
+  );
+
 }
 
-    document.getElementById("xp").innerText = xp;
+
+/* ============================== */
+/* ANSWER QUESTION */
+/* ============================== */
+
+function answerQuestion(
+  selectedIndex
+) {
+
+  if (questionLocked) {
+    return;
+  }
+
+  questionLocked = true;
+
+
+  const result =
+    document.getElementById(
+      "result"
+    );
+
+
+  const answerButtons =
+    document.querySelectorAll(
+      ".answer"
+    );
+
+
+  answerButtons.forEach(
+    button => {
+
+      button.disabled =
+        true;
+
+    }
+  );
+
+
+  /* ============================== */
+  /* CORRECT ANSWER */
+  /* ============================== */
+
+  if (
+    selectedIndex ===
+    currentQuestion.correct
+  ) {
+
+    xp += 10;
+
+
+    document.getElementById(
+      "xp"
+    ).innerText =
+      xp;
+
 
     result.innerHTML =
-      "✅ Correct! +10 XP<br><br>" +
+      "✅ <strong>Correct!</strong> +10 XP" +
+      "<br><br>" +
       currentQuestion.explanation;
-  } else {
-    lives--;if (currentMode === "battle") {
-  wrongBattleAnswer();
-}
 
-    document.getElementById("lives").innerText = lives;
+
+    if (
+      currentMode ===
+      "battle"
+    ) {
+
+      correctBattleAnswer();
+
+
+      /*
+        If the enemy is still alive,
+        load another question.
+      */
+
+      if (
+        enemyHP > 0
+      ) {
+
+        setTimeout(
+          loadQuestion,
+          1800
+        );
+
+      }
+
+      /*
+        If enemyHP reaches zero,
+        battle.js handles spawning
+        the next enemy and question.
+      */
+
+      return;
+
+    }
+
+  }
+
+
+  /* ============================== */
+  /* WRONG ANSWER */
+  /* ============================== */
+
+  else {
+
+    lives--;
+
+    if (lives < 0) {
+      lives = 0;
+    }
+
+
+    document.getElementById(
+      "lives"
+    ).innerText =
+      lives;
+
 
     const correctAnswer =
-      currentQuestion.answers[currentQuestion.correct];
+      currentQuestion.answers[
+        currentQuestion.correct
+      ];
+
 
     result.innerHTML =
-      "❌ Incorrect<br><br>" +
+      "❌ <strong>Incorrect</strong>" +
+      "<br><br>" +
       "Correct answer: " +
       correctAnswer +
       "<br><br>" +
       currentQuestion.explanation;
+
+
+    if (
+      currentMode ===
+      "battle"
+    ) {
+
+      wrongBattleAnswer();
+
+
+      /*
+        Battle HP controls death
+        during Battle Mode.
+      */
+
+      if (
+        playerHP > 0
+      ) {
+
+        setTimeout(
+          loadQuestion,
+          1800
+        );
+
+      }
+
+      return;
+
+    }
+
   }
 
-  setTimeout(() => {
-    if (lives <= 0) {
-      gameOver();
-    } else {
-      loadQuestion();
+
+  /* Non-battle modes */
+
+  setTimeout(
+    loadQuestion,
+    1800
+  );
+
+}
+
+
+/* ============================== */
+/* BACK TO MENU */
+/* ============================== */
+
+function backToMenu() {
+
+  document.getElementById(
+    "gameScreen"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "mainMenu"
+  ).style.display =
+    "block";
+
+
+  document.getElementById(
+    "backToMenuButton"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "bossBanner"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "result"
+  ).innerHTML =
+    "";
+
+
+  showAnswerButtons();
+
+
+  xp = 0;
+  lives = 3;
+
+
+  document.getElementById(
+    "xp"
+  ).innerText =
+    xp;
+
+
+  document.getElementById(
+    "lives"
+  ).innerText =
+    lives;
+
+}
+
+
+/* ============================== */
+/* SHOW ANSWERS */
+/* ============================== */
+
+function showAnswerButtons() {
+
+  document.querySelectorAll(
+    ".answer"
+  ).forEach(
+    button => {
+
+      button.style.display =
+        "block";
+
+      button.disabled =
+        false;
+
     }
-  }, 2500);
+  );
+
 }
 
-function gameOver() {
-  document.getElementById("question").innerText =
-    "Game Over";
 
-  document.getElementById("result").innerHTML =
-    "Final XP: " + xp +
-    "<br><br>Refresh the page to play again.";
+/* ============================== */
+/* MENU BUTTON */
+/* ============================== */
 
-  document.querySelectorAll(".answer")
-    .forEach(button => {
-      button.style.display = "none";
-    });
-}
+document.getElementById(
+  "backToMenuButton"
+).addEventListener(
+  "click",
+  backToMenu
+);
+
 </script>
 
 </body>
+
 </html>
