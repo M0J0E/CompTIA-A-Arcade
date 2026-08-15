@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
@@ -22,37 +21,27 @@
       box-sizing: border-box;
     }
 
-
     html,
     body {
-
       margin: 0;
       padding: 0;
 
       width: 100%;
       min-height: 100%;
 
-      font-family:
-        Arial,
-        sans-serif;
+      font-family: Arial, sans-serif;
 
-      background:
-        #0f172a;
-
-      color:
-        white;
+      background: #0f172a;
+      color: white;
     }
-
 
     body {
       overflow-x: hidden;
     }
 
-
     button {
       font-family: inherit;
     }
-
 
 
     /* ================================================= */
@@ -61,165 +50,97 @@
 
     #mainMenu {
 
-      min-height:
-        100vh;
+      min-height: 100vh;
+      width: 100%;
 
-      width:
-        100%;
+      display: flex;
+      flex-direction: column;
 
-      display:
-        flex;
+      justify-content: center;
+      align-items: center;
 
-      flex-direction:
-        column;
-
-      justify-content:
-        center;
-
-      align-items:
-        center;
-
-      padding:
-        30px 20px;
-
+      padding: 30px 20px;
 
       background:
-
         linear-gradient(
           rgba(15, 23, 42, 0.35),
           rgba(15, 23, 42, 0.88)
         ),
+        url("assets/battle-bg.png");
 
-        url(
-          "assets/battle-bg.png"
-        );
-
-
-      background-size:
-        cover;
-
-      background-position:
-        center;
-
-      background-repeat:
-        no-repeat;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
     }
 
 
     .menu-panel {
 
-      width:
-        100%;
+      width: 100%;
+      max-width: 600px;
 
-      max-width:
-        600px;
+      padding: 28px;
 
-      padding:
-        28px;
-
-      border-radius:
-        28px;
+      border-radius: 28px;
 
       background:
-        rgba(
-          15,
-          23,
-          42,
-          0.82
-        );
+        rgba(15, 23, 42, 0.82);
 
-      backdrop-filter:
-        blur(10px);
-
-      -webkit-backdrop-filter:
-        blur(10px);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
 
       border:
-        1px solid
-        rgba(
-          255,
-          255,
-          255,
-          0.14
-        );
+        1px solid rgba(255,255,255,0.14);
 
       box-shadow:
-        0 20px 50px
-        rgba(
-          0,
-          0,
-          0,
-          0.35
-        );
+        0 20px 50px rgba(0,0,0,0.35);
     }
 
 
     .menu-title {
 
-      font-size:
-        42px;
+      font-size: 42px;
 
-      margin:
-        0 0 5px;
+      margin: 0 0 5px;
 
-      text-align:
-        center;
+      text-align: center;
     }
 
 
     .menu-subtitle {
 
-      text-align:
-        center;
+      text-align: center;
 
-      color:
-        #cbd5e1;
+      color: #cbd5e1;
 
-      margin-bottom:
-        25px;
+      margin-bottom: 25px;
     }
 
 
     .game-button {
 
-      width:
-        100%;
+      width: 100%;
 
-      padding:
-        17px;
+      padding: 17px;
 
-      margin:
-        8px 0;
+      margin: 8px 0;
 
-      border:
-        none;
+      border: none;
 
-      border-radius:
-        18px;
+      border-radius: 18px;
 
-      font-size:
-        19px;
+      font-size: 19px;
 
-      font-weight:
-        bold;
+      font-weight: bold;
 
-      background:
-        #2563eb;
+      background: #2563eb;
 
-      color:
-        white;
+      color: white;
 
-      cursor:
-        pointer;
+      cursor: pointer;
 
       box-shadow:
-        0 8px 20px
-        rgba(
-          0,
-          0,
-          0,
-          0.22
-        );
+        0 8px 20px rgba(0,0,0,0.22);
 
       transition:
         transform 0.12s,
@@ -228,161 +149,109 @@
 
 
     .game-button:active {
-
-      transform:
-        scale(0.97);
+      transform: scale(0.97);
     }
 
 
     .game-button:disabled {
-
-      opacity:
-        0.5;
-
-      cursor:
-        default;
+      opacity: 0.5;
+      cursor: default;
     }
 
 
-
     /* ================================================= */
-    /* GAME                                              */
+    /* GAME SCREEN                                       */
     /* ================================================= */
 
     #gameScreen {
 
-      display:
-        none;
+      display: none;
 
-      position:
-        relative;
+      position: relative;
 
-      min-height:
-        100vh;
+      min-height: 100vh;
+      width: 100%;
 
-      width:
-        100%;
-
-      overflow:
-        hidden;
-
+      overflow: hidden;
 
       background-image:
-
         linear-gradient(
           rgba(0,0,0,0.05),
           rgba(0,0,0,0.35)
         ),
+        url("assets/battle-bg.png");
 
-        url(
-          "assets/battle-bg.png"
-        );
-
-
-      background-size:
-        cover;
-
-      background-position:
-        center;
-
-      background-repeat:
-        no-repeat;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
     }
 
 
     .game-overlay {
 
-      min-height:
-        100vh;
+      min-height: 100vh;
 
-      display:
-        flex;
-
-      flex-direction:
-        column;
+      display: flex;
+      flex-direction: column;
 
       padding:
-        12px 14px 14px;
+        env(safe-area-inset-top, 12px)
+        14px
+        env(safe-area-inset-bottom, 14px);
     }
 
 
-
     /* ================================================= */
-    /* HUD                                               */
+    /* TOP HUD                                           */
     /* ================================================= */
 
     .top-hud {
 
-      display:
-        grid;
+      display: grid;
 
       grid-template-columns:
         1fr auto auto;
 
-      align-items:
-        center;
+      align-items: center;
 
-      gap:
-        8px;
+      gap: 8px;
 
-      padding:
-        10px 12px;
+      padding: 10px 12px;
 
-      border-radius:
-        18px;
+      border-radius: 18px;
 
       background:
-        rgba(
-          15,
-          23,
-          42,
-          0.76
-        );
+        rgba(15, 23, 42, 0.76);
 
-      backdrop-filter:
-        blur(8px);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
 
-      -webkit-backdrop-filter:
-        blur(8px);
+      box-shadow:
+        0 8px 20px rgba(0,0,0,0.22);
 
-      z-index:
-        20;
+      z-index: 20;
     }
 
 
     #modeName {
-
-      font-weight:
-        bold;
-
-      font-size:
-        15px;
+      font-weight: bold;
+      font-size: 15px;
     }
 
 
     .hud-stat {
 
-      padding:
-        6px 10px;
+      padding: 6px 10px;
 
-      border-radius:
-        12px;
+      border-radius: 12px;
 
       background:
-        rgba(
-          255,
-          255,
-          255,
-          0.08
-        );
+        rgba(255,255,255,0.08);
 
-      white-space:
-        nowrap;
+      white-space: nowrap;
 
-      font-weight:
-        bold;
+      font-weight: bold;
     }
-
 
 
     /* ================================================= */
@@ -391,370 +260,263 @@
 
     .campaign-progress-wrap {
 
-      margin-top:
-        8px;
+      margin-top: 8px;
 
-      padding:
-        8px 10px;
+      padding: 8px 10px;
 
-      border-radius:
-        14px;
+      border-radius: 14px;
 
       background:
-        rgba(
-          15,
-          23,
-          42,
-          0.68
-        );
+        rgba(15, 23, 42, 0.68);
 
-      backdrop-filter:
-        blur(6px);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
 
-      -webkit-backdrop-filter:
-        blur(6px);
+      z-index: 20;
     }
 
 
     .campaign-progress-top {
 
-      display:
-        flex;
+      display: flex;
 
-      justify-content:
-        space-between;
+      justify-content: space-between;
 
-      gap:
-        10px;
+      gap: 10px;
 
-      margin-bottom:
-        6px;
+      margin-bottom: 6px;
 
-      font-size:
-        12px;
+      font-size: 12px;
 
-      font-weight:
-        bold;
+      font-weight: bold;
     }
 
 
     .campaign-progress-bar {
 
-      width:
-        100%;
+      width: 100%;
 
-      height:
-        9px;
+      height: 9px;
 
-      border-radius:
-        999px;
+      border-radius: 999px;
 
-      overflow:
-        hidden;
+      overflow: hidden;
 
       background:
-        rgba(
-          255,
-          255,
-          255,
-          0.15
-        );
+        rgba(255,255,255,0.15);
     }
 
 
     #campaignProgressFill {
 
-      width:
-        0%;
+      width: 0%;
 
-      height:
-        100%;
+      height: 100%;
 
-      background:
-        #3b82f6;
+      background: #3b82f6;
 
       transition:
         width 0.3s ease;
     }
 
 
-
     /* ================================================= */
-    /* BATTLE ARENA                                      */
+    /* BATTLEFIELD                                       */
     /* ================================================= */
 
     #battleArena {
 
-      position:
-        relative;
+      position: relative;
 
-      flex:
-        1;
+      flex: 1;
 
-      min-height:
-        340px;
+      min-height: 340px;
 
-      display:
-        flex;
+      display: flex;
 
-      flex-direction:
-        column;
+      flex-direction: column;
 
-      justify-content:
-        center;
+      justify-content: center;
 
-      padding:
-        12px 4px 0;
+      padding: 12px 4px 0;
     }
 
 
     #bossBanner {
 
-      display:
-        none;
+      display: none;
 
-      position:
-        absolute;
+      position: absolute;
 
-      top:
-        12px;
+      top: 12px;
+      left: 50%;
 
-      left:
-        50%;
+      transform: translateX(-50%);
 
-      transform:
-        translateX(-50%);
+      z-index: 12;
 
-      z-index:
-        12;
+      padding: 9px 18px;
 
-      padding:
-        9px 18px;
-
-      border-radius:
-        16px;
+      border-radius: 16px;
 
       background:
-        rgba(
-          126,
-          34,
-          206,
-          0.9
-        );
+        rgba(126, 34, 206, 0.90);
 
-      font-size:
-        22px;
+      font-size: 22px;
 
-      font-weight:
-        bold;
+      font-weight: bold;
 
-      white-space:
-        nowrap;
+      white-space: nowrap;
+
+      box-shadow:
+        0 6px 18px rgba(0,0,0,0.3);
     }
 
 
     .enemy-counter {
 
-      position:
-        absolute;
+      position: absolute;
 
-      top:
-        12px;
+      top: 12px;
+      right: 4px;
 
-      right:
-        4px;
+      z-index: 10;
 
-      z-index:
-        10;
+      padding: 8px 11px;
 
-      padding:
-        8px 11px;
-
-      border-radius:
-        13px;
+      border-radius: 13px;
 
       background:
-        rgba(
-          15,
-          23,
-          42,
-          0.74
-        );
+        rgba(15, 23, 42, 0.74);
 
-      font-size:
-        13px;
+      font-size: 13px;
 
-      font-weight:
-        bold;
+      font-weight: bold;
+
+      backdrop-filter: blur(6px);
     }
 
 
     .battle-field {
 
-      width:
-        100%;
+      width: 100%;
 
-      display:
-        flex;
+      display: flex;
 
-      justify-content:
-        space-between;
+      justify-content: space-between;
 
-      align-items:
-        flex-end;
+      align-items: flex-end;
 
-      gap:
-        18px;
+      gap: 18px;
 
       padding:
-        65px 10px 10px;
+        65px 10px
+        10px;
     }
 
 
     .fighter {
 
-      width:
-        46%;
+      width: 46%;
 
-      max-width:
-        240px;
+      max-width: 240px;
 
-      display:
-        flex;
+      display: flex;
 
-      flex-direction:
-        column;
+      flex-direction: column;
 
-      align-items:
-        center;
+      align-items: center;
     }
 
 
     .character {
 
-      position:
-        relative;
+      position: relative;
 
-      width:
-        100%;
+      width: 100%;
 
-      display:
-        flex;
+      display: flex;
 
-      justify-content:
-        center;
+      justify-content: center;
 
-      align-items:
-        flex-end;
+      align-items: flex-end;
 
-      min-height:
-        170px;
+      min-height: 170px;
     }
 
 
     .character img {
 
-      display:
-        block;
+      display: block;
 
-      width:
-        165px;
+      width: 165px;
 
-      max-width:
-        100%;
+      max-width: 100%;
 
-      height:
-        auto;
+      height: auto;
 
-      object-fit:
-        contain;
+      object-fit: contain;
 
       filter:
         drop-shadow(
-          0 10px 12px
-          rgba(0,0,0,0.35)
+          0 10px 12px rgba(0,0,0,0.35)
         );
     }
 
 
     .fighter-name {
 
-      margin-top:
-        3px;
+      margin-top: 3px;
 
-      margin-bottom:
-        7px;
+      margin-bottom: 7px;
 
-      padding:
-        5px 10px;
+      padding: 5px 10px;
 
-      border-radius:
-        10px;
+      border-radius: 10px;
 
       background:
-        rgba(
-          15,
-          23,
-          42,
-          0.68
-        );
+        rgba(15, 23, 42, 0.68);
 
-      font-size:
-        14px;
+      font-size: 14px;
+
+      text-shadow:
+        0 2px 4px black;
     }
 
 
-
     /* ================================================= */
-    /* HP                                                */
+    /* HEALTH                                            */
     /* ================================================= */
 
     .health-container {
 
-      width:
-        100%;
+      width: 100%;
 
-      max-width:
-        210px;
+      max-width: 210px;
 
-      height:
-        17px;
+      height: 17px;
 
-      overflow:
-        hidden;
+      overflow: hidden;
 
-      border-radius:
-        999px;
+      border-radius: 999px;
 
       background:
-        rgba(
-          15,
-          23,
-          42,
-          0.85
-        );
+        rgba(15, 23, 42, 0.85);
 
       border:
-        2px solid
-        rgba(
-          255,
-          255,
-          255,
-          0.85
-        );
+        2px solid rgba(255,255,255,0.85);
+
+      box-shadow:
+        0 4px 12px rgba(0,0,0,0.22);
     }
 
 
     .health-bar {
 
-      width:
-        100%;
+      width: 100%;
+      height: 100%;
 
-      height:
-        100%;
-
-      background:
-        #22c55e;
+      background: #22c55e;
 
       transition:
         width 0.35s ease;
@@ -762,38 +524,25 @@
 
 
     .enemy-health {
-
-      background:
-        #ef4444;
+      background: #ef4444;
     }
 
 
     .hp-text {
 
-      margin-top:
-        5px;
+      margin-top: 5px;
 
-      padding:
-        3px 7px;
+      padding: 3px 7px;
 
-      border-radius:
-        8px;
+      border-radius: 8px;
 
       background:
-        rgba(
-          15,
-          23,
-          42,
-          0.64
-        );
+        rgba(15, 23, 42, 0.64);
 
-      font-size:
-        12px;
+      font-size: 12px;
 
-      font-weight:
-        bold;
+      font-weight: bold;
     }
-
 
 
     /* ================================================= */
@@ -802,59 +551,43 @@
 
     .question-panel {
 
-      width:
-        100%;
+      width: 100%;
 
-      max-width:
-        760px;
+      max-width: 760px;
 
       margin:
-        0 auto 8px;
+        0 auto
+        8px;
 
-      padding:
-        15px;
+      padding: 15px;
 
-      border-radius:
-        24px;
+      border-radius: 24px;
 
       background:
-        rgba(
-          15,
-          23,
-          42,
-          0.88
-        );
+        rgba(15, 23, 42, 0.88);
 
-      backdrop-filter:
-        blur(10px);
-
-      -webkit-backdrop-filter:
-        blur(10px);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
 
       border:
-        1px solid
-        rgba(
-          255,
-          255,
-          255,
-          0.12
-        );
+        1px solid rgba(255,255,255,0.12);
+
+      box-shadow:
+        0 15px 40px rgba(0,0,0,0.30);
+
+      z-index: 30;
     }
 
 
     #category {
 
-      margin-bottom:
-        7px;
+      margin-bottom: 7px;
 
-      color:
-        #93c5fd;
+      color: #93c5fd;
 
-      font-size:
-        12px;
+      font-size: 12px;
 
-      font-weight:
-        bold;
+      font-weight: bold;
     }
 
 
@@ -863,29 +596,22 @@
       margin:
         0 0 10px;
 
-      font-size:
-        19px;
+      font-size: 19px;
 
-      line-height:
-        1.35;
+      line-height: 1.35;
     }
 
 
     #questionInstructions {
 
-      margin-bottom:
-        10px;
+      margin-bottom: 10px;
 
-      color:
-        #fde047;
+      color: #fde047;
 
-      font-size:
-        13px;
+      font-size: 13px;
 
-      font-weight:
-        bold;
+      font-weight: bold;
     }
-
 
 
     /* ================================================= */
@@ -894,114 +620,87 @@
 
     #answersContainer {
 
-      display:
-        grid;
+      display: grid;
 
-      gap:
-        7px;
+      gap: 7px;
     }
 
 
     .answer {
 
-      width:
-        100%;
+      width: 100%;
 
-      padding:
-        12px 14px;
+      padding: 12px 14px;
 
       border:
-        1px solid
-        rgba(
-          255,
-          255,
-          255,
-          0.15
-        );
+        1px solid rgba(255,255,255,0.15);
 
-      border-radius:
-        15px;
+      border-radius: 15px;
 
       background:
-        rgba(
-          2,
-          6,
-          23,
-          0.76
-        );
+        rgba(2, 6, 23, 0.76);
 
-      color:
-        white;
+      color: white;
 
-      font-size:
-        15px;
+      font-size: 15px;
 
-      text-align:
-        left;
+      text-align: left;
 
-      line-height:
-        1.25;
+      line-height: 1.25;
 
-      cursor:
-        pointer;
+      cursor: pointer;
+
+      transition:
+        transform 0.12s,
+        background 0.15s,
+        border-color 0.15s;
+    }
+
+
+    .answer:active {
+      transform: scale(0.98);
     }
 
 
     .answer.selected {
 
       background:
-        rgba(
-          37,
-          99,
-          235,
-          0.94
-        );
+        rgba(37, 99, 235, 0.94);
 
-      border-color:
-        #93c5fd;
+      border-color: #93c5fd;
     }
 
 
     .answer.correct-answer {
 
       background:
-        rgba(
-          22,
-          101,
-          52,
-          0.96
-        );
+        rgba(22, 101, 52, 0.96);
 
-      border-color:
-        #4ade80;
+      border-color: #4ade80;
     }
 
 
     .answer.wrong-answer {
 
       background:
-        rgba(
-          153,
-          27,
-          27,
-          0.96
-        );
+        rgba(153, 27, 27, 0.96);
 
-      border-color:
-        #f87171;
+      border-color: #f87171;
+    }
+
+
+    .answer:disabled {
+      opacity: 0.95;
     }
 
 
     #submitAnswerButton {
 
-      display:
-        none;
+      display: none;
 
-      margin-top:
-        10px;
+      margin-top: 10px;
 
-      background:
-        #16a34a;
+      background: #16a34a;
     }
 
 
@@ -1010,46 +709,61 @@
       margin:
         10px 0 0;
 
-      font-size:
-        14px;
+      font-size: 14px;
 
-      line-height:
-        1.35;
+      line-height: 1.35;
     }
 
 
+    /* ================================================= */
+    /* BOTTOM BUTTONS                                    */
+    /* ================================================= */
 
-    /* ================================================= */
-    /* BACK                                              */
-    /* ================================================= */
+    .bottom-buttons {
+
+      width: 100%;
+
+      max-width: 760px;
+
+      margin: 0 auto 8px;
+
+      display: grid;
+
+      grid-template-columns:
+        1fr 1fr;
+
+      gap: 8px;
+    }
+
 
     #backToMenuButton {
 
-      max-width:
-        760px;
+      margin: 0;
 
-      margin:
-        0 auto 8px;
+      padding: 11px;
 
-      padding:
-        11px;
-
-      font-size:
-        15px;
+      font-size: 15px;
 
       background:
-        rgba(
-          15,
-          23,
-          42,
-          0.82
-        );
+        rgba(15, 23, 42, 0.82);
     }
 
 
+    #restartCampaignButton {
+
+      margin: 0;
+
+      padding: 11px;
+
+      font-size: 15px;
+
+      background:
+        rgba(185, 28, 28, 0.88);
+    }
+
 
     /* ================================================= */
-    /* ANIMATIONS                                        */
+    /* ATTACK ANIMATIONS                                 */
     /* ================================================= */
 
     .player-attack {
@@ -1067,8 +781,7 @@
     @keyframes playerAttack {
 
       0% {
-        transform:
-          translateX(0);
+        transform: translateX(0);
       }
 
       50% {
@@ -1078,8 +791,7 @@
       }
 
       100% {
-        transform:
-          translateX(0);
+        transform: translateX(0);
       }
     }
 
@@ -1087,8 +799,7 @@
     @keyframes enemyAttack {
 
       0% {
-        transform:
-          translateX(0);
+        transform: translateX(0);
       }
 
       50% {
@@ -1098,37 +809,31 @@
       }
 
       100% {
-        transform:
-          translateX(0);
+        transform: translateX(0);
       }
     }
 
 
+    /* ================================================= */
+    /* DAMAGE                                            */
+    /* ================================================= */
+
     .damage-number {
 
-      position:
-        absolute;
+      position: absolute;
 
-      top:
-        15px;
+      top: 15px;
+      left: 50%;
 
-      left:
-        50%;
+      transform: translateX(-50%);
 
-      transform:
-        translateX(-50%);
+      z-index: 50;
 
-      z-index:
-        50;
+      font-size: 30px;
 
-      font-size:
-        30px;
+      font-weight: bold;
 
-      font-weight:
-        bold;
-
-      color:
-        #ef4444;
+      color: #ef4444;
 
       text-shadow:
         0 3px 5px black;
@@ -1139,8 +844,7 @@
         ease-out
         forwards;
 
-      pointer-events:
-        none;
+      pointer-events: none;
     }
 
 
@@ -1148,8 +852,7 @@
 
       from {
 
-        opacity:
-          1;
+        opacity: 1;
 
         transform:
           translate(-50%, 0);
@@ -1157,8 +860,7 @@
 
       to {
 
-        opacity:
-          0;
+        opacity: 0;
 
         transform:
           translate(-50%, -70px);
@@ -1166,9 +868,8 @@
     }
 
 
-
     /* ================================================= */
-    /* IPAD / DESKTOP                                    */
+    /* TABLET / DESKTOP                                  */
     /* ================================================= */
 
     @media
@@ -1176,32 +877,24 @@
 
       .game-overlay {
 
-        max-width:
-          900px;
+        max-width: 900px;
 
-        margin:
-          auto;
+        margin: auto;
       }
 
 
       .character img {
-
-        width:
-          210px;
+        width: 210px;
       }
 
 
       .character {
-
-        min-height:
-          225px;
+        min-height: 225px;
       }
 
 
       #question {
-
-        font-size:
-          21px;
+        font-size: 21px;
       }
 
 
@@ -1213,16 +906,13 @@
 
 
       .answer {
-
-        min-height:
-          58px;
+        min-height: 58px;
       }
     }
 
 
-
     /* ================================================= */
-    /* PHONE                                             */
+    /* SMALL PHONES                                      */
     /* ================================================= */
 
     @media
@@ -1230,49 +920,73 @@
 
       .game-overlay {
 
-        padding-left:
-          9px;
+        padding-left: 9px;
 
-        padding-right:
-          9px;
+        padding-right: 9px;
+      }
+
+
+      .top-hud {
+        padding: 8px 9px;
+      }
+
+
+      #modeName {
+        font-size: 12px;
+      }
+
+
+      .hud-stat {
+
+        font-size: 12px;
+
+        padding: 5px 7px;
       }
 
 
       #battleArena {
+        min-height: 280px;
+      }
 
-        min-height:
-          280px;
+
+      .battle-field {
+
+        padding-left: 4px;
+
+        padding-right: 4px;
       }
 
 
       .character {
-
-        min-height:
-          135px;
+        min-height: 135px;
       }
 
 
       .character img {
+        width: 125px;
+      }
 
-        width:
-          125px;
+
+      .question-panel {
+        padding: 12px;
       }
 
 
       #question {
-
-        font-size:
-          16px;
+        font-size: 16px;
       }
 
 
       .answer {
 
-        padding:
-          10px 11px;
+        padding: 10px 11px;
 
-        font-size:
-          14px;
+        font-size: 14px;
+      }
+
+
+      .bottom-buttons {
+        grid-template-columns: 1fr;
       }
     }
 
@@ -1281,20 +995,23 @@
 </head>
 
 
+
 <body>
 
 
 <!-- ================================================= -->
-<!-- MENU                                              -->
+<!-- MAIN MENU                                         -->
 <!-- ================================================= -->
 
 <div id="mainMenu">
 
   <div class="menu-panel">
 
+
     <h1 class="menu-title">
       CompTIA A+ Arcade
     </h1>
+
 
     <p class="menu-subtitle">
       Learn. Battle. Level Up.
@@ -1305,7 +1022,7 @@
       class="game-button"
       onclick="startGame('battle')"
     >
-      ⚔️ Campaign Battle
+      ⚔️ Continue Campaign
     </button>
 
 
@@ -1340,6 +1057,7 @@
       📝 Practice Exam
     </button>
 
+
   </div>
 
 </div>
@@ -1347,7 +1065,7 @@
 
 
 <!-- ================================================= -->
-<!-- GAME                                              -->
+<!-- GAME SCREEN                                       -->
 <!-- ================================================= -->
 
 <div id="gameScreen">
@@ -1359,45 +1077,60 @@
 
     <div class="top-hud">
 
+
       <span id="modeName">
         ⚔️ Campaign Battle
       </span>
 
+
       <span class="hud-stat">
+
         ⭐
+
         <span id="xp">
           0
         </span>
+
         XP
+
       </span>
 
+
       <span class="hud-stat">
+
         ❤️
+
         <span id="lives">
           3
         </span>
+
       </span>
+
 
     </div>
 
 
 
-    <!-- PROGRESS -->
+    <!-- CAMPAIGN PROGRESS -->
 
     <div
       id="campaignProgressWrap"
       class="campaign-progress-wrap"
     >
 
+
       <div class="campaign-progress-top">
 
+
         <span id="campaignQuestionText">
-          Campaign 1
+          Question 1
         </span>
 
+
         <span id="bossProgressText">
-          Boss in 9
+          Boss in 9 questions
         </span>
+
 
       </div>
 
@@ -1409,11 +1142,14 @@
 
       </div>
 
+
     </div>
 
 
 
-    <!-- BATTLE -->
+    <!-- ================================================= -->
+    <!-- BATTLE ARENA                                      -->
+    <!-- ================================================= -->
 
     <div id="battleArena">
 
@@ -1434,12 +1170,14 @@
       </div>
 
 
+
       <div class="battle-field">
 
 
         <!-- PLAYER -->
 
         <div class="fighter">
+
 
           <div
             id="playerCharacter"
@@ -1477,6 +1215,7 @@
             100 / 100 HP
           </div>
 
+
         </div>
 
 
@@ -1484,6 +1223,7 @@
         <!-- ENEMY -->
 
         <div class="fighter">
+
 
           <div
             id="enemyCharacter"
@@ -1524,15 +1264,20 @@
             100 / 100 HP
           </div>
 
+
         </div>
 
+
       </div>
+
 
     </div>
 
 
 
-    <!-- QUESTION -->
+    <!-- ================================================= -->
+    <!-- QUESTION PANEL                                    -->
+    <!-- ================================================= -->
 
     <div class="question-panel">
 
@@ -1566,17 +1311,35 @@
 
       <p id="result"></p>
 
+
     </div>
 
 
 
-    <button
-      id="backToMenuButton"
-      class="game-button"
-      type="button"
-    >
-      ⬅️ Back to Menu
-    </button>
+    <!-- BOTTOM BUTTONS -->
+
+    <div class="bottom-buttons">
+
+
+      <button
+        id="backToMenuButton"
+        class="game-button"
+        type="button"
+      >
+        ⬅️ Back to Menu
+      </button>
+
+
+      <button
+        id="restartCampaignButton"
+        class="game-button"
+        type="button"
+      >
+        🔄 Restart Campaign
+      </button>
+
+
+    </div>
 
 
   </div>
@@ -1586,7 +1349,7 @@
 
 
 <!-- ================================================= -->
-<!-- FILES                                             -->
+<!-- DATA FILES                                        -->
 <!-- ================================================= -->
 
 <script src="questions.js"></script>
@@ -1599,63 +1362,66 @@
 
 
 /* ===================================================== */
-/* MAIN STATE                                            */
+/* MAIN GAME STATE                                       */
 /* ===================================================== */
 
-let xp = 0;
 
-let lives = 3;
+let xp =
+  0;
 
-let currentQuestion = null;
 
-let currentMode = null;
+let lives =
+  3;
 
-let questionLocked = false;
 
-let selectedAnswers = [];
+let currentQuestion =
+  null;
 
-let previousQuestionId = null;
 
-let campaignQuestions = [];
+let currentMode =
+  null;
+
+
+let questionLocked =
+  false;
+
+
+let selectedAnswers =
+  [];
+
+
+let previousQuestionId =
+  null;
+
+
+let campaignQuestions =
+  [];
 
 
 /* ===================================================== */
-/* START                                                 */
+/* START GAME                                            */
 /* ===================================================== */
+
 
 function startGame(
   mode
 ) {
 
+
   currentMode =
     mode;
 
-  xp =
-    0;
-
-  lives =
-    3;
-
-  previousQuestionId =
-    null;
 
   selectedAnswers =
     [];
+
 
   questionLocked =
     false;
 
 
-  document.getElementById(
-    "xp"
-  ).innerText =
-    xp;
-
-
-  document.getElementById(
-    "lives"
-  ).innerText =
-    lives;
+  previousQuestionId =
+    null;
 
 
   document.getElementById(
@@ -1686,6 +1452,7 @@ function startGame(
 
     exam:
       "📝 Practice Exam"
+
   };
 
 
@@ -1695,9 +1462,16 @@ function startGame(
     names[mode];
 
 
+  /* ================================================= */
+  /* CAMPAIGN                                         */
+  /* ================================================= */
+
+
   if (
-    mode === "battle"
+    mode ===
+    "battle"
   ) {
+
 
     document.getElementById(
       "battleArena"
@@ -1711,24 +1485,67 @@ function startGame(
       "block";
 
 
+    document.getElementById(
+      "restartCampaignButton"
+    ).style.display =
+      "block";
+
+
     campaignQuestions =
+
       getPlayableQuestions()
         .sort(
           (a, b) =>
-            a.id - b.id
+            a.id -
+            b.id
         );
+
+
+    /*
+      setupBattle() now loads
+      saved campaign data.
+    */
 
 
     setupBattle();
 
 
+    /*
+      If the save says campaign
+      is complete, show victory.
+    */
+
+
+    if (
+      campaignComplete
+    ) {
+
+      campaignVictory();
+
+      return;
+
+    }
+
+
+    /*
+      Resume exactly where
+      the player left off.
+    */
+
+
     loadCampaignQuestion(
-      0
+      questionsAnswered
     );
 
 
     return;
+
   }
+
+
+  /* ================================================= */
+  /* OTHER MODES                                      */
+  /* ================================================= */
 
 
   document.getElementById(
@@ -1743,7 +1560,34 @@ function startGame(
     "none";
 
 
+  document.getElementById(
+    "restartCampaignButton"
+  ).style.display =
+    "none";
+
+
+  xp =
+    0;
+
+
+  lives =
+    3;
+
+
+  document.getElementById(
+    "xp"
+  ).innerText =
+    xp;
+
+
+  document.getElementById(
+    "lives"
+  ).innerText =
+    lives;
+
+
   loadQuestion();
+
 }
 
 
@@ -1751,24 +1595,31 @@ function startGame(
 /* PLAYABLE QUESTIONS                                    */
 /* ===================================================== */
 
+
 function getPlayableQuestions() {
+
 
   if (
     typeof questions ===
     "undefined"
   ) {
+
     return [];
+
   }
 
 
   return questions.filter(
     question => {
 
+
       if (
         question.pbq ===
         true
       ) {
+
         return false;
+
       }
 
 
@@ -1777,7 +1628,9 @@ function getPlayableQuestions() {
           question.answers
         )
       ) {
+
         return false;
+
       }
 
 
@@ -1785,32 +1638,53 @@ function getPlayableQuestions() {
         question.answers.length ===
         0
       ) {
+
         return false;
+
       }
 
 
       if (
-        question.correct === null ||
-        question.correct === undefined
+        question.correct ===
+          null
+        ||
+        question.correct ===
+          undefined
       ) {
+
         return false;
+
       }
 
 
+      /*
+        Skip malformed
+        multi-answer questions.
+      */
+
+
       if (
-        question.multiple === true &&
+        question.multiple ===
+          true
+        &&
         Array.isArray(
           question.correct
-        ) &&
-        question.correct.length < 2
+        )
+        &&
+        question.correct.length <
+          2
       ) {
+
         return false;
+
       }
 
 
       return true;
+
     }
   );
+
 }
 
 
@@ -1818,12 +1692,15 @@ function getPlayableQuestions() {
 /* CAMPAIGN QUESTION                                     */
 /* ===================================================== */
 
+
 function loadCampaignQuestion(
   campaignIndex
 ) {
 
+
   questionLocked =
     false;
+
 
   selectedAnswers =
     [];
@@ -1834,9 +1711,12 @@ function loadCampaignQuestion(
     campaignQuestions.length
   ) {
 
+
     campaignVictory();
 
+
     return;
+
   }
 
 
@@ -1852,7 +1732,9 @@ function loadCampaignQuestion(
 
   renderCurrentQuestion();
 
+
   updateCampaignDisplay();
+
 }
 
 
@@ -1860,23 +1742,29 @@ function loadCampaignQuestion(
 /* RANDOM QUESTION                                       */
 /* ===================================================== */
 
+
 function loadQuestion() {
+
 
   if (
     currentMode ===
     "battle"
   ) {
 
+
     loadCampaignQuestion(
       questionsAnswered
     );
 
+
     return;
+
   }
 
 
   questionLocked =
     false;
+
 
   selectedAnswers =
     [];
@@ -1891,18 +1779,23 @@ function loadQuestion() {
     0
   ) {
 
+
     document.getElementById(
       "question"
     ).innerText =
       "No playable questions found.";
 
+
     return;
+
   }
 
 
   let availableQuestions =
+
     playableQuestions.filter(
       question =>
+
         question.id !==
         previousQuestionId
     );
@@ -1912,12 +1805,15 @@ function loadQuestion() {
     availableQuestions.length ===
     0
   ) {
+
     availableQuestions =
       playableQuestions;
+
   }
 
 
   currentQuestion =
+
     availableQuestions[
       Math.floor(
         Math.random() *
@@ -1931,6 +1827,7 @@ function loadQuestion() {
 
 
   renderCurrentQuestion();
+
 }
 
 
@@ -1938,7 +1835,9 @@ function loadQuestion() {
 /* RENDER QUESTION                                       */
 /* ===================================================== */
 
+
 function renderCurrentQuestion() {
+
 
   document.getElementById(
     "question"
@@ -1949,6 +1848,7 @@ function renderCurrentQuestion() {
   document.getElementById(
     "category"
   ).innerText =
+
     "📚 " +
 
     (
@@ -1991,20 +1891,32 @@ function renderCurrentQuestion() {
     )
   ) {
 
+
     const required =
       currentQuestion.correct.length;
 
 
     instructions.innerText =
+
       "Select " +
-      numberToWord(required) +
+
+      numberToWord(
+        required
+      )
+
+      +
+
       " answers";
 
 
     submitButton.style.display =
       "block";
 
-  } else {
+  }
+
+
+  else {
+
 
     instructions.innerText =
       "Select the best answer";
@@ -2012,24 +1924,30 @@ function renderCurrentQuestion() {
 
     submitButton.style.display =
       "none";
+
   }
 
 
   createAnswerButtons();
+
 }
 
 
 /* ===================================================== */
-/* PROGRESS DISPLAY                                      */
+/* CAMPAIGN DISPLAY                                      */
 /* ===================================================== */
 
+
 function updateCampaignDisplay() {
+
 
   if (
     currentMode !==
     "battle"
   ) {
+
     return;
+
   }
 
 
@@ -2038,13 +1956,15 @@ function updateCampaignDisplay() {
 
 
   if (
-    total === 0
+    total <= 0
   ) {
+
     return;
+
   }
 
 
-  const currentNumber =
+  const current =
     Math.min(
       questionsAnswered + 1,
       total
@@ -2054,95 +1974,127 @@ function updateCampaignDisplay() {
   document.getElementById(
     "campaignQuestionText"
   ).innerText =
-    "Campaign " +
-    currentNumber +
+
+    "Question " +
+
+    current +
+
     "/" +
+
     total;
 
 
+  /*
+    =====================================
+    BOSS PHASE
+    =====================================
+  */
+
+
   if (
-    currentNumber === total
+    battlePhase ===
+    "boss"
   ) {
+
 
     document.getElementById(
       "bossProgressText"
     ).innerText =
-      "👑 FINAL BOSS";
+
+      "👑 BOSS " +
+
+      enemyHP +
+
+      "/" +
+
+      enemyMaxHP +
+
+      " HP";
+
+
+    const bossPercent =
+
+      (
+        (
+          enemyMaxHP -
+          enemyHP
+        )
+        /
+        enemyMaxHP
+      )
+      *
+      100;
 
 
     document.getElementById(
       "campaignProgressFill"
     ).style.width =
-      "100%";
+
+      bossPercent +
+      "%";
 
 
     return;
+
   }
 
 
-  if (
-    currentNumber ===
-    total - 1
-  ) {
-
-    document.getElementById(
-      "bossProgressText"
-    ).innerText =
-      "⚔️ FINAL GUARDIAN";
-
-    return;
-  }
+  /*
+    =====================================
+    NORMAL PHASE
+    =====================================
+  */
 
 
-  const positionInStage =
+  const remaining =
+
+    NORMAL_QUESTIONS_PER_STAGE -
+
+    normalQuestionsThisStage;
+
+
+  document.getElementById(
+    "bossProgressText"
+  ).innerText =
+
+    "Boss in " +
+
+    remaining +
+
     (
-      (
-        currentNumber - 1
-      ) %
-      10
-    ) + 1;
+      remaining === 1
+        ? " question"
+        : " questions"
+    );
 
 
-  const questionsUntilBoss =
-    10 -
-    positionInStage;
+  const stagePercent =
 
-
-  if (
-    positionInStage === 10
-  ) {
-
-    document.getElementById(
-      "bossProgressText"
-    ).innerText =
-      "👑 BOSS";
-
-  } else {
-
-    document.getElementById(
-      "bossProgressText"
-    ).innerText =
-      "Boss in " +
-      questionsUntilBoss;
-  }
+    (
+      normalQuestionsThisStage /
+      NORMAL_QUESTIONS_PER_STAGE
+    )
+    *
+    100;
 
 
   document.getElementById(
     "campaignProgressFill"
   ).style.width =
-    (
-      positionInStage *
-      10
-    ) +
+
+    stagePercent +
     "%";
+
 }
 
 
 /* ===================================================== */
-/* ANSWERS                                               */
+/* CREATE ANSWER BUTTONS                                 */
 /* ===================================================== */
 
+
 function createAnswerButtons() {
+
 
   const container =
     document.getElementById(
@@ -2160,6 +2112,7 @@ function createAnswerButtons() {
       index
     ) => {
 
+
       const button =
         document.createElement(
           "button"
@@ -2174,12 +2127,29 @@ function createAnswerButtons() {
         "answer";
 
 
+      button.dataset.index =
+        index;
+
+
       button.innerText =
+
         String.fromCharCode(
-          65 + index
-        ) +
-        ". " +
+          65 +
+          index
+        )
+
+        +
+
+        ". "
+
+        +
+
         answer;
+
+
+      /*
+        MULTIPLE ANSWER
+      */
 
 
       if (
@@ -2188,48 +2158,69 @@ function createAnswerButtons() {
         )
       ) {
 
+
         button.onclick =
           function () {
+
 
             toggleAnswer(
               index,
               button
             );
+
           };
 
-      } else {
+      }
+
+
+      /*
+        SINGLE ANSWER
+      */
+
+
+      else {
+
 
         button.onclick =
           function () {
 
+
             submitSingleAnswer(
               index
             );
+
           };
+
       }
 
 
       container.appendChild(
         button
       );
+
     }
   );
+
 }
 
 
 /* ===================================================== */
-/* MULTI SELECT                                          */
+/* MULTIPLE SELECTION                                    */
 /* ===================================================== */
+
 
 function toggleAnswer(
   index,
   button
 ) {
 
+
   if (
     questionLocked
   ) {
+
     return;
+
   }
 
 
@@ -2243,9 +2234,16 @@ function toggleAnswer(
     );
 
 
+  /*
+    DESELECT
+  */
+
+
   if (
-    existing !== -1
+    existing !==
+    -1
   ) {
+
 
     selectedAnswers.splice(
       existing,
@@ -2257,13 +2255,24 @@ function toggleAnswer(
       "selected"
     );
 
-  } else {
+  }
+
+
+  /*
+    SELECT
+  */
+
+
+  else {
+
 
     if (
       selectedAnswers.length >=
       required
     ) {
+
       return;
+
     }
 
 
@@ -2275,44 +2284,62 @@ function toggleAnswer(
     button.classList.add(
       "selected"
     );
+
   }
 
 
   document.getElementById(
     "submitAnswerButton"
   ).disabled =
+
     selectedAnswers.length !==
     required;
+
 }
 
 
 /* ===================================================== */
-/* SUBMIT                                                */
+/* SINGLE SUBMIT                                         */
 /* ===================================================== */
+
 
 function submitSingleAnswer(
   selectedIndex
 ) {
 
+
   if (
     questionLocked
   ) {
+
     return;
+
   }
 
 
   evaluateAnswer(
-    [selectedIndex]
+    [
+      selectedIndex
+    ]
   );
+
 }
+
+
+/* ===================================================== */
+/* MULTIPLE SUBMIT                                       */
+/* ===================================================== */
 
 
 function submitMultipleAnswer() {
 
+
   if (
     questionLocked
   ) {
+
     return;
+
   }
 
 
@@ -2321,7 +2348,9 @@ function submitMultipleAnswer() {
       currentQuestion.correct
     )
   ) {
+
     return;
+
   }
 
 
@@ -2329,13 +2358,18 @@ function submitMultipleAnswer() {
     selectedAnswers.length !==
     currentQuestion.correct.length
   ) {
+
     return;
+
   }
 
 
   evaluateAnswer(
-    [...selectedAnswers]
+    [
+      ...selectedAnswers
+    ]
   );
+
 }
 
 
@@ -2343,24 +2377,40 @@ function submitMultipleAnswer() {
 /* GRADE                                                 */
 /* ===================================================== */
 
+
 function evaluateAnswer(
   userAnswers
 ) {
+
 
   questionLocked =
     true;
 
 
   const correctAnswers =
+
     Array.isArray(
       currentQuestion.correct
     )
-      ? [...currentQuestion.correct]
-      : [currentQuestion.correct];
+
+      ?
+
+      [
+        ...currentQuestion.correct
+      ]
+
+      :
+
+      [
+        currentQuestion.correct
+      ];
 
 
   const selected =
-    [...userAnswers]
+
+    [
+      ...userAnswers
+    ]
       .sort(
         (a, b) =>
           a - b
@@ -2368,7 +2418,10 @@ function evaluateAnswer(
 
 
   const correct =
-    [...correctAnswers]
+
+    [
+      ...correctAnswers
+    ]
       .sort(
         (a, b) =>
           a - b
@@ -2376,14 +2429,18 @@ function evaluateAnswer(
 
 
   const isCorrect =
+
     selected.length ===
-      correct.length &&
+    correct.length
+
+    &&
 
     selected.every(
       (
         value,
         index
       ) =>
+
         value ===
         correct[index]
     );
@@ -2395,11 +2452,21 @@ function evaluateAnswer(
   );
 
 
-  if (isCorrect) {
+  if (
+    isCorrect
+  ) {
+
     handleCorrectAnswer();
-  } else {
-    handleWrongAnswer();
+
   }
+
+
+  else {
+
+    handleWrongAnswer();
+
+  }
+
 }
 
 
@@ -2407,10 +2474,12 @@ function evaluateAnswer(
 /* HIGHLIGHT                                             */
 /* ===================================================== */
 
+
 function highlightAnswers(
   selected,
   correct
 ) {
+
 
   const buttons =
     document.querySelectorAll(
@@ -2424,6 +2493,7 @@ function highlightAnswers(
       index
     ) => {
 
+
       button.disabled =
         true;
 
@@ -2434,22 +2504,30 @@ function highlightAnswers(
         )
       ) {
 
+
         button.classList.add(
           "correct-answer"
         );
 
-      } else if (
+      }
+
+
+      else if (
         selected.includes(
           index
         )
       ) {
 
+
         button.classList.add(
           "wrong-answer"
         );
+
       }
+
     }
   );
+
 }
 
 
@@ -2457,9 +2535,12 @@ function highlightAnswers(
 /* CORRECT                                               */
 /* ===================================================== */
 
+
 function handleCorrectAnswer() {
 
-  xp += 10;
+
+  xp +=
+    10;
 
 
   document.getElementById(
@@ -2468,11 +2549,41 @@ function handleCorrectAnswer() {
     xp;
 
 
+  let message =
+
+    "✅ <strong>Correct!</strong>"
+
+    +
+
+    "<br>+10 XP";
+
+
+  if (
+    currentQuestion.explanation
+  ) {
+
+
+    message +=
+
+      "<br><br>"
+
+      +
+
+      currentQuestion.explanation;
+
+  }
+
+
   document.getElementById(
     "result"
   ).innerHTML =
-    "✅ <strong>Correct!</strong>" +
-    "<br>+10 XP";
+    message;
+
+
+  /*
+    Campaign transition is
+    completely controlled by battle.js.
+  */
 
 
   if (
@@ -2480,9 +2591,12 @@ function handleCorrectAnswer() {
     "battle"
   ) {
 
+
     correctBattleAnswer();
 
+
     return;
+
   }
 
 
@@ -2490,6 +2604,7 @@ function handleCorrectAnswer() {
     loadQuestion,
     1800
   );
+
 }
 
 
@@ -2497,63 +2612,141 @@ function handleCorrectAnswer() {
 /* WRONG                                                 */
 /* ===================================================== */
 
+
 function handleWrongAnswer() {
 
-  lives--;
+
+  /*
+    Keep lives for the other modes.
+
+    Campaign health itself is
+    controlled by battle.js.
+  */
 
 
   if (
-    lives < 0
+    currentMode !==
+    "battle"
   ) {
-    lives = 0;
+
+
+    lives--;
+
+
+    if (
+      lives < 0
+    ) {
+
+      lives =
+        0;
+
+    }
+
+
+    document.getElementById(
+      "lives"
+    ).innerText =
+      lives;
+
   }
 
 
-  document.getElementById(
-    "lives"
-  ).innerText =
-    lives;
-
-
   const correctIndexes =
+
     Array.isArray(
       currentQuestion.correct
     )
-      ? currentQuestion.correct
-      : [currentQuestion.correct];
+
+      ?
+
+      currentQuestion.correct
+
+      :
+
+      [
+        currentQuestion.correct
+      ];
 
 
   const correctText =
+
     correctIndexes
       .map(
         index => {
 
+
           return (
+
             String.fromCharCode(
-              65 + index
-            ) +
-            ". " +
+              65 +
+              index
+            )
+
+            +
+
+            ". "
+
+            +
+
             currentQuestion.answers[
               index
             ]
+
           );
+
         }
       )
-      .join("<br>");
+      .join(
+        "<br>"
+      );
+
+
+  let message =
+
+    "❌ <strong>Incorrect</strong>"
+
+    +
+
+    "<br><br>"
+
+    +
+
+    "<strong>Correct answer:</strong>"
+
+    +
+
+    "<br>"
+
+    +
+
+    correctText;
+
+
+  if (
+    currentQuestion.explanation
+  ) {
+
+
+    message +=
+
+      "<br><br>"
+
+      +
+
+      currentQuestion.explanation;
+
+  }
 
 
   document.getElementById(
     "result"
   ).innerHTML =
-    "❌ <strong>Incorrect</strong>" +
+    message;
 
-    "<br><br>" +
 
-    "<strong>Correct answer:</strong>" +
-
-    "<br>" +
-
-    correctText;
+  /*
+    Campaign
+  */
 
 
   if (
@@ -2561,9 +2754,12 @@ function handleWrongAnswer() {
     "battle"
   ) {
 
+
     wrongBattleAnswer();
 
+
     return;
+
   }
 
 
@@ -2571,9 +2767,12 @@ function handleWrongAnswer() {
     lives <= 0
   ) {
 
+
     genericGameOver();
 
+
     return;
+
   }
 
 
@@ -2581,16 +2780,19 @@ function handleWrongAnswer() {
     loadQuestion,
     2200
   );
+
 }
 
 
 /* ===================================================== */
-/* HELPERS                                               */
+/* NUMBER WORD                                           */
 /* ===================================================== */
+
 
 function numberToWord(
   number
 ) {
+
 
   const words = {
 
@@ -2600,6 +2802,7 @@ function numberToWord(
     4: "FOUR",
     5: "FIVE",
     6: "SIX"
+
   };
 
 
@@ -2607,14 +2810,17 @@ function numberToWord(
     words[number] ||
     number
   );
+
 }
 
 
 /* ===================================================== */
-/* GENERIC GAME OVER                                     */
+/* OTHER MODE GAME OVER                                  */
 /* ===================================================== */
 
+
 function genericGameOver() {
+
 
   questionLocked =
     true;
@@ -2635,7 +2841,11 @@ function genericGameOver() {
   document.getElementById(
     "result"
   ).innerHTML =
-    "Final XP: " +
+
+    "Final XP: "
+
+    +
+
     xp;
 
 
@@ -2649,14 +2859,37 @@ function genericGameOver() {
     "submitAnswerButton"
   ).style.display =
     "none";
+
 }
 
 
 /* ===================================================== */
-/* BACK                                                  */
+/* BACK TO MENU                                          */
 /* ===================================================== */
 
+
 function backToMenu() {
+
+
+  /*
+    Save before leaving
+    Campaign Battle.
+  */
+
+
+  if (
+    currentMode ===
+      "battle"
+    &&
+    typeof saveCampaign ===
+      "function"
+  ) {
+
+
+    saveCampaign();
+
+  }
+
 
   document.getElementById(
     "gameScreen"
@@ -2703,20 +2936,52 @@ function backToMenu() {
   currentMode =
     null;
 
+
   currentQuestion =
     null;
+
 
   selectedAnswers =
     [];
 
+
   questionLocked =
     false;
+
 }
+
+
+/* ===================================================== */
+/* SAVE ON PAGE CLOSE                                    */
+/* ===================================================== */
+
+
+window.addEventListener(
+  "beforeunload",
+  function () {
+
+
+    if (
+      currentMode ===
+        "battle"
+      &&
+      typeof saveCampaign ===
+        "function"
+    ) {
+
+
+      saveCampaign();
+
+    }
+
+  }
+);
 
 
 /* ===================================================== */
 /* EVENTS                                                */
 /* ===================================================== */
+
 
 document.getElementById(
   "submitAnswerButton"
@@ -2731,6 +2996,14 @@ document.getElementById(
 ).addEventListener(
   "click",
   backToMenu
+);
+
+
+document.getElementById(
+  "restartCampaignButton"
+).addEventListener(
+  "click",
+  restartCampaign
 );
 
 
