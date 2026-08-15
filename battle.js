@@ -18,18 +18,27 @@ let questionsAnswered = 0;
 let currentStage = 0;
 
 let isBoss = false;
-let isFinalEnemy = false;
-let isFinalBoss = false;
 
 let battleFinished = false;
+
 let campaignComplete = false;
 
 
 /* ===================================================== */
-/* CAMPAIGN SETTINGS                                     */
+/* SETTINGS                                              */
 /* ===================================================== */
 
 const BOSS_INTERVAL = 10;
+
+const NORMAL_ENEMY_HP = 100;
+
+const BOSS_HP = 200;
+
+const PLAYER_DAMAGE = 50;
+
+const NORMAL_ENEMY_DAMAGE = 20;
+
+const BOSS_DAMAGE = 30;
 
 
 /* ===================================================== */
@@ -55,20 +64,10 @@ function getTotalCampaignQuestions() {
 
       return (
         question.pbq !== true &&
-
         Array.isArray(question.answers) &&
-
         question.answers.length > 0 &&
-
         question.correct !== null &&
-
-        question.correct !== undefined &&
-
-        !(
-          question.multiple === true &&
-          Array.isArray(question.correct) &&
-          question.correct.length < 2
-        )
+        question.correct !== undefined
       );
 
     }).length;
@@ -79,375 +78,144 @@ function getTotalCampaignQuestions() {
 
 
 /* ===================================================== */
-/* NORMAL ENEMIES                                        */
+/* ENEMY NAMES                                           */
 /* ===================================================== */
 
-const normalEnemies = [
+/*
+  These names line up with:
 
-  {
-    name: "Malware Bot",
-    image: "assets/enemy1.png",
-    hp: 100
-  },
+  enemy1.png
+  enemy2.png
+  enemy3.png
+  ...
 
-  {
-    name: "Firewall Beast",
-    image: "assets/enemy2.png",
-    hp: 110
-  },
+  You can rename these however you want.
+*/
 
-  {
-    name: "Packet Goblin",
-    image: "assets/enemy3.png",
-    hp: 120
-  },
+const enemyNames = [
 
-  {
-    name: "Virus Slime",
-    image: "assets/enemy4.png",
-    hp: 130
-  },
+  "Malware Bot",
+  "Firewall Beast",
+  "Packet Goblin",
+  "Virus Slime",
+  "Data Imp",
+  "Cable Crawler",
+  "RAM Wraith",
+  "Port Phantom",
+  "BIOS Bug",
+  "Cloud Creep",
 
-  {
-    name: "Data Imp",
-    image: "assets/enemy5.png",
-    hp: 140
-  },
+  "Cache Creeper",
+  "Router Rogue",
+  "Switch Spider",
+  "Signal Specter",
+  "Storage Stalker",
+  "Thermal Troll",
+  "Printer Poltergeist",
+  "Voltage Viper",
+  "DNS Demon",
+  "DHCP Phantom",
 
-  {
-    name: "Cable Crawler",
-    image: "assets/enemy6.png",
-    hp: 150
-  },
+  "Fiber Fiend",
+  "Wireless Wraith",
+  "Virtual Vandal",
+  "Hypervisor Horror",
+  "RAID Raider",
+  "Socket Stalker",
+  "Power Parasite",
+  "Display Drake",
+  "Peripheral Phantom",
+  "Subnet Shade",
 
-  {
-    name: "RAM Wraith",
-    image: "assets/enemy7.png",
-    hp: 160
-  },
+  "Protocol Predator",
+  "Encryption Entity",
+  "NFC Nightmare",
+  "Bluetooth Brute",
+  "Cloud Corruptor",
+  "Latency Lurker",
+  "Firmware Fiend",
+  "Thermal Titanling",
+  "Storage Shade",
+  "Network Nemesis",
 
-  {
-    name: "Port Phantom",
-    image: "assets/enemy8.png",
-    hp: 170
-  },
-
-  {
-    name: "BIOS Bug",
-    image: "assets/enemy9.png",
-    hp: 180
-  },
-
-  {
-    name: "Cloud Creep",
-    image: "assets/enemy10.png",
-    hp: 190
-  },
-
-  {
-    name: "Cache Creeper",
-    image: "assets/enemy11.png",
-    hp: 200
-  },
-
-  {
-    name: "Router Rogue",
-    image: "assets/enemy12.png",
-    hp: 210
-  },
-
-  {
-    name: "Switch Spider",
-    image: "assets/enemy13.png",
-    hp: 220
-  },
-
-  {
-    name: "Signal Specter",
-    image: "assets/enemy14.png",
-    hp: 230
-  },
-
-  {
-    name: "Storage Stalker",
-    image: "assets/enemy15.png",
-    hp: 240
-  },
-
-  {
-    name: "Thermal Troll",
-    image: "assets/enemy16.png",
-    hp: 250
-  },
-
-  {
-    name: "Printer Poltergeist",
-    image: "assets/enemy17.png",
-    hp: 260
-  },
-
-  {
-    name: "Voltage Viper",
-    image: "assets/enemy18.png",
-    hp: 270
-  },
-
-  {
-    name: "DNS Demon",
-    image: "assets/enemy19.png",
-    hp: 280
-  },
-
-  {
-    name: "DHCP Phantom",
-    image: "assets/enemy20.png",
-    hp: 290
-  },
-
-  {
-    name: "Fiber Fiend",
-    image: "assets/enemy21.png",
-    hp: 300
-  },
-
-  {
-    name: "Wireless Wraith",
-    image: "assets/enemy22.png",
-    hp: 310
-  },
-
-  {
-    name: "Virtual Vandal",
-    image: "assets/enemy23.png",
-    hp: 320
-  },
-
-  {
-    name: "Hypervisor Horror",
-    image: "assets/enemy24.png",
-    hp: 330
-  },
-
-  {
-    name: "RAID Raider",
-    image: "assets/enemy25.png",
-    hp: 340
-  },
-
-  {
-    name: "Socket Stalker",
-    image: "assets/enemy26.png",
-    hp: 350
-  },
-
-  {
-    name: "Power Parasite",
-    image: "assets/enemy27.png",
-    hp: 360
-  },
-
-  {
-    name: "Display Drake",
-    image: "assets/enemy28.png",
-    hp: 370
-  },
-
-  {
-    name: "Peripheral Phantom",
-    image: "assets/enemy29.png",
-    hp: 380
-  },
-
-  {
-    name: "Subnet Shade",
-    image: "assets/enemy30.png",
-    hp: 390
-  },
-
-  {
-    name: "Protocol Predator",
-    image: "assets/enemy31.png",
-    hp: 400
-  },
-
-  {
-    name: "Encryption Entity",
-    image: "assets/enemy32.png",
-    hp: 410
-  },
-
-  {
-    name: "NFC Nightmare",
-    image: "assets/enemy33.png",
-    hp: 420
-  },
-
-  {
-    name: "Bluetooth Brute",
-    image: "assets/enemy34.png",
-    hp: 430
-  },
-
-  {
-    name: "Cloud Corruptor",
-    image: "assets/enemy35.png",
-    hp: 440
-  },
-
-  {
-    name: "Latency Lurker",
-    image: "assets/enemy36.png",
-    hp: 450
-  },
-
-  {
-    name: "Firmware Fiend",
-    image: "assets/enemy37.png",
-    hp: 460
-  },
-
-  {
-    name: "Thermal Titanling",
-    image: "assets/enemy38.png",
-    hp: 470
-  },
-
-  {
-    name: "Storage Shade",
-    image: "assets/enemy39.png",
-    hp: 480
-  },
-
-  {
-    name: "Network Nemesis",
-    image: "assets/enemy40.png",
-    hp: 490
-  },
-
-  {
-    name: "Memory Marauder",
-    image: "assets/enemy41.png",
-    hp: 500
-  },
-
-  {
-    name: "Boot Beast",
-    image: "assets/enemy42.png",
-    hp: 510
-  },
-
-  {
-    name: "Signal Serpent",
-    image: "assets/enemy43.png",
-    hp: 520
-  },
-
-  {
-    name: "Cloud Crusher",
-    image: "assets/enemy44.png",
-    hp: 530
-  },
-
-  {
-    name: "System Specter",
-    image: "assets/enemy45.png",
-    hp: 540
-  },
-
-  {
-    name: "Core Corruptor",
-    image: "assets/enemy46.png",
-    hp: 550
-  }
+  "Memory Marauder",
+  "Boot Beast",
+  "Signal Serpent",
+  "Cloud Crusher",
+  "System Specter",
+  "Core Corruptor"
 
 ];
 
 
 /* ===================================================== */
-/* BOSSES                                                */
+/* BOSS NAMES                                            */
 /* ===================================================== */
 
-const bosses = [
+const bossNames = [
 
-  { name: "Malware Overlord", image: "assets/boss1.png", hp: 250 },
-  { name: "Network Titan", image: "assets/boss2.png", hp: 275 },
-  { name: "Cyber Dragon", image: "assets/boss3.png", hp: 300 },
-  { name: "RAID Colossus", image: "assets/boss4.png", hp: 325 },
-  { name: "Cloud Emperor", image: "assets/boss5.png", hp: 350 },
-  { name: "Thermal King", image: "assets/boss6.png", hp: 375 },
-  { name: "Packet Warlord", image: "assets/boss7.png", hp: 400 },
-  { name: "BIOS Behemoth", image: "assets/boss8.png", hp: 425 },
-  { name: "Port Reaper", image: "assets/boss9.png", hp: 450 },
-  { name: "Firewall Sovereign", image: "assets/boss10.png", hp: 475 },
+  "Malware Overlord",
+  "Network Titan",
+  "Cyber Dragon",
+  "RAID Colossus",
+  "Cloud Emperor",
+  "Thermal King",
+  "Packet Warlord",
+  "BIOS Behemoth",
+  "Port Reaper",
+  "Firewall Sovereign",
 
-  { name: "Storage Leviathan", image: "assets/boss11.png", hp: 500 },
-  { name: "Wireless Overlord", image: "assets/boss12.png", hp: 525 },
-  { name: "Virtualization King", image: "assets/boss13.png", hp: 550 },
-  { name: "Subnet Tyrant", image: "assets/boss14.png", hp: 575 },
-  { name: "Printer Emperor", image: "assets/boss15.png", hp: 600 },
-  { name: "Voltage Monarch", image: "assets/boss16.png", hp: 625 },
-  { name: "DNS Destroyer", image: "assets/boss17.png", hp: 650 },
-  { name: "DHCP Devourer", image: "assets/boss18.png", hp: 675 },
-  { name: "Fiber Overlord", image: "assets/boss19.png", hp: 700 },
-  { name: "Signal Emperor", image: "assets/boss20.png", hp: 725 },
+  "Storage Leviathan",
+  "Wireless Overlord",
+  "Virtualization King",
+  "Subnet Tyrant",
+  "Printer Emperor",
+  "Voltage Monarch",
+  "DNS Destroyer",
+  "DHCP Devourer",
+  "Fiber Overlord",
+  "Signal Emperor",
 
-  { name: "Hypervisor Titan", image: "assets/boss21.png", hp: 750 },
-  { name: "RAID Emperor", image: "assets/boss22.png", hp: 775 },
-  { name: "Socket Tyrant", image: "assets/boss23.png", hp: 800 },
-  { name: "Power Overlord", image: "assets/boss24.png", hp: 825 },
-  { name: "Display Colossus", image: "assets/boss25.png", hp: 850 },
-  { name: "Peripheral King", image: "assets/boss26.png", hp: 875 },
-  { name: "Protocol Emperor", image: "assets/boss27.png", hp: 900 },
-  { name: "Encryption Titan", image: "assets/boss28.png", hp: 925 },
-  { name: "NFC Warlord", image: "assets/boss29.png", hp: 950 },
-  { name: "Bluetooth Overlord", image: "assets/boss30.png", hp: 975 },
+  "Hypervisor Titan",
+  "RAID Emperor",
+  "Socket Tyrant",
+  "Power Overlord",
+  "Display Colossus",
+  "Peripheral King",
+  "Protocol Emperor",
+  "Encryption Titan",
+  "NFC Warlord",
+  "Bluetooth Overlord",
 
-  { name: "Cloud Leviathan", image: "assets/boss31.png", hp: 1000 },
-  { name: "Latency Tyrant", image: "assets/boss32.png", hp: 1025 },
-  { name: "Firmware Emperor", image: "assets/boss33.png", hp: 1050 },
-  { name: "Thermal Colossus", image: "assets/boss34.png", hp: 1075 },
-  { name: "Storage Monarch", image: "assets/boss35.png", hp: 1100 },
-  { name: "Network Overlord", image: "assets/boss36.png", hp: 1125 },
-  { name: "Memory Emperor", image: "assets/boss37.png", hp: 1150 },
-  { name: "Boot Tyrant", image: "assets/boss38.png", hp: 1175 },
-  { name: "Signal Overlord", image: "assets/boss39.png", hp: 1200 },
-  { name: "Cloud Devourer", image: "assets/boss40.png", hp: 1225 },
+  "Cloud Leviathan",
+  "Latency Tyrant",
+  "Firmware Emperor",
+  "Thermal Colossus",
+  "Storage Monarch",
+  "Network Overlord",
+  "Memory Emperor",
+  "Boot Tyrant",
+  "Signal Overlord",
+  "Cloud Devourer",
 
-  { name: "System Emperor", image: "assets/boss41.png", hp: 1250 },
-  { name: "Core Titan", image: "assets/boss42.png", hp: 1275 },
-  { name: "Protocol Destroyer", image: "assets/boss43.png", hp: 1300 },
-  { name: "Network Sovereign", image: "assets/boss44.png", hp: 1325 },
-  { name: "Cyber Emperor", image: "assets/boss45.png", hp: 1350 },
-  { name: "A+ Guardian", image: "assets/boss46.png", hp: 1400 }
+  "System Emperor",
+  "Core Titan",
+  "Protocol Destroyer",
+  "Network Sovereign",
+  "Cyber Emperor",
+  "A+ Guardian"
 
 ];
 
 
 /* ===================================================== */
-/* FINAL ENCOUNTERS                                      */
-/* ===================================================== */
-
-const finalEnemy = {
-  name: "Exam Sentinel",
-  image: "assets/final-enemy.png",
-  hp: 650
-};
-
-
-const finalBoss = {
-  name: "CompTIA Grandmaster",
-  image: "assets/final-boss.png",
-  hp: 1600
-};
-
-
-/* ===================================================== */
-/* SETUP                                                 */
+/* START BATTLE                                          */
 /* ===================================================== */
 
 function setupBattle() {
 
   playerHP = 100;
+
   playerMaxHP = 100;
 
   questionsAnswered = 0;
@@ -455,22 +223,45 @@ function setupBattle() {
   currentStage = 0;
 
   isBoss = false;
-  isFinalEnemy = false;
-  isFinalBoss = false;
 
   battleFinished = false;
-  campaignComplete = false;
 
-  updateCampaignCounter();
+  campaignComplete = false;
 
   loadEnemyForCurrentQuestion();
 
   updateBattleUI();
+
+  updateCampaignCounter();
 }
 
 
 /* ===================================================== */
-/* LOAD ENEMY                                            */
+/* DETERMINE CURRENT STAGE                               */
+/* ===================================================== */
+
+function getStageIndex(questionNumber) {
+
+  return Math.floor(
+    (questionNumber - 1) / BOSS_INTERVAL
+  );
+}
+
+
+/* ===================================================== */
+/* CHECK IF CURRENT QUESTION IS BOSS                     */
+/* ===================================================== */
+
+function isBossQuestion(questionNumber) {
+
+  return (
+    questionNumber % BOSS_INTERVAL === 0
+  );
+}
+
+
+/* ===================================================== */
+/* LOAD ENEMY/BOSS                                       */
 /* ===================================================== */
 
 function loadEnemyForCurrentQuestion() {
@@ -489,114 +280,62 @@ function loadEnemyForCurrentQuestion() {
     questionsAnswered + 1;
 
 
-  /* FINAL GUARDIAN */
-
-  if (
-    totalQuestions >= 2 &&
-    questionNumber === totalQuestions - 1
-  ) {
-
-    isBoss = false;
-    isFinalEnemy = true;
-    isFinalBoss = false;
-
-    applyEnemy(
-      finalEnemy,
-      finalEnemy.name
-    );
-
-    const banner =
-      document.getElementById(
-        "bossBanner"
-      );
-
-    if (banner) {
-
-      banner.style.display =
-        "block";
-
-      banner.innerText =
-        "⚔️ FINAL GUARDIAN ⚔️";
-    }
-
-    return;
-  }
-
-
-  /* FINAL BOSS */
-
-  if (
-    questionNumber ===
-    totalQuestions
-  ) {
-
-    isBoss = true;
-    isFinalEnemy = false;
-    isFinalBoss = true;
-
-    applyEnemy(
-      finalBoss,
-      "👑 " + finalBoss.name
-    );
-
-    const banner =
-      document.getElementById(
-        "bossBanner"
-      );
-
-    if (banner) {
-
-      banner.style.display =
-        "block";
-
-      banner.innerText =
-        "👑 FINAL BOSS 👑";
-    }
-
-    return;
-  }
-
-
-  /* NORMAL STAGES */
-
-  isFinalEnemy = false;
-  isFinalBoss = false;
-
-  const stageIndex =
-    Math.floor(
-      (questionNumber - 1) /
-      BOSS_INTERVAL
-    );
-
   currentStage =
-    stageIndex;
+    getStageIndex(
+      questionNumber
+    );
+
 
   isBoss =
-    questionNumber %
-    BOSS_INTERVAL ===
-    0;
+    isBossQuestion(
+      questionNumber
+    );
 
+
+  /*
+    =====================================
+    BOSS QUESTION
+    =====================================
+  */
 
   if (isBoss) {
 
+    enemyMaxHP =
+      BOSS_HP;
+
+    enemyHP =
+      BOSS_HP;
+
+
     const bossIndex =
       Math.min(
-        stageIndex,
-        bosses.length - 1
+        currentStage,
+        bossNames.length - 1
       );
 
-    const boss =
-      bosses[bossIndex];
 
-    applyEnemy(
-      boss,
-      "👑 " + boss.name
+    const bossName =
+      bossNames[bossIndex];
+
+
+    setEnemyName(
+      "👑 " +
+      bossName
     );
+
+
+    setEnemyImage(
+      "assets/boss" +
+      (bossIndex + 1) +
+      ".png"
+    );
+
 
     const banner =
       document.getElementById(
         "bossBanner"
       );
+
 
     if (banner) {
 
@@ -607,52 +346,73 @@ function loadEnemyForCurrentQuestion() {
         "👑 BOSS BATTLE 👑";
     }
 
-  } else {
+  }
+
+
+  /*
+    =====================================
+    NORMAL ENEMY
+    =====================================
+  */
+
+  else {
+
+    enemyMaxHP =
+      NORMAL_ENEMY_HP;
+
+    enemyHP =
+      NORMAL_ENEMY_HP;
+
 
     const enemyIndex =
       Math.min(
-        stageIndex,
-        normalEnemies.length - 1
+        currentStage,
+        enemyNames.length - 1
       );
 
-    const enemy =
-      normalEnemies[enemyIndex];
 
-    applyEnemy(
-      enemy,
-      enemy.name +
+    const enemyName =
+      enemyNames[enemyIndex];
+
+
+    setEnemyName(
+      enemyName +
       " Lv. " +
-      (stageIndex + 1)
+      (currentStage + 1)
     );
+
+
+    setEnemyImage(
+      "assets/enemy" +
+      (enemyIndex + 1) +
+      ".png"
+    );
+
 
     const banner =
       document.getElementById(
         "bossBanner"
       );
 
+
     if (banner) {
       banner.style.display =
         "none";
     }
   }
+
+
+  updateBattleUI();
+
+  updateCampaignCounter();
 }
 
 
 /* ===================================================== */
-/* APPLY ENEMY                                           */
+/* SET ENEMY NAME                                        */
 /* ===================================================== */
 
-function applyEnemy(
-  enemyData,
-  displayName
-) {
-
-  enemyMaxHP =
-    enemyData.hp;
-
-  enemyHP =
-    enemyMaxHP;
-
+function setEnemyName(name) {
 
   const enemyName =
     document.getElementById(
@@ -660,40 +420,45 @@ function applyEnemy(
     );
 
   if (enemyName) {
-
-    enemyName.innerText =
-      displayName;
+    enemyName.innerText = name;
   }
+}
 
+
+/* ===================================================== */
+/* SET ENEMY IMAGE                                       */
+/* ===================================================== */
+
+function setEnemyImage(path) {
 
   const image =
     document.querySelector(
       "#enemyCharacter img"
     );
 
-  if (image) {
 
-    image.onerror =
-      function () {
-
-        this.onerror =
-          null;
-
-        this.src =
-          "assets/enemy.png";
-      };
-
-    image.src =
-      enemyData.image;
+  if (!image) {
+    return;
   }
 
 
-  updateBattleUI();
+  image.onerror =
+    function () {
+
+      this.onerror = null;
+
+      this.src =
+        "assets/enemy.png";
+    };
+
+
+  image.src =
+    path;
 }
 
 
 /* ===================================================== */
-/* CORRECT                                               */
+/* CORRECT ANSWER                                        */
 /* ===================================================== */
 
 function correctBattleAnswer() {
@@ -706,11 +471,9 @@ function correctBattleAnswer() {
   }
 
 
-  const damage =
-    calculatePlayerDamage();
-
   enemyHP -=
-    damage;
+    PLAYER_DAMAGE;
+
 
   if (enemyHP < 0) {
     enemyHP = 0;
@@ -719,12 +482,28 @@ function correctBattleAnswer() {
 
   animatePlayerAttack();
 
+
   showDamage(
-    "-" + damage,
+    "-" + PLAYER_DAMAGE,
     "enemy"
   );
 
+
   updateBattleUI();
+
+
+  /*
+    Boss has 200 HP.
+
+    One correct question deals 50,
+    but because the boss only appears
+    on one campaign question, we finish
+    the current encounter after the answer.
+
+    The HP bar still visually shows
+    the 50 damage before transition.
+  */
+
 
   finishBattleQuestion(
     true
@@ -733,7 +512,7 @@ function correctBattleAnswer() {
 
 
 /* ===================================================== */
-/* WRONG                                                 */
+/* WRONG ANSWER                                          */
 /* ===================================================== */
 
 function wrongBattleAnswer() {
@@ -747,10 +526,14 @@ function wrongBattleAnswer() {
 
 
   const damage =
-    calculateEnemyDamage();
+    isBoss
+      ? BOSS_DAMAGE
+      : NORMAL_ENEMY_DAMAGE;
+
 
   playerHP -=
     damage;
+
 
   if (playerHP < 0) {
     playerHP = 0;
@@ -759,23 +542,28 @@ function wrongBattleAnswer() {
 
   animateEnemyAttack();
 
+
   showDamage(
     "-" + damage,
     "player"
   );
 
+
   updateBattleUI();
 
 
-  if (playerHP <= 0) {
+  if (
+    playerHP <= 0
+  ) {
 
-    battleFinished =
-      true;
+    battleFinished = true;
+
 
     setTimeout(
       battleGameOver,
       700
     );
+
 
     return;
   }
@@ -788,47 +576,7 @@ function wrongBattleAnswer() {
 
 
 /* ===================================================== */
-/* DAMAGE VALUES                                         */
-/* ===================================================== */
-
-function calculatePlayerDamage() {
-
-  if (isFinalBoss) {
-    return 100;
-  }
-
-  if (isFinalEnemy) {
-    return 90;
-  }
-
-  if (isBoss) {
-    return 75;
-  }
-
-  return 55;
-}
-
-
-function calculateEnemyDamage() {
-
-  if (isFinalBoss) {
-    return 40;
-  }
-
-  if (isFinalEnemy) {
-    return 35;
-  }
-
-  if (isBoss) {
-    return 30;
-  }
-
-  return 20;
-}
-
-
-/* ===================================================== */
-/* FINISH QUESTION                                       */
+/* FINISH CURRENT QUESTION                               */
 /* ===================================================== */
 
 function finishBattleQuestion(
@@ -838,13 +586,18 @@ function finishBattleQuestion(
   battleFinished =
     true;
 
-  questionsAnswered++;
 
+  const wasBoss =
+    isBoss;
+
+
+  /*
+    Small heal for correct answers.
+  */
 
   if (answeredCorrectly) {
 
-    playerHP +=
-      5;
+    playerHP += 5;
 
     if (
       playerHP >
@@ -856,6 +609,9 @@ function finishBattleQuestion(
   }
 
 
+  questionsAnswered++;
+
+
   updateBattleUI();
 
   updateCampaignCounter();
@@ -865,6 +621,7 @@ function finishBattleQuestion(
     typeof updateCampaignDisplay ===
     "function"
   ) {
+
     updateCampaignDisplay();
   }
 
@@ -872,6 +629,10 @@ function finishBattleQuestion(
   const totalQuestions =
     getTotalCampaignQuestions();
 
+
+  /*
+    Campaign finished
+  */
 
   if (
     questionsAnswered >=
@@ -887,6 +648,43 @@ function finishBattleQuestion(
   }
 
 
+  /*
+    =====================================
+    BOSS TRANSITION
+    =====================================
+
+    Example:
+
+    Q10 = boss1.png
+
+    After Q10 finishes:
+    wait so player can see boss result
+
+    then Q11 loads enemy2.png
+  */
+
+  if (wasBoss) {
+
+    setTimeout(
+      () => {
+
+        loadEnemyForCurrentQuestion();
+
+        loadNextCampaignQuestion();
+
+      },
+      2200
+    );
+
+
+    return;
+  }
+
+
+  /*
+    Normal enemy question transition
+  */
+
   setTimeout(
     () => {
 
@@ -901,7 +699,7 @@ function finishBattleQuestion(
 
 
 /* ===================================================== */
-/* NEXT QUESTION                                         */
+/* NEXT CAMPAIGN QUESTION                                */
 /* ===================================================== */
 
 function loadNextCampaignQuestion() {
@@ -923,13 +721,14 @@ function loadNextCampaignQuestion() {
     typeof loadQuestion ===
     "function"
   ) {
+
     loadQuestion();
   }
 }
 
 
 /* ===================================================== */
-/* COUNTER                                               */
+/* CAMPAIGN COUNTER                                      */
 /* ===================================================== */
 
 function updateCampaignCounter() {
@@ -939,18 +738,17 @@ function updateCampaignCounter() {
       "enemyCount"
     );
 
+
   if (!counter) {
     return;
   }
 
 
-  const totalQuestions =
+  const total =
     getTotalCampaignQuestions();
 
 
-  if (
-    totalQuestions <= 0
-  ) {
+  if (total <= 0) {
 
     counter.innerText =
       "0/0";
@@ -959,22 +757,22 @@ function updateCampaignCounter() {
   }
 
 
-  const currentQuestion =
+  const current =
     Math.min(
       questionsAnswered + 1,
-      totalQuestions
+      total
     );
 
 
   counter.innerText =
-    currentQuestion +
+    current +
     "/" +
-    totalQuestions;
+    total;
 }
 
 
 /* ===================================================== */
-/* UI                                                    */
+/* UPDATE BATTLE UI                                      */
 /* ===================================================== */
 
 function updateBattleUI() {
@@ -983,20 +781,23 @@ function updateBattleUI() {
     (
       playerHP /
       playerMaxHP
-    ) * 100;
+    ) *
+    100;
 
 
   const enemyPercent =
     (
       enemyHP /
       enemyMaxHP
-    ) * 100;
+    ) *
+    100;
 
 
   const playerBar =
     document.getElementById(
       "playerHealthBar"
     );
+
 
   const enemyBar =
     document.getElementById(
@@ -1010,7 +811,8 @@ function updateBattleUI() {
       Math.max(
         playerPercent,
         0
-      ) + "%";
+      ) +
+      "%";
   }
 
 
@@ -1020,7 +822,8 @@ function updateBattleUI() {
       Math.max(
         enemyPercent,
         0
-      ) + "%";
+      ) +
+      "%";
   }
 
 
@@ -1028,6 +831,7 @@ function updateBattleUI() {
     document.getElementById(
       "playerHPText"
     );
+
 
   const enemyText =
     document.getElementById(
@@ -1057,7 +861,7 @@ function updateBattleUI() {
 
 
 /* ===================================================== */
-/* ANIMATIONS                                            */
+/* PLAYER ATTACK                                         */
 /* ===================================================== */
 
 function animatePlayerAttack() {
@@ -1066,6 +870,7 @@ function animatePlayerAttack() {
     document.getElementById(
       "playerCharacter"
     );
+
 
   if (!player) {
     return;
@@ -1090,12 +895,17 @@ function animatePlayerAttack() {
 }
 
 
+/* ===================================================== */
+/* ENEMY ATTACK                                          */
+/* ===================================================== */
+
 function animateEnemyAttack() {
 
   const enemy =
     document.getElementById(
       "enemyCharacter"
     );
+
 
   if (!enemy) {
     return;
@@ -1155,6 +965,7 @@ function showDamage(
   damageText.className =
     "damage-number";
 
+
   damageText.innerText =
     amount;
 
@@ -1185,7 +996,7 @@ function battleGameOver() {
     true;
 
 
-  const totalQuestions =
+  const total =
     getTotalCampaignQuestions();
 
 
@@ -1193,6 +1004,7 @@ function battleGameOver() {
     document.getElementById(
       "bossBanner"
     );
+
 
   if (banner) {
     banner.style.display =
@@ -1219,11 +1031,11 @@ function battleGameOver() {
 
     Math.min(
       questionsAnswered + 1,
-      totalQuestions
+      total
     ) +
 
     " of " +
-    totalQuestions +
+    total +
 
     ".<br><br>" +
 
@@ -1245,7 +1057,7 @@ function battleGameOver() {
 
 
 /* ===================================================== */
-/* VICTORY                                               */
+/* CAMPAIGN VICTORY                                      */
 /* ===================================================== */
 
 function campaignVictory() {
@@ -1260,7 +1072,7 @@ function campaignVictory() {
     true;
 
 
-  const totalQuestions =
+  const total =
     getTotalCampaignQuestions();
 
 
@@ -1274,6 +1086,7 @@ function campaignVictory() {
 
     banner.style.display =
       "block";
+
 
     banner.innerText =
       "🏆 CAMPAIGN COMPLETE 🏆";
@@ -1297,7 +1110,7 @@ function campaignVictory() {
   ).innerHTML =
     "You completed all " +
 
-    totalQuestions +
+    total +
 
     " playable campaign questions." +
 
@@ -1317,9 +1130,4 @@ function campaignVictory() {
     "submitAnswerButton"
   ).style.display =
     "none";
-
-
-  enemyHP = 0;
-
-  updateBattleUI();
 }
