@@ -1,96 +1,112 @@
 /* ===================================================== */
-/* COMPTIA A+ ARCADE - CAMPAIGN BATTLE SYSTEM            */
+/* COMPTIA A+ ARCADE - SAVED CAMPAIGN BATTLE SYSTEM      */
 /* ===================================================== */
-
-
-/* ===================================================== */
-/* BATTLE STATE                                          */
-/* ===================================================== */
-
-let playerHP = 100;
-let playerMaxHP = 100;
-
-let enemyHP = 100;
-let enemyMaxHP = 100;
-
-let questionsAnswered = 0;
-
-let currentStage = 0;
-
-let isBoss = false;
-
-let battleFinished = false;
-
-let campaignComplete = false;
 
 
 /* ===================================================== */
 /* SETTINGS                                              */
 /* ===================================================== */
 
-const BOSS_INTERVAL = 10;
+const SAVE_KEY =
+  "comptiaArcadeCampaignSaveV1";
 
-const NORMAL_ENEMY_HP = 100;
+const NORMAL_QUESTIONS_PER_STAGE =
+  9;
 
-const BOSS_HP = 200;
+const NORMAL_ENEMY_HP =
+  100;
 
-const PLAYER_DAMAGE = 50;
+const BOSS_HP =
+  200;
 
-const NORMAL_ENEMY_DAMAGE = 20;
+const PLAYER_MAX_HP =
+  100;
 
-const BOSS_DAMAGE = 30;
+const PLAYER_DAMAGE =
+  50;
+
+const NORMAL_ENEMY_DAMAGE =
+  20;
+
+const BOSS_DAMAGE =
+  30;
 
 
 /* ===================================================== */
-/* GET TOTAL PLAYABLE QUESTIONS                          */
+/* BATTLE STATE                                          */
 /* ===================================================== */
 
-function getTotalCampaignQuestions() {
+let playerHP =
+  PLAYER_MAX_HP;
 
-  if (
-    typeof campaignQuestions !== "undefined" &&
-    Array.isArray(campaignQuestions) &&
-    campaignQuestions.length > 0
-  ) {
-    return campaignQuestions.length;
-  }
+let playerMaxHP =
+  PLAYER_MAX_HP;
 
-  if (
-    typeof questions !== "undefined" &&
-    Array.isArray(questions)
-  ) {
+let enemyHP =
+  NORMAL_ENEMY_HP;
 
-    return questions.filter(question => {
+let enemyMaxHP =
+  NORMAL_ENEMY_HP;
 
-      return (
-        question.pbq !== true &&
-        Array.isArray(question.answers) &&
-        question.answers.length > 0 &&
-        question.correct !== null &&
-        question.correct !== undefined
-      );
 
-    }).length;
-  }
+/*
+  questionsAnswered is the index
+  of the NEXT campaign question.
 
-  return 0;
-}
+  Example:
+
+  0 = about to answer campaign question 1
+  1 = about to answer campaign question 2
+*/
+let questionsAnswered =
+  0;
+
+
+/*
+  Stage:
+
+  0 = enemy1 / boss1
+  1 = enemy2 / boss2
+  2 = enemy3 / boss3
+*/
+let currentStage =
+  0;
+
+
+/*
+  Number of normal questions completed
+  during this stage.
+
+  When this reaches 9,
+  boss phase begins.
+*/
+let normalQuestionsThisStage =
+  0;
+
+
+/*
+  Current phase:
+
+  "normal"
+  "boss"
+*/
+let battlePhase =
+  "normal";
+
+
+let isBoss =
+  false;
+
+let battleFinished =
+  false;
+
+let campaignComplete =
+  false;
 
 
 /* ===================================================== */
 /* ENEMY NAMES                                           */
 /* ===================================================== */
-
-/*
-  These names line up with:
-
-  enemy1.png
-  enemy2.png
-  enemy3.png
-  ...
-
-  You can rename these however you want.
-*/
 
 const enemyNames = [
 
@@ -209,224 +225,716 @@ const bossNames = [
 
 
 /* ===================================================== */
-/* START BATTLE                                          */
+/* TOTAL QUESTIONS                                       */
+/* ===================================================== */
+
+function getTotalCampaignQuestions() {
+
+  if (
+    typeof campaignQuestions !==
+      "undefined" &&
+    Array.isArray(
+      campaignQuestions
+    ) &&
+    campaignQuestions.length > 0
+  ) {
+
+    return campaignQuestions.length;
+
+  }
+
+
+  if (
+    typeof questions !==
+      "undefined" &&
+    Array.isArray(
+      questions
+    )
+  ) {
+
+    return questions.filter(
+      question => {
+
+        return (
+
+          question.pbq !== true &&
+
+          Array.isArray(
+            question.answers
+          ) &&
+
+          question.answers.length >
+            0 &&
+
+          question.correct !==
+            null &&
+
+          question.correct !==
+            undefined &&
+
+          !(
+            question.multiple ===
+              true &&
+
+            Array.isArray(
+              question.correct
+            ) &&
+
+            question.correct.length <
+              2
+          )
+
+        );
+
+      }
+    ).length;
+
+  }
+
+
+  return 0;
+
+}
+
+
+/* ===================================================== */
+/* SAVE CAMPAIGN                                         */
+/* ===================================================== */
+
+function saveCampaign() {
+
+  const data = {
+
+    questionsAnswered:
+      questionsAnswered,
+
+    currentStage:
+      currentStage,
+
+    normalQuestionsThisStage:
+      normalQuestionsThisStage,
+
+    battlePhase:
+      battlePhase,
+
+    playerHP:
+      playerHP,
+
+    enemyHP:
+      enemyHP,
+
+    enemyMaxHP:
+      enemyMaxHP,
+
+    xp:
+      typeof xp !== "undefined"
+        ? xp
+        : 0,
+
+    lives:
+      typeof lives !== "undefined"
+        ? lives
+        : 3,
+
+    campaignComplete:
+      campaignComplete
+
+  };
+
+
+  localStorage.setItem(
+    SAVE_KEY,
+    JSON.stringify(data)
+  );
+
+}
+
+
+/* ===================================================== */
+/* LOAD CAMPAIGN                                         */
+/* ===================================================== */
+
+function loadSavedCampaign() {
+
+  const raw =
+    localStorage.getItem(
+      SAVE_KEY
+    );
+
+
+  if (!raw) {
+
+    return false;
+
+  }
+
+
+  try {
+
+    const data =
+      JSON.parse(raw);
+
+
+    const total =
+      getTotalCampaignQuestions();
+
+
+    if (
+      typeof data.questionsAnswered !==
+        "number"
+    ) {
+
+      return false;
+
+    }
+
+
+    questionsAnswered =
+      Math.max(
+        0,
+        Math.min(
+          data.questionsAnswered,
+          total
+        )
+      );
+
+
+    currentStage =
+      data.currentStage || 0;
+
+
+    normalQuestionsThisStage =
+      data.normalQuestionsThisStage || 0;
+
+
+    battlePhase =
+      data.battlePhase || "normal";
+
+
+    playerHP =
+      typeof data.playerHP ===
+        "number"
+        ? data.playerHP
+        : PLAYER_MAX_HP;
+
+
+    /*
+      Never resume dead.
+      Retry from the same question
+      with full HP.
+    */
+
+    if (
+      playerHP <= 0
+    ) {
+
+      playerHP =
+        PLAYER_MAX_HP;
+
+    }
+
+
+    enemyHP =
+      typeof data.enemyHP ===
+        "number"
+        ? data.enemyHP
+        : NORMAL_ENEMY_HP;
+
+
+    enemyMaxHP =
+      typeof data.enemyMaxHP ===
+        "number"
+        ? data.enemyMaxHP
+        : NORMAL_ENEMY_HP;
+
+
+    campaignComplete =
+      data.campaignComplete ===
+      true;
+
+
+    if (
+      typeof xp !== "undefined"
+    ) {
+
+      xp =
+        data.xp || 0;
+
+    }
+
+
+    if (
+      typeof lives !== "undefined"
+    ) {
+
+      lives =
+        data.lives ?? 3;
+
+    }
+
+
+    return true;
+
+  }
+
+
+  catch (error) {
+
+    console.error(
+      "Could not load campaign save:",
+      error
+    );
+
+
+    return false;
+
+  }
+
+}
+
+
+/* ===================================================== */
+/* DELETE SAVE                                           */
+/* ===================================================== */
+
+function clearCampaignSave() {
+
+  localStorage.removeItem(
+    SAVE_KEY
+  );
+
+}
+
+
+/* ===================================================== */
+/* RESTART CAMPAIGN                                      */
+/* ===================================================== */
+
+function restartCampaign() {
+
+  const confirmed =
+    window.confirm(
+      "Restart the entire campaign? Your saved progress will be erased."
+    );
+
+
+  if (!confirmed) {
+
+    return;
+
+  }
+
+
+  clearCampaignSave();
+
+
+  questionsAnswered =
+    0;
+
+  currentStage =
+    0;
+
+  normalQuestionsThisStage =
+    0;
+
+  battlePhase =
+    "normal";
+
+  playerHP =
+    PLAYER_MAX_HP;
+
+  enemyHP =
+    NORMAL_ENEMY_HP;
+
+  enemyMaxHP =
+    NORMAL_ENEMY_HP;
+
+  isBoss =
+    false;
+
+  battleFinished =
+    false;
+
+  campaignComplete =
+    false;
+
+
+  if (
+    typeof xp !==
+    "undefined"
+  ) {
+
+    xp = 0;
+
+  }
+
+
+  if (
+    typeof lives !==
+    "undefined"
+  ) {
+
+    lives = 3;
+
+  }
+
+
+  document.getElementById(
+    "xp"
+  ).innerText =
+    "0";
+
+
+  document.getElementById(
+    "lives"
+  ).innerText =
+    "3";
+
+
+  loadCurrentEncounter(
+    true
+  );
+
+
+  loadCampaignQuestion(
+    0
+  );
+
+
+  updateBattleUI();
+
+  updateCampaignCounter();
+
+  saveCampaign();
+
+}
+
+
+/* ===================================================== */
+/* SETUP CAMPAIGN                                        */
 /* ===================================================== */
 
 function setupBattle() {
 
-  playerHP = 100;
-
-  playerMaxHP = 100;
-
-  questionsAnswered = 0;
-
-  currentStage = 0;
-
-  isBoss = false;
-
-  battleFinished = false;
-
-  campaignComplete = false;
-
-  loadEnemyForCurrentQuestion();
-
-  updateBattleUI();
-
-  updateCampaignCounter();
-}
+  battleFinished =
+    false;
 
 
-/* ===================================================== */
-/* DETERMINE CURRENT STAGE                               */
-/* ===================================================== */
-
-function getStageIndex(questionNumber) {
-
-  return Math.floor(
-    (questionNumber - 1) / BOSS_INTERVAL
-  );
-}
+  const didLoadSave =
+    loadSavedCampaign();
 
 
-/* ===================================================== */
-/* CHECK IF CURRENT QUESTION IS BOSS                     */
-/* ===================================================== */
+  if (!didLoadSave) {
 
-function isBossQuestion(questionNumber) {
+    questionsAnswered =
+      0;
 
-  return (
-    questionNumber % BOSS_INTERVAL === 0
-  );
-}
+    currentStage =
+      0;
 
+    normalQuestionsThisStage =
+      0;
 
-/* ===================================================== */
-/* LOAD ENEMY/BOSS                                       */
-/* ===================================================== */
+    battlePhase =
+      "normal";
 
-function loadEnemyForCurrentQuestion() {
-
-  battleFinished = false;
-
-  const totalQuestions =
-    getTotalCampaignQuestions();
-
-  if (totalQuestions <= 0) {
-    return;
-  }
-
-
-  const questionNumber =
-    questionsAnswered + 1;
-
-
-  currentStage =
-    getStageIndex(
-      questionNumber
-    );
-
-
-  isBoss =
-    isBossQuestion(
-      questionNumber
-    );
-
-
-  /*
-    =====================================
-    BOSS QUESTION
-    =====================================
-  */
-
-  if (isBoss) {
-
-    enemyMaxHP =
-      BOSS_HP;
+    playerHP =
+      PLAYER_MAX_HP;
 
     enemyHP =
-      BOSS_HP;
+      NORMAL_ENEMY_HP;
+
+    enemyMaxHP =
+      NORMAL_ENEMY_HP;
+
+    campaignComplete =
+      false;
+
+  }
 
 
-    const bossIndex =
-      Math.min(
-        currentStage,
-        bossNames.length - 1
-      );
+  if (
+    typeof xp !==
+    "undefined"
+  ) {
+
+    document.getElementById(
+      "xp"
+    ).innerText =
+      xp;
+
+  }
 
 
-    const bossName =
-      bossNames[bossIndex];
+  if (
+    typeof lives !==
+    "undefined"
+  ) {
 
-
-    setEnemyName(
-      "👑 " +
-      bossName
-    );
-
-
-    setEnemyImage(
-      "assets/boss" +
-      (bossIndex + 1) +
-      ".png"
-    );
-
-
-    const banner =
-      document.getElementById(
-        "bossBanner"
-      );
-
-
-    if (banner) {
-
-      banner.style.display =
-        "block";
-
-      banner.innerText =
-        "👑 BOSS BATTLE 👑";
-    }
+    document.getElementById(
+      "lives"
+    ).innerText =
+      lives;
 
   }
 
 
   /*
-    =====================================
-    NORMAL ENEMY
-    =====================================
+    If saved enemy HP is invalid,
+    recreate the encounter.
   */
+
+  if (
+    enemyHP <= 0 ||
+    enemyMaxHP <= 0
+  ) {
+
+    loadCurrentEncounter(
+      true
+    );
+
+  }
+
 
   else {
 
-    enemyMaxHP =
-      NORMAL_ENEMY_HP;
+    restoreCurrentEncounterVisuals();
 
-    enemyHP =
-      NORMAL_ENEMY_HP;
-
-
-    const enemyIndex =
-      Math.min(
-        currentStage,
-        enemyNames.length - 1
-      );
-
-
-    const enemyName =
-      enemyNames[enemyIndex];
-
-
-    setEnemyName(
-      enemyName +
-      " Lv. " +
-      (currentStage + 1)
-    );
-
-
-    setEnemyImage(
-      "assets/enemy" +
-      (enemyIndex + 1) +
-      ".png"
-    );
-
-
-    const banner =
-      document.getElementById(
-        "bossBanner"
-      );
-
-
-    if (banner) {
-      banner.style.display =
-        "none";
-    }
   }
 
 
   updateBattleUI();
 
   updateCampaignCounter();
+
 }
 
 
 /* ===================================================== */
-/* SET ENEMY NAME                                        */
+/* RESTORE VISUALS                                       */
+/* ===================================================== */
+
+function restoreCurrentEncounterVisuals() {
+
+  if (
+    battlePhase ===
+    "boss"
+  ) {
+
+    isBoss =
+      true;
+
+
+    showBoss();
+
+  }
+
+
+  else {
+
+    isBoss =
+      false;
+
+
+    showNormalEnemy();
+
+  }
+
+}
+
+
+/* ===================================================== */
+/* CURRENT ENCOUNTER                                     */
+/* ===================================================== */
+
+function loadCurrentEncounter(
+  resetHP = true
+) {
+
+  battleFinished =
+    false;
+
+
+  if (
+    battlePhase ===
+    "boss"
+  ) {
+
+    isBoss =
+      true;
+
+
+    if (resetHP) {
+
+      enemyMaxHP =
+        BOSS_HP;
+
+      enemyHP =
+        BOSS_HP;
+
+    }
+
+
+    showBoss();
+
+  }
+
+
+  else {
+
+    isBoss =
+      false;
+
+
+    if (resetHP) {
+
+      enemyMaxHP =
+        NORMAL_ENEMY_HP;
+
+      enemyHP =
+        NORMAL_ENEMY_HP;
+
+    }
+
+
+    showNormalEnemy();
+
+  }
+
+
+  updateBattleUI();
+
+}
+
+
+/* ===================================================== */
+/* NORMAL ENEMY                                          */
+/* ===================================================== */
+
+function showNormalEnemy() {
+
+  const index =
+    Math.min(
+      currentStage,
+      enemyNames.length - 1
+    );
+
+
+  setEnemyName(
+
+    enemyNames[index] +
+
+    " Lv. " +
+
+    (currentStage + 1)
+
+  );
+
+
+  setEnemyImage(
+
+    "assets/enemy" +
+
+    (index + 1) +
+
+    ".png"
+
+  );
+
+
+  const banner =
+    document.getElementById(
+      "bossBanner"
+    );
+
+
+  if (banner) {
+
+    banner.style.display =
+      "none";
+
+  }
+
+}
+
+
+/* ===================================================== */
+/* BOSS                                                  */
+/* ===================================================== */
+
+function showBoss() {
+
+  const index =
+    Math.min(
+      currentStage,
+      bossNames.length - 1
+    );
+
+
+  setEnemyName(
+
+    "👑 " +
+
+    bossNames[index]
+
+  );
+
+
+  setEnemyImage(
+
+    "assets/boss" +
+
+    (index + 1) +
+
+    ".png"
+
+  );
+
+
+  const banner =
+    document.getElementById(
+      "bossBanner"
+    );
+
+
+  if (banner) {
+
+    banner.style.display =
+      "block";
+
+
+    banner.innerText =
+      "👑 BOSS BATTLE 👑";
+
+  }
+
+}
+
+
+/* ===================================================== */
+/* SET NAME                                              */
 /* ===================================================== */
 
 function setEnemyName(name) {
 
-  const enemyName =
+  const element =
     document.getElementById(
       "enemyName"
     );
 
-  if (enemyName) {
-    enemyName.innerText = name;
+
+  if (element) {
+
+    element.innerText =
+      name;
+
   }
+
 }
 
 
 /* ===================================================== */
-/* SET ENEMY IMAGE                                       */
+/* SET IMAGE                                             */
 /* ===================================================== */
 
 function setEnemyImage(path) {
@@ -438,22 +946,28 @@ function setEnemyImage(path) {
 
 
   if (!image) {
+
     return;
+
   }
 
 
   image.onerror =
     function () {
 
-      this.onerror = null;
+      this.onerror =
+        null;
+
 
       this.src =
         "assets/enemy.png";
+
     };
 
 
   image.src =
     path;
+
 }
 
 
@@ -467,7 +981,9 @@ function correctBattleAnswer() {
     battleFinished ||
     campaignComplete
   ) {
+
     return;
+
   }
 
 
@@ -475,8 +991,13 @@ function correctBattleAnswer() {
     PLAYER_DAMAGE;
 
 
-  if (enemyHP < 0) {
-    enemyHP = 0;
+  if (
+    enemyHP < 0
+  ) {
+
+    enemyHP =
+      0;
+
   }
 
 
@@ -493,21 +1014,21 @@ function correctBattleAnswer() {
 
 
   /*
-    Boss has 200 HP.
-
-    One correct question deals 50,
-    but because the boss only appears
-    on one campaign question, we finish
-    the current encounter after the answer.
-
-    The HP bar still visually shows
-    the 50 damage before transition.
+    Wait for animation before
+    deciding whether foe died.
   */
 
+  setTimeout(
+    () => {
 
-  finishBattleQuestion(
-    true
+      resolveAnsweredQuestion(
+        true
+      );
+
+    },
+    650
   );
+
 }
 
 
@@ -521,7 +1042,9 @@ function wrongBattleAnswer() {
     battleFinished ||
     campaignComplete
   ) {
+
     return;
+
   }
 
 
@@ -535,8 +1058,13 @@ function wrongBattleAnswer() {
     damage;
 
 
-  if (playerHP < 0) {
-    playerHP = 0;
+  if (
+    playerHP < 0
+  ) {
+
+    playerHP =
+      0;
+
   }
 
 
@@ -556,30 +1084,52 @@ function wrongBattleAnswer() {
     playerHP <= 0
   ) {
 
-    battleFinished = true;
+    battleFinished =
+      true;
+
+
+    /*
+      Save same question position
+      but restore HP for retry.
+    */
+
+    playerHP =
+      PLAYER_MAX_HP;
+
+
+    saveCampaign();
 
 
     setTimeout(
       battleGameOver,
-      700
+      650
     );
 
 
     return;
+
   }
 
 
-  finishBattleQuestion(
-    false
+  setTimeout(
+    () => {
+
+      resolveAnsweredQuestion(
+        false
+      );
+
+    },
+    650
   );
+
 }
 
 
 /* ===================================================== */
-/* FINISH CURRENT QUESTION                               */
+/* RESOLVE COMPLETED QUESTION                            */
 /* ===================================================== */
 
-function finishBattleQuestion(
+function resolveAnsweredQuestion(
   answeredCorrectly
 ) {
 
@@ -587,29 +1137,173 @@ function finishBattleQuestion(
     true;
 
 
-  const wasBoss =
-    isBoss;
+  const totalQuestions =
+    getTotalCampaignQuestions();
 
 
   /*
-    Small heal for correct answers.
+    Advance actual question index.
   */
 
-  if (answeredCorrectly) {
+  questionsAnswered++;
 
-    playerHP += 5;
+
+  /*
+    NORMAL PHASE
+  */
+
+  if (
+    battlePhase ===
+    "normal"
+  ) {
+
+    normalQuestionsThisStage++;
+
+
+    /*
+      Enemy was defeated.
+
+      Spawn another COPY of the
+      same stage enemy unless it
+      is time for the boss.
+    */
 
     if (
-      playerHP >
-      playerMaxHP
+      enemyHP <= 0
     ) {
-      playerHP =
-        playerMaxHP;
+
+      if (
+        normalQuestionsThisStage <
+        NORMAL_QUESTIONS_PER_STAGE
+      ) {
+
+        enemyMaxHP =
+          NORMAL_ENEMY_HP;
+
+        enemyHP =
+          NORMAL_ENEMY_HP;
+
+      }
+
     }
+
+
+    /*
+      Nine normal questions
+      completed.
+
+      NEXT question begins boss fight.
+    */
+
+    if (
+      normalQuestionsThisStage >=
+      NORMAL_QUESTIONS_PER_STAGE
+    ) {
+
+      battlePhase =
+        "boss";
+
+      isBoss =
+        true;
+
+      enemyMaxHP =
+        BOSS_HP;
+
+      enemyHP =
+        BOSS_HP;
+
+    }
+
   }
 
 
-  questionsAnswered++;
+  /*
+    BOSS PHASE
+  */
+
+  else if (
+    battlePhase ===
+    "boss"
+  ) {
+
+    /*
+      Boss stays until HP reaches 0.
+
+      Since boss has 200 HP and
+      correct answers do 50 damage,
+      four correct answers defeat it.
+    */
+
+    if (
+      enemyHP <= 0
+    ) {
+
+      /*
+        Boss defeated.
+
+        Advance to next stage.
+      */
+
+      currentStage++;
+
+
+      normalQuestionsThisStage =
+        0;
+
+
+      battlePhase =
+        "normal";
+
+
+      isBoss =
+        false;
+
+
+      enemyMaxHP =
+        NORMAL_ENEMY_HP;
+
+
+      enemyHP =
+        NORMAL_ENEMY_HP;
+
+
+      /*
+        Heal after beating boss.
+      */
+
+      playerHP +=
+        25;
+
+
+      if (
+        playerHP >
+        playerMaxHP
+      ) {
+
+        playerHP =
+          playerMaxHP;
+
+      }
+
+
+      if (
+        typeof xp !==
+        "undefined"
+      ) {
+
+        xp += 50;
+
+
+        document.getElementById(
+          "xp"
+        ).innerText =
+          xp;
+
+      }
+
+    }
+
+  }
 
 
   updateBattleUI();
@@ -623,15 +1317,16 @@ function finishBattleQuestion(
   ) {
 
     updateCampaignDisplay();
+
   }
 
 
-  const totalQuestions =
-    getTotalCampaignQuestions();
+  saveCampaign();
 
 
   /*
-    Campaign finished
+    End campaign if all
+    playable questions are done.
   */
 
   if (
@@ -641,65 +1336,39 @@ function finishBattleQuestion(
 
     setTimeout(
       campaignVictory,
-      1400
-    );
-
-    return;
-  }
-
-
-  /*
-    =====================================
-    BOSS TRANSITION
-    =====================================
-
-    Example:
-
-    Q10 = boss1.png
-
-    After Q10 finishes:
-    wait so player can see boss result
-
-    then Q11 loads enemy2.png
-  */
-
-  if (wasBoss) {
-
-    setTimeout(
-      () => {
-
-        loadEnemyForCurrentQuestion();
-
-        loadNextCampaignQuestion();
-
-      },
-      2200
+      1200
     );
 
 
     return;
+
   }
 
 
   /*
-    Normal enemy question transition
+    Load correct visual for
+    the NEXT question.
   */
 
   setTimeout(
     () => {
 
-      loadEnemyForCurrentQuestion();
+      loadCurrentEncounter(
+        false
+      );
+
 
       loadNextCampaignQuestion();
 
     },
-    1600
+    1200
   );
+
 }
 
 
 /* ===================================================== */
-/* NEXT CAMPAIGN QUESTION                                */
+/* NEXT QUESTION                                         */
 /* ===================================================== */
 
 function loadNextCampaignQuestion() {
@@ -713,7 +1382,9 @@ function loadNextCampaignQuestion() {
       questionsAnswered
     );
 
+
     return;
+
   }
 
 
@@ -723,24 +1394,28 @@ function loadNextCampaignQuestion() {
   ) {
 
     loadQuestion();
+
   }
+
 }
 
 
 /* ===================================================== */
-/* CAMPAIGN COUNTER                                      */
+/* COUNTER                                               */
 /* ===================================================== */
 
 function updateCampaignCounter() {
 
-  const counter =
+  const element =
     document.getElementById(
       "enemyCount"
     );
 
 
-  if (!counter) {
+  if (!element) {
+
     return;
+
   }
 
 
@@ -748,12 +1423,16 @@ function updateCampaignCounter() {
     getTotalCampaignQuestions();
 
 
-  if (total <= 0) {
+  if (
+    total <= 0
+  ) {
 
-    counter.innerText =
+    element.innerText =
       "0/0";
 
+
     return;
+
   }
 
 
@@ -764,20 +1443,25 @@ function updateCampaignCounter() {
     );
 
 
-  counter.innerText =
+  element.innerText =
+
     current +
+
     "/" +
+
     total;
+
 }
 
 
 /* ===================================================== */
-/* UPDATE BATTLE UI                                      */
+/* UI                                                    */
 /* ===================================================== */
 
 function updateBattleUI() {
 
   const playerPercent =
+
     (
       playerHP /
       playerMaxHP
@@ -786,6 +1470,7 @@ function updateBattleUI() {
 
 
   const enemyPercent =
+
     (
       enemyHP /
       enemyMaxHP
@@ -808,22 +1493,26 @@ function updateBattleUI() {
   if (playerBar) {
 
     playerBar.style.width =
+
       Math.max(
         playerPercent,
         0
       ) +
       "%";
+
   }
 
 
   if (enemyBar) {
 
     enemyBar.style.width =
+
       Math.max(
         enemyPercent,
         0
       ) +
       "%";
+
   }
 
 
@@ -842,26 +1531,37 @@ function updateBattleUI() {
   if (playerText) {
 
     playerText.innerText =
+
       playerHP +
+
       " / " +
+
       playerMaxHP +
+
       " HP";
+
   }
 
 
   if (enemyText) {
 
     enemyText.innerText =
+
       enemyHP +
+
       " / " +
+
       enemyMaxHP +
+
       " HP";
+
   }
+
 }
 
 
 /* ===================================================== */
-/* PLAYER ATTACK                                         */
+/* ANIMATIONS                                            */
 /* ===================================================== */
 
 function animatePlayerAttack() {
@@ -873,7 +1573,9 @@ function animatePlayerAttack() {
 
 
   if (!player) {
+
     return;
+
   }
 
 
@@ -892,12 +1594,9 @@ function animatePlayerAttack() {
     },
     400
   );
+
 }
 
-
-/* ===================================================== */
-/* ENEMY ATTACK                                          */
-/* ===================================================== */
 
 function animateEnemyAttack() {
 
@@ -908,7 +1607,9 @@ function animateEnemyAttack() {
 
 
   if (!enemy) {
+
     return;
+
   }
 
 
@@ -927,11 +1628,12 @@ function animateEnemyAttack() {
     },
     400
   );
+
 }
 
 
 /* ===================================================== */
-/* DAMAGE TEXT                                           */
+/* DAMAGE NUMBER                                         */
 /* ===================================================== */
 
 function showDamage(
@@ -939,7 +1641,7 @@ function showDamage(
   target
 ) {
 
-  const targetId =
+  const id =
     target === "enemy"
       ? "enemyCharacter"
       : "playerCharacter";
@@ -947,42 +1649,45 @@ function showDamage(
 
   const targetElement =
     document.getElementById(
-      targetId
+      id
     );
 
 
   if (!targetElement) {
+
     return;
+
   }
 
 
-  const damageText =
+  const damage =
     document.createElement(
       "div"
     );
 
 
-  damageText.className =
+  damage.className =
     "damage-number";
 
 
-  damageText.innerText =
+  damage.innerText =
     amount;
 
 
   targetElement.appendChild(
-    damageText
+    damage
   );
 
 
   setTimeout(
     () => {
 
-      damageText.remove();
+      damage.remove();
 
     },
     800
   );
+
 }
 
 
@@ -1000,18 +1705,6 @@ function battleGameOver() {
     getTotalCampaignQuestions();
 
 
-  const banner =
-    document.getElementById(
-      "bossBanner"
-    );
-
-
-  if (banner) {
-    banner.style.display =
-      "none";
-  }
-
-
   document.getElementById(
     "question"
   ).innerText =
@@ -1027,20 +1720,43 @@ function battleGameOver() {
   document.getElementById(
     "result"
   ).innerHTML =
-    "You reached campaign question " +
+
+    "Your campaign progress was saved."
+
+    +
+
+    "<br><br>"
+
+    +
+
+    "You are at question "
+
+    +
 
     Math.min(
       questionsAnswered + 1,
       total
-    ) +
+    )
 
-    " of " +
-    total +
+    +
 
-    ".<br><br>" +
+    " of "
 
-    "Final XP: " +
-    xp;
+    +
+
+    total
+
+    +
+
+    "."
+
+    +
+
+    "<br><br>"
+
+    +
+
+    "Return to the menu and continue when you're ready.";
 
 
   document.getElementById(
@@ -1053,6 +1769,7 @@ function battleGameOver() {
     "submitAnswerButton"
   ).style.display =
     "none";
+
 }
 
 
@@ -1065,15 +1782,16 @@ function campaignVictory() {
   campaignComplete =
     true;
 
+
   battleFinished =
     true;
+
 
   questionLocked =
     true;
 
 
-  const total =
-    getTotalCampaignQuestions();
+  saveCampaign();
 
 
   const banner =
@@ -1090,6 +1808,7 @@ function campaignVictory() {
 
     banner.innerText =
       "🏆 CAMPAIGN COMPLETE 🏆";
+
   }
 
 
@@ -1108,16 +1827,24 @@ function campaignVictory() {
   document.getElementById(
     "result"
   ).innerHTML =
-    "You completed all " +
 
-    total +
+    "You completed every playable question."
 
-    " playable campaign questions." +
+    +
 
-    "<br><br>" +
+    "<br><br>"
 
-    "Final XP: " +
-    xp;
+    +
+
+    "Final XP: "
+
+    +
+
+    (
+      typeof xp !== "undefined"
+        ? xp
+        : 0
+    );
 
 
   document.getElementById(
@@ -1130,4 +1857,5 @@ function campaignVictory() {
     "submitAnswerButton"
   ).style.display =
     "none";
+
 }
